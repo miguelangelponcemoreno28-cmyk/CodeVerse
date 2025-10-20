@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Selección de Herramientas - CodeVerse{% endblock %}
+
+{% block content %}
+    <div class="text-center mb-16">
+        <div class="mb-6 inline-block">
+            <span class="bg-blue-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-semibold border border-blue-400/30">
+                <i class="fas fa-tools mr-2"></i>Herramientas Prácticas
+            </span>
+        </div>
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">
+            Herramientas <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Útiles</span> para Desarrolladores
+        </h1>
+        <p class="text-xl text-slate-300 mb-4 max-w-2xl mx-auto">
+            Selecciona la utilidad que necesitas para acelerar tu trabajo diario.
+        </p>
+        <div class="h-1 w-24 bg-gradient-to-r from-blue-400 to-cyan-400 mx-auto rounded-full"></div>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Calculadora IMC -->
+        <a href="/herramienta/imc" class="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/0 group-hover:from-blue-500/10 group-hover:to-blue-500/5 transition-all duration-300"></div>
+            <div class="relative z-10">
+                <div class="bg-blue-500/20 w-16 h-16 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-500/30 transition-all duration-300 mx-auto">
+                    <i class="fas fa-heart text-blue-400 text-2xl"></i>
+                </div>
+                <h2 class="text-xl font-bold group-hover:text-blue-300 transition-colors">Calculadora IMC</h2>
+                <p class="text-slate-400 mt-2 text-sm">Calcula tu índice de masa corporal de forma rápida y sencilla.</p>
+                <div class="mt-4 flex items-center text-blue-400 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span>Acceder</span> <i class="fas fa-arrow-right ml-2"></i>
+                </div>
+            </div>
+            <div class="absolute inset-0 border border-blue-500/0 group-hover:border-blue-500/30 rounded-2xl transition-all duration-300"></div>
+        </a>
+
+        <!-- Convertidor de Unidades -->
+        <a href="/herramienta/convertidor" class="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-cyan-500/0 group-hover:from-cyan-500/10 group-hover:to-cyan-500/5 transition-all duration-300"></div>
+            <div class="relative z-10">
+                <div class="bg-cyan-500/20 w-16 h-16 rounded-xl flex items-center justify-center mb-4 group-hover:bg-cyan-500/30 transition-all duration-300 mx-auto">
+                    <i class="fas fa-arrows-alt-h text-cyan-400 text-2xl"></i>
+                </div>
+                <h2 class="text-xl font-bold group-hover:text-cyan-300 transition-colors">Convertidor de Unidades</h2>
+                <p class="text-slate-400 mt-2 text-sm">Convierte km, millas, kg, libras, temperaturas y más.</p>
+                <div class="mt-4 flex items-center text-cyan-400 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span>Acceder</span> <i class="fas fa-arrow-right ml-2"></i>
+                </div>
+            </div>
+            <div class="absolute inset-0 border border-cyan-500/0 group-hover:border-cyan-500/30 rounded-2xl transition-all duration-300"></div>
+        </a>
+
+        <!-- Calculadora -->
+        <a href="/herramienta/calculadora" class="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/0 group-hover:from-purple-500/10 group-hover:to-purple-500/5 transition-all duration-300"></div>
+            <div class="relative z-10">
+                <div class="bg-purple-500/20 w-16 h-16 rounded-xl flex items-center justify-center mb-4 group-hover:bg-purple-500/30 transition-all duration-300 mx-auto">
+                    <i class="fas fa-calculator text-purple-400 text-2xl"></i>
+                </div>
+                <h2 class="text-xl font-bold group-hover:text-purple-300 transition-colors">Calculadora</h2>
+                <p class="text-slate-400 mt-2 text-sm">Realiza operaciones matemáticas básicas y avanzadas.</p>
+                <div class="mt-4 flex items-center text-purple-400 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span>Acceder</span> <i class="fas fa-arrow-right ml-2"></i>
+                </div>
+            </div>
+            <div class="absolute inset-0 border border-purple-500/0 group-hover:border-purple-500/30 rounded-2xl transition-all duration-300"></div>
+        </a>
+
+        <!-- Descargar videos Tik Tok -->
+        <a href="/tiktok" class="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-pink-500/0 group-hover:from-pink-500/10 group-hover:to-pink-500/5 transition-all duration-300"></div>
+            <div class="relative z-10">
+                <div class="bg-pink-500/20 w-16 h-16 rounded-xl flex items-center justify-center mb-4 group-hover:bg-pink-500/30 transition-all duration-300 mx-auto">
+                    <i class="fab fa-tiktok text-pink-400 text-2xl"></i>
+                </div>
+                <h2 class="text-xl font-bold group-hover:text-pink-300 transition-colors">Descargar TikTok</h2>
+                <p class="text-slate-400 mt-2 text-sm">Descarga videos de TikTok fácil y rápidamente.</p>
+                <div class="mt-4 flex items-center text-pink-400 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span>Acceder</span> <i class="fas fa-arrow-right ml-2"></i>
+                </div>
+            </div>
+            <div class="absolute inset-0 border border-pink-500/0 group-hover:border-pink-500/30 rounded-2xl transition-all duration-300"></div>
+        </a>
+
+        <!-- Generador de QR -->
+        <a href="/qrgen" class="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-green-500/0 to-green-500/0 group-hover:from-green-500/10 group-hover:to-green-500/5 transition-all duration-300"></div>
+            <div class="relative z-10">
+                <div class="bg-green-500/20 w-16 h-16 rounded-xl flex items-center justify-center mb-4 group-hover:bg-green-500/30 transition-all duration-300 mx-auto">
+                    <i class="fas fa-qrcode text-green-400 text-2xl"></i>
+                </div>
+                <h2 class="text-xl font-bold group-hover:text-green-300 transition-colors">Generar QR</h2>
+                <p class="text-slate-400 mt-2 text-sm">Crea códigos QR desde texto, URLs y más contenidos.</p>
+                <div class="mt-4 flex items-center text-green-400 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span>Acceder</span> <i class="fas fa-arrow-right ml-2"></i>
+                </div>
+            </div>
+            <div class="absolute inset-0 border border-green-500/0 group-hover:border-green-500/30 rounded-2xl transition-all duration-300"></div>
+        </a>
+
+        <!-- Calculadora de Fechas -->
+        <a href="/caluladora_fechas" class="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-orange-500/0 group-hover:from-orange-500/10 group-hover:to-orange-500/5 transition-all duration-300"></div>
+            <div class="relative z-10">
+                <div class="bg-orange-500/20 w-16 h-16 rounded-xl flex items-center justify-center mb-4 group-hover:bg-orange-500/30 transition-all duration-300 mx-auto">
+                    <i class="fas fa-calendar text-orange-400 text-2xl"></i>
+                </div>
+                <h2 class="text-xl font-bold group-hover:text-orange-300 transition-colors">Diferencia de Fechas</h2>
+                <p class="text-slate-400 mt-2 text-sm">Calcula la diferencia entre fechas en días, meses y años.</p>
+                <div class="mt-4 flex items-center text-orange-400 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span>Acceder</span> <i class="fas fa-arrow-right ml-2"></i>
+                </div>
+            </div>
+            <div class="absolute inset-0 border border-orange-500/0 group-hover:border-orange-500/30 rounded-2xl transition-all duration-300"></div>
+        </a>
+
+        <!-- Notas Rápidas -->
+        <a href="/notas" class="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/0 to-yellow-500/0 group-hover:from-yellow-500/10 group-hover:to-yellow-500/5 transition-all duration-300"></div>
+            <div class="relative z-10">
+                <div class="bg-yellow-500/20 w-16 h-16 rounded-xl flex items-center justify-center mb-4 group-hover:bg-yellow-500/30 transition-all duration-300 mx-auto">
+                    <i class="fas fa-sticky-note text-yellow-400 text-2xl"></i>
+                </div>
+                <h2 class="text-xl font-bold group-hover:text-yellow-300 transition-colors">Notas Rápidas</h2>
+                <p class="text-slate-400 mt-2 text-sm">Crea, arrastra, gira y organiza tus notas en una pantalla infinita con recordatorios.</p>
+                <div class="mt-4 flex items-center text-yellow-400 text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span>Acceder</span> <i class="fas fa-arrow-right ml-2"></i>
+                </div>
+            </div>
+            <div class="absolute inset-0 border border-yellow-500/0 group-hover:border-yellow-500/30 rounded-2xl transition-all duration-300"></div>
+        </a>
+    </div>
+
+    <!-- Sección adicional informativa -->
+    <div class="mt-20 pt-12 border-t border-slate-700/50">
+        <div class="grid md:grid-cols-3 gap-8 text-center">
+            <div>
+                <div class="text-3xl font-bold text-blue-400 mb-2">7+</div>
+                <p class="text-slate-300">Herramientas disponibles</p>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-cyan-400 mb-2">100%</div>
+                <p class="text-slate-300">Gratuitas y sin registro</p>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-purple-400 mb-2">⚡</div>
+                <p class="text-slate-300">Rápidas y eficientes</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

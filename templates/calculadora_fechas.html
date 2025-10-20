@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Calculadora de Fechas - CodeVerse{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+  <main class="bg-gray-800/90 backdrop-blur-lg p-6 rounded-2xl shadow-2xl border border-gray-700 w-full max-w-md">
+    <h1 class="text-2xl font-bold text-center mb-6 text-cyan-400">
+      📅 Calculadora de Diferencia entre Fechas
+    </h1>
+
+    <div class="space-y-4">
+      <!-- Fecha inicial -->
+      <div>
+        <label for="fechaInicio" class="block text-sm text-gray-300 mb-1">Fecha Inicial</label>
+        <input type="date" id="fechaInicio"
+               class="w-full p-3 rounded-lg bg-gray-900 text-white border border-gray-700 focus:ring-2 focus:ring-cyan-500 outline-none transition" />
+      </div>
+
+      <!-- Fecha final -->
+      <div>
+        <label for="fechaFin" class="block text-sm text-gray-300 mb-1">Fecha Final</label>
+        <input type="date" id="fechaFin"
+               class="w-full p-3 rounded-lg bg-gray-900 text-white border border-gray-700 focus:ring-2 focus:ring-cyan-500 outline-none transition" />
+      </div>
+
+      <!-- Botón calcular -->
+      <button id="calcularBtn"
+              class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-lg mt-4 transition">
+        Calcular Diferencia
+      </button>
+
+      <!-- Resultado -->
+      <div id="resultado"
+           class="mt-6 text-center text-lg font-semibold text-gray-200 bg-gray-900/60 rounded-lg py-4 border border-gray-700 hidden">
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const fechaInicio = document.getElementById("fechaInicio");
+  const fechaFin = document.getElementById("fechaFin");
+  const calcularBtn = document.getElementById("calcularBtn");
+  const resultado = document.getElementById("resultado");
+
+  calcularBtn.addEventListener("click", () => {
+    const inicio = new Date(fechaInicio.value);
+    const fin = new Date(fechaFin.value);
+
+    if (!fechaInicio.value || !fechaFin.value) {
+      resultado.textContent = "⚠️ Por favor selecciona ambas fechas.";
+      resultado.classList.remove("hidden");
+      return;
+    }
+
+    if (fin < inicio) {
+      resultado.textContent = "❌ La fecha final no puede ser anterior a la inicial.";
+      resultado.classList.remove("hidden");
+      return;
+    }
+
+    // Calcular diferencia
+    const diffTiempo = fin - inicio;
+    const diffDias = Math.floor(diffTiempo / (1000 * 60 * 60 * 24));
+    const diffAños = Math.floor(diffDias / 365);
+    const diffMeses = Math.floor((diffDias % 365) / 30);
+    const diasRestantes = diffDias - diffAños * 365 - diffMeses * 30;
+
+    resultado.innerHTML = `
+      <p>🗓️ <span class="text-cyan-400">${diffDias}</span> días en total</p>
+      <p>📆 Aproximadamente 
+        <span class="text-cyan-400">${diffAños}</span> años, 
+        <span class="text-cyan-400">${diffMeses}</span> meses y 
+        <span class="text-cyan-400">${diasRestantes}</span> días
+      </p>
+    `;
+    resultado.classList.remove("hidden");
+  });
+</script>
+{% endblock %}

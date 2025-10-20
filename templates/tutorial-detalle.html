@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ tutorial.title }} - CodeVerse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</head>
+<body class="bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-slate-100">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-slate-700 bg-slate-950/95 backdrop-blur-md shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 text-2xl font-bold hover:opacity-80 transition">
+                <i class="fas fa-code text-blue-400"></i>
+                <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">CodeVerse</span>
+            </a>
+            <div class="hidden md:flex gap-8">
+                <a href="/" class="text-slate-300 hover:text-blue-400 transition font-medium">Inicio</a>
+                <a href="/snippets" class="text-slate-300 hover:text-blue-400 transition font-medium">Snippets</a>
+                <a href="/tutoriales" class="text-blue-400 font-medium border-b-2 border-blue-400 pb-1">Tutoriales</a>
+                <a href="/herramientas" class="text-slate-300 hover:text-blue-400 transition font-medium">Herramientas</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Container -->
+    <div class="max-w-5xl mx-auto px-6">
+        <!-- Breadcrumb -->
+        <div class="py-6 text-slate-400 text-sm">
+            <a href="/tutoriales" class="hover:text-blue-400 transition">Tutoriales</a> 
+            <span class="mx-2">/</span> 
+            <span class="text-slate-300">{{ tutorial.title }}</span>
+        </div>
+
+        <!-- Back Button -->
+        <a href="/tutoriales" class="inline-flex items-center gap-2 text-blue-400 hover:text-cyan-400 transition mb-8 font-medium group">
+            <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i> Volver a Tutoriales
+        </a>
+
+        <!-- Tutorial Header -->
+        <div class="mb-12 pb-8 border-b border-slate-700/50">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                {{ tutorial.title }}
+            </h1>
+            <p class="text-xl text-slate-300 mb-6">{{ tutorial.description }}</p>
+            
+            <div class="flex flex-wrap gap-4 mt-6">
+                <!-- Language Badge -->
+                <div class="flex items-center gap-2">
+                    <span class="text-slate-400 text-sm">Lenguaje:</span>
+                    <span class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-400/30 rounded-lg px-4 py-2 text-sm font-bold text-blue-300">
+                        <i class="fab fa-{{ tutorial.language }}"></i>
+                        {{ tutorial.language | upper }}
+                    </span>
+                </div>
+                
+                <!-- Level Badge -->
+                <div class="flex items-center gap-2">
+                    <span class="text-slate-400 text-sm">Nivel:</span>
+                    <span class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 border border-emerald-400/30 rounded-lg px-4 py-2 text-sm font-bold text-emerald-300" id="levelBadge">
+                        <span id="levelStars">⭐</span>
+                        <span id="levelText">{{ tutorial.level | capitalize }}</span>
+                    </span>
+                </div>
+                
+                <!-- Duration -->
+                <div class="flex items-center gap-2">
+                    <span class="text-slate-400 text-sm">Duración:</span>
+                    <span class="inline-flex items-center gap-2 bg-slate-800/50 border border-slate-600/50 rounded-lg px-4 py-2 text-sm font-bold text-slate-300">
+                        <i class="fas fa-clock"></i>
+                        {{ tutorial.duration }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tutorial Content -->
+        <div class="bg-gradient-to-br from-slate-800/50 via-slate-800/30 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 md:p-10 mb-12 backdrop-blur">
+            <h2 class="text-3xl font-bold mb-6 text-blue-400 flex items-center gap-3">
+                <i class="fas fa-book-open"></i>
+                Contenido del Tutorial
+            </h2>
+
+            <!-- Info Box -->
+            <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-l-4 border-blue-400 rounded-lg p-6 mb-8 backdrop-blur">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-lightbulb text-blue-400 text-xl mt-1"></i>
+                    <div>
+                        <strong class="text-blue-300 text-lg">Consejo:</strong>
+                        <p class="text-slate-300 mt-2">Lee este tutorial con atención y practica los ejemplos en tu editor de código mientras avanzas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What you'll learn -->
+            <h3 class="text-2xl font-bold mb-4 text-cyan-400 flex items-center gap-2">
+                <i class="fas fa-graduation-cap"></i>
+                ¿Qué aprenderás?
+            </h3>
+            <ul class="space-y-3 mb-8 ml-4">
+                <li class="flex items-start gap-3 text-slate-300">
+                    <i class="fas fa-check-circle text-emerald-400 mt-1"></i>
+                    <span>Los conceptos fundamentales de <strong class="text-blue-300">{{ tutorial.language | capitalize }}</strong></span>
+                </li>
+                <li class="flex items-start gap-3 text-slate-300">
+                    <i class="fas fa-check-circle text-emerald-400 mt-1"></i>
+                    <span>Mejores prácticas y convenciones de código</span>
+                </li>
+                <li class="flex items-start gap-3 text-slate-300">
+                    <i class="fas fa-check-circle text-emerald-400 mt-1"></i>
+                    <span>Ejemplos prácticos y casos de uso</span>
+                </li>
+                <li class="flex items-start gap-3 text-slate-300">
+                    <i class="fas fa-check-circle text-emerald-400 mt-1"></i>
+                    <span>Ejercicios para poner en práctica lo aprendido</span>
+                </li>
+            </ul>
+
+            <!-- Prerequisites -->
+            <h3 class="text-2xl font-bold mb-4 text-cyan-400 flex items-center gap-2">
+                <i class="fas fa-clipboard-list"></i>
+                Requisitos previos
+            </h3>
+            <ul class="space-y-3 mb-8 ml-4" id="prerequisites">
+                <!-- Se llenarán dinámicamente -->
+            </ul>
+
+            <!-- Tutorial Content Area -->
+            <div class="tutorial-content-area bg-slate-900/50 border border-slate-700/30 rounded-xl p-6 mb-8">
+                {{ tutorial.content | safe }}
+            </div>
+
+            <!-- Steps to follow -->
+            <h3 class="text-2xl font-bold mb-4 text-cyan-400 flex items-center gap-2">
+                <i class="fas fa-list-ol"></i>
+                Pasos a seguir
+            </h3>
+            <ol class="space-y-3 mb-8 ml-4">
+                <li class="flex items-start gap-3 text-slate-300">
+                    <span class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</span>
+                    <span class="mt-1">Lee cada sección con atención</span>
+                </li>
+                <li class="flex items-start gap-3 text-slate-300">
+                    <span class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm">2</span>
+                    <span class="mt-1">Copia los ejemplos y modifícalos</span>
+                </li>
+                <li class="flex items-start gap-3 text-slate-300">
+                    <span class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm">3</span>
+                    <span class="mt-1">Realiza los ejercicios propuestos</span>
+                </li>
+                <li class="flex items-start gap-3 text-slate-300">
+                    <span class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm">4</span>
+                    <span class="mt-1">Crea tu propio proyecto pequeño</span>
+                </li>
+                <li class="flex items-start gap-3 text-slate-300">
+                    <span class="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm">5</span>
+                    <span class="mt-1">Comparte tu progreso en la comunidad</span>
+                </li>
+            </ol>
+
+            <!-- Warning Box -->
+            <div class="bg-gradient-to-r from-orange-500/10 to-red-500/10 border-l-4 border-orange-400 rounded-lg p-6 backdrop-blur">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-exclamation-triangle text-orange-400 text-xl mt-1"></i>
+                    <div>
+                        <strong class="text-orange-300 text-lg">Importante:</strong>
+                        <p class="text-slate-300 mt-2">La práctica es clave para aprender a programar. No te conformes solo con leer, asegúrate de ejecutar el código y experimentar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="bg-gradient-to-br from-blue-600/20 via-cyan-600/20 to-blue-600/20 border border-blue-500/30 rounded-2xl p-10 text-center mb-12 backdrop-blur">
+            <h3 class="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                ¿Listo para continuar tu aprendizaje?
+            </h3>
+            <p class="text-slate-300 text-lg mb-6">Explora más tutoriales y sigue mejorando tus habilidades.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="/tutoriales" class="group inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1">
+                    <i class="fas fa-book group-hover:scale-110 transition"></i>
+                    Todos los Tutoriales
+                </a>
+                <a href="/" class="group inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-1">
+                    <i class="fas fa-home group-hover:scale-110 transition"></i>
+                    Ir al Inicio
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-700 bg-gradient-to-b from-slate-950 to-slate-900 py-12 px-6 mt-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 text-lg font-bold mb-3">
+                        <i class="fas fa-code text-blue-400"></i>
+                        <span>CodeVerse</span>
+                    </div>
+                    <p class="text-slate-400 text-sm">Aprende a programar desde cero</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-blue-400">Recursos</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="/tutoriales" class="hover:text-blue-400 transition">Tutoriales</a></li>
+                        <li><a href="/snippets" class="hover:text-blue-400 transition">Snippets</a></li>
+                        <li><a href="/herramientas" class="hover:text-blue-400 transition">Herramientas</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-cyan-400">Lenguajes</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="#" class="hover:text-cyan-400 transition">HTML & CSS</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition">JavaScript</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition">Python & Java</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-green-400">Legal</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="#" class="hover:text-green-400 transition">Privacidad</a></li>
+                        <li><a href="#" class="hover:text-green-400 transition">Términos</a></li>
+                        <li><a href="#" class="hover:text-green-400 transition">Contacto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-700 pt-8 text-center text-slate-400">
+                <p>© 2025 CodeVerse. Aprende a programar con tutoriales prácticos.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Datos del tutorial (ejemplo)
+        const tutorial = {
+            title: "Introducción a JavaScript",
+            description: "Aprende los fundamentos de JavaScript desde cero",
+            language: "javascript",
+            level: "principiante",
+            duration: "2 horas"
+        };
+
+        // Configurar badge de nivel con colores
+        function setupLevelBadge() {
+            const levelBadge = document.getElementById('levelBadge');
+            const levelStars = document.getElementById('levelStars');
+            const levelText = document.getElementById('levelText');
+
+            const levelConfig = {
+                'principiante': {
+                    stars: '⭐',
+                    classes: 'from-emerald-500/20 to-emerald-600/20 border-emerald-400/30 text-emerald-300'
+                },
+                'intermedio': {
+                    stars: '⭐⭐',
+                    classes: 'from-blue-500/20 to-blue-600/20 border-blue-400/30 text-blue-300'
+                },
+                'avanzado': {
+                    stars: '⭐⭐⭐',
+                    classes: 'from-orange-500/20 to-orange-600/20 border-orange-400/30 text-orange-300'
+                }
+            };
+
+            const config = levelConfig[tutorial.level] || levelConfig['principiante'];
+            levelStars.textContent = config.stars;
+            levelBadge.className = `inline-flex items-center gap-2 bg-gradient-to-r ${config.classes} rounded-lg px-4 py-2 text-sm font-bold`;
+        }
+
+        // Configurar prerequisitos según nivel
+        function setupPrerequisites() {
+            const prerequisitesList = document.getElementById('prerequisites');
+            let prerequisites = [];
+
+            if (tutorial.level === 'principiante') {
+                prerequisites = [
+                    'Conocimientos básicos de programación',
+                    'Un editor de código instalado (VS Code, Sublime Text, etc.)'
+                ];
+            } else if (tutorial.level === 'intermedio') {
+                prerequisites = [
+                    `Experiencia previa con ${tutorial.language}`,
+                    'Entendimiento de conceptos básicos de programación',
+                    'Disposición para aprender conceptos más avanzados'
+                ];
+            } else {
+                prerequisites = [
+                    `Dominio sólido de ${tutorial.language}`,
+                    'Experiencia con proyectos complejos',
+                    'Capacidad para resolver problemas de forma independiente'
+                ];
+            }
+
+            prerequisitesList.innerHTML = prerequisites.map(prereq => `
+                <li class="flex items-start gap-3 text-slate-300">
+                    <i class="fas fa-arrow-right text-cyan-400 mt-1"></i>
+                    <span>${prereq}</span>
+                </li>
+            `).join('');
+        }
+
+        // Inicializar
+        setupLevelBadge();
+        setupPrerequisites();
+
+        // Animación de scroll suave para los enlaces
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+
+    <style>
+        /* Estilos adicionales para código */
+        .tutorial-content-area pre {
+            @apply bg-slate-950 border border-slate-700 rounded-lg p-4 overflow-x-auto mb-4;
+        }
+
+        .tutorial-content-area code {
+            @apply text-cyan-400 font-mono text-sm;
+        }
+
+        .tutorial-content-area h2 {
+            @apply text-2xl font-bold mt-8 mb-4 text-blue-400 border-b border-slate-700 pb-2;
+        }
+
+        .tutorial-content-area h3 {
+            @apply text-xl font-bold mt-6 mb-3 text-cyan-400;
+        }
+
+        .tutorial-content-area p {
+            @apply text-slate-300 mb-4 leading-relaxed;
+        }
+
+        .tutorial-content-area ul,
+        .tutorial-content-area ol {
+            @apply ml-6 mb-4 space-y-2;
+        }
+
+        .tutorial-content-area li {
+            @apply text-slate-300;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tutorial-content-area > * {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</body>
+</html>

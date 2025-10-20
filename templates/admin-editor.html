@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeVerse - Editor de Tutoriales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</head>
+<body class="bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-slate-100">
+    <!-- Navbar -->
+    <nav class="border-b border-slate-700 bg-slate-950/95 backdrop-blur-md shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 text-2xl font-bold hover:opacity-80 transition">
+                <i class="fas fa-code text-blue-400"></i>
+                <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">CodeVerse</span>
+            </a>
+            <div class="hidden md:flex items-center gap-4">
+                <span class="text-slate-400 text-sm">Panel de Administración</span>
+                <a href="/" class="text-slate-300 hover:text-blue-400 transition font-medium">Volver al sitio</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="py-12 px-6 bg-gradient-to-b from-blue-600/20 via-cyan-600/10 to-transparent">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center">
+                    <i class="fas fa-edit text-white text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-4xl font-bold">Editor de Tutoriales</h1>
+                    <p class="text-slate-400 mt-1">Gestiona y edita el contenido de tus tutoriales</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Messages -->
+    <div class="max-w-7xl mx-auto px-6 mt-6">
+        <div id="successMessage" class="hidden bg-gradient-to-r from-emerald-500/10 to-green-500/10 border-l-4 border-emerald-400 rounded-lg p-4 mb-4">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-check-circle text-emerald-400 text-xl"></i>
+                <span class="text-emerald-300 font-medium" id="successText"></span>
+            </div>
+        </div>
+        <div id="errorMessage" class="hidden bg-gradient-to-r from-red-500/10 to-pink-500/10 border-l-4 border-red-400 rounded-lg p-4 mb-4">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-exclamation-circle text-red-400 text-xl"></i>
+                <span class="text-red-300 font-medium" id="errorText"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="grid lg:grid-cols-[350px_1fr] gap-8">
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Actions Card -->
+                <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-tasks text-blue-400"></i>
+                        Acciones Rápidas
+                    </h3>
+                    <div class="space-y-3">
+                        <button onclick="sincronizarJSON()" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold py-3 px-4 rounded-lg transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 flex items-center justify-center gap-2">
+                            <i class="fas fa-sync-alt"></i>
+                            Sincronizar JSON
+                        </button>
+                        <button onclick="abrirFormularioNuevo()" class="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-semibold py-3 px-4 rounded-lg transition-all shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 flex items-center justify-center gap-2">
+                            <i class="fas fa-plus-circle"></i>
+                            Nuevo Tutorial
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tutorials List Card -->
+                <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-list text-cyan-400"></i>
+                        Tutoriales
+                    </h3>
+                    <ul id="tutorialList" class="space-y-3 max-h-[600px] overflow-y-auto pr-2">
+                        <!-- Generado dinámicamente -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Editor Panel -->
+            <div id="editorPanel" class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl p-8 shadow-xl min-h-[600px]">
+                <div class="text-center py-20">
+                    <i class="fas fa-mouse-pointer text-6xl text-slate-600 mb-6"></i>
+                    <h3 class="text-2xl font-bold text-slate-300 mb-3">Selecciona un tutorial para editar</h3>
+                    <p class="text-slate-400">Elige un tutorial de la lista o crea uno nuevo para comenzar</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Scrollbar personalizado */
+        #tutorialList::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #tutorialList::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 10px;
+        }
+
+        #tutorialList::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.5);
+            border-radius: 10px;
+        }
+
+        #tutorialList::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.7);
+        }
+
+        .tutorial-item {
+            transition: all 0.3s ease;
+        }
+
+        .tutorial-item:hover {
+            transform: translateX(4px);
+        }
+    </style>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        let tutorialesData = [];
+        let tutorialActual = null;
+
+        // Cargar lista de tutoriales
+        async function cargarTutoriales() {
+            try {
+                const response = await fetch(`${API_BASE}/tutoriales`);
+                const data = await response.json();
+
+                if (data.success) {
+                    tutorialesData = data.data;
+                    renderizarLista();
+                }
+            } catch (error) {
+                mostrarError('Error al cargar tutoriales: ' + error.message);
+            }
+        }
+
+        // Renderizar lista de tutoriales
+        function renderizarLista() {
+            const list = document.getElementById('tutorialList');
+            
+            if (tutorialesData.length === 0) {
+                list.innerHTML = '<li class="text-center text-slate-400 py-4">No hay tutoriales</li>';
+                return;
+            }
+
+            list.innerHTML = tutorialesData.map(tutorial => `
+                <li class="tutorial-item bg-slate-800/50 border border-slate-700/50 rounded-xl p-4 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 cursor-pointer">
+                    <div class="mb-3">
+                        <h4 class="font-bold text-white text-sm mb-1">${tutorial.title}</h4>
+                        <div class="flex items-center gap-2 text-xs text-slate-400">
+                            <span class="flex items-center gap-1">
+                                <i class="fab fa-${getLanguageIcon(tutorial.language)}"></i>
+                                ${tutorial.language}
+                            </span>
+                            <span>•</span>
+                            <span>${tutorial.level}</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="editarTutorial(event, '${tutorial._id}')" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold py-2 px-3 rounded-lg transition flex items-center justify-center gap-1">
+                            <i class="fas fa-edit"></i>
+                            Editar
+                        </button>
+                        <button onclick="eliminarTutorial(event, '${tutorial._id}')" class="flex-1 bg-red-600 hover:bg-red-500 text-white text-xs font-semibold py-2 px-3 rounded-lg transition flex items-center justify-center gap-1">
+                            <i class="fas fa-trash"></i>
+                            Eliminar
+                        </button>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        function getLanguageIcon(language) {
+            const icons = {
+                'html': 'html5',
+                'css': 'css3-alt',
+                'javascript': 'js-square',
+                'python': 'python',
+                'java': 'java'
+            };
+            return icons[language] || 'code';
+        }
+
+        // Editar tutorial
+        async function editarTutorial(event, tutorialId) {
+            event.stopPropagation();
+            const tutorial = tutorialesData.find(t => t._id === tutorialId);
+            if (!tutorial) return;
+
+            tutorialActual = tutorial;
+
+            try {
+                const response = await fetch(`${API_BASE}/tutorial/${tutorial._id}/contenido`);
+                const data = await response.json();
+
+                let contenido = '';
+                if (data.success && data.data) {
+                    contenido = data.data.content;
+                }
+
+                const panel = document.getElementById('editorPanel');
+                panel.innerHTML = `
+                    <div class="space-y-6">
+                        <!-- Header -->
+                        <div class="border-b border-slate-700/50 pb-6">
+                            <h2 class="text-3xl font-bold text-white mb-2">${tutorial.title}</h2>
+                            <p class="text-slate-400">${tutorial.description}</p>
+                        </div>
+
+                        <!-- Info Grid -->
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
+                                <div class="flex items-center gap-2 text-slate-400 text-sm mb-1">
+                                    <i class="fab fa-${getLanguageIcon(tutorial.language)}"></i>
+                                    Lenguaje
+                                </div>
+                                <div class="text-white font-bold">${tutorial.language.toUpperCase()}</div>
+                            </div>
+                            <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
+                                <div class="flex items-center gap-2 text-slate-400 text-sm mb-1">
+                                    <i class="fas fa-signal"></i>
+                                    Nivel
+                                </div>
+                                <div class="text-white font-bold capitalize">${tutorial.level}</div>
+                            </div>
+                            <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
+                                <div class="flex items-center gap-2 text-slate-400 text-sm mb-1">
+                                    <i class="fas fa-clock"></i>
+                                    Duración
+                                </div>
+                                <div class="text-white font-bold">${tutorial.duration}</div>
+                            </div>
+                        </div>
+
+                        <!-- Toolbar -->
+                        <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
+                            <h4 class="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
+                                <i class="fas fa-tools text-blue-400"></i>
+                                Herramientas de Formato
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="insertarEnTexto('<h3>', '</h3>')" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-lg text-xs font-medium transition flex items-center gap-1">
+                                    <i class="fas fa-heading"></i>
+                                    Encabezado
+                                </button>
+                                <button onclick="insertarEnTexto('<p>', '</p>')" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-lg text-xs font-medium transition flex items-center gap-1">
+                                    <i class="fas fa-paragraph"></i>
+                                    Párrafo
+                                </button>
+                                <button onclick="insertarEnTexto('<ul><li>', '</li></ul>')" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-lg text-xs font-medium transition flex items-center gap-1">
+                                    <i class="fas fa-list"></i>
+                                    Lista
+                                </button>
+                                <button onclick="insertarEnTexto('<code>', '</code>')" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-lg text-xs font-medium transition flex items-center gap-1">
+                                    <i class="fas fa-code"></i>
+                                    Código
+                                </button>
+                                <button onclick="insertarEnTexto('<strong>', '</strong>')" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-lg text-xs font-medium transition flex items-center gap-1">
+                                    <i class="fas fa-bold"></i>
+                                    Negrita
+                                </button>
+                                <button onclick="insertarEnTexto('<em>', '</em>')" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-lg text-xs font-medium transition flex items-center gap-1">
+                                    <i class="fas fa-italic"></i>
+                                    Itálica
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Editor -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center gap-2">
+                                <i class="fas fa-file-code text-cyan-400"></i>
+                                Contenido HTML
+                            </label>
+                            <textarea id="contenidoEditor" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-4 text-cyan-400 font-mono text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition" rows="20">${contenido}</textarea>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex gap-3 pt-4 border-t border-slate-700/50">
+                            <button onclick="guardarContenido()" class="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-semibold py-3 px-6 rounded-lg transition-all shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 flex items-center justify-center gap-2">
+                                <i class="fas fa-save"></i>
+                                Guardar Contenido
+                            </button>
+                            <button onclick="previewContenido()" class="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold py-3 px-6 rounded-lg transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 flex items-center justify-center gap-2">
+                                <i class="fas fa-eye"></i>
+                                Vista Previa
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                mostrarError('Error al cargar el editor: ' + error.message);
+            }
+        }
+
+        // Guardar contenido
+        async function guardarContenido() {
+            if (!tutorialActual) return;
+
+            const contenido = document.getElementById('contenidoEditor').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/tutorial/${tutorialActual._id}/contenido`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        content: contenido,
+                        title: tutorialActual.title,
+                        language: tutorialActual.language,
+                        level: tutorialActual.level,
+                        duration: tutorialActual.duration,
+                        description: tutorialActual.description
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    mostrarExito('✅ Contenido guardado exitosamente');
+                } else {
+                    mostrarError('Error: ' + data.message);
+                }
+            } catch (error) {
+                mostrarError('Error al guardar: ' + error.message);
+            }
+        }
+
+        // Sincronizar JSON
+        async function sincronizarJSON() {
+            try {
+                const response = await fetch(`${API_BASE}/sincronizar-json`, { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    mostrarExito('🔄 JSON sincronizado exitosamente con MongoDB');
+                    cargarTutoriales();
+                } else {
+                    mostrarError('Error: ' + data.message);
+                }
+            } catch (error) {
+                mostrarError('Error al sincronizar: ' + error.message);
+            }
+        }
+
+        // Abrir formulario nuevo tutorial
+        function abrirFormularioNuevo() {
+            tutorialActual = null;
+            const panel = document.getElementById('editorPanel');
+            panel.innerHTML = `
+                <div class="space-y-6">
+                    <div class="border-b border-slate-700/50 pb-6">
+                        <h2 class="text-3xl font-bold text-white mb-2">Crear Nuevo Tutorial</h2>
+                        <p class="text-slate-400">Completa todos los campos para crear un nuevo tutorial</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-300 mb-2">Título del Tutorial *</label>
+                            <input type="text" id="newTitle" placeholder="Ej: Introducción a React" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-300 mb-2">Descripción *</label>
+                            <textarea id="newDescription" placeholder="Descripción breve del tutorial" rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"></textarea>
+                        </div>
+
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-300 mb-2">Lenguaje *</label>
+                                <select id="newLanguage" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition">
+                                    <option value="html">HTML</option>
+                                    <option value="css">CSS</option>
+                                    <option value="javascript">JavaScript</option>
+                                    <option value="python">Python</option>
+                                    <option value="java">Java</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-300 mb-2">Nivel *</label>
+                                <select id="newLevel" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition">
+                                    <option value="principiante">Principiante</option>
+                                    <option value="intermedio">Intermedio</option>
+                                    <option value="avanzado">Avanzado</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-300 mb-2">Duración *</label>
+                                <input type="text" id="newDuration" placeholder="30 min" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-300 mb-2">Contenido HTML</label>
+                            <textarea id="newContent" placeholder="<h3>Contenido del tutorial</h3><p>...</p>" rows="12" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-4 text-cyan-400 font-mono text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 pt-4 border-t border-slate-700/50">
+                        <button onclick="crearNuevoTutorial()" class="flex-1 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-semibold py-3 px-6 rounded-lg transition-all shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 flex items-center justify-center gap-2">
+                            <i class="fas fa-check-circle"></i>
+                            Crear Tutorial
+                        </button>
+                        <button onclick="cargarTutoriales(); document.getElementById('editorPanel').innerHTML = '<div class=\\'text-center py-20\\'><i class=\\'fas fa-mouse-pointer text-6xl text-slate-600 mb-6\\'></i><h3 class=\\'text-2xl font-bold text-slate-300 mb-3\\'>Selecciona un tutorial para editar</h3><p class=\\'text-slate-400\\'>Elige un tutorial de la lista o crea uno nuevo</p></div>'" class="px-8 bg-slate-700 hover:bg-slate-600 text-white font-semibold py-3 rounded-lg transition flex items-center gap-2">
+                            <i class="fas fa-times"></i>
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Crear nuevo tutorial
+        async function crearNuevoTutorial() {
+            const title = document.getElementById('newTitle').value.trim();
+            const description = document.getElementById('newDescription').value.trim();
+            const language = document.getElementById('newLanguage').value;
+            const level = document.getElementById('newLevel').value;
+            const duration = document.getElementById('newDuration').value.trim();
+            const content = document.getElementById('newContent').value;
+
+            if (!title || !description || !duration) {
+                mostrarError('Por favor completa todos los campos requeridos (*)');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/tutorial/nuevo`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, description, language, level, duration, content })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    mostrarExito('✅ Tutorial creado exitosamente');
+                    setTimeout(() => cargarTutoriales(), 1000);
+                } else {
+                    mostrarError('Error: ' + data.message);
+                }
+            } catch (error) {
+                mostrarError('Error al crear tutorial: ' + error.message);
+            }
+        }
+
+        // Eliminar tutorial
+        async function eliminarTutorial(event, tutorialId) {
+            event.stopPropagation();
+            
+            if (!confirm('¿Estás seguro de que quieres eliminar este tutorial?')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/tutorial/${tutorialId}`, { method: 'DELETE' });
+                const data = await response.json();
+
+                if (data.success) {
+                    mostrarExito('✅ Tutorial eliminado exitosamente');
+                    setTimeout(() => cargarTutoriales(), 500);
+                } else {
+                    mostrarError('Error: ' + data.message);
+                }
+            } catch (error) {
+                mostrarError('Error al eliminar: ' + error.message);
+            }
+        }
+
+        // Insertar en textarea
+        function insertarEnTexto(apertura, cierre) {
+            const editor = document.getElementById('contenidoEditor');
+            if (!editor) return;
+
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const texto = editor.value;
+            const seleccionado = texto.substring(start, end);
+
+            editor.value = texto.substring(0, start) + apertura + seleccionado + cierre + texto.substring(end);
+            editor.focus();
+            editor.setSelectionRange(start + apertura.length, start + apertura.length + seleccionado.length);
+        }
+
+        // Preview
+        function previewContenido() {
+            const contenido = document.getElementById('contenidoEditor').value;
+            const preview = window.open('', '_blank');
+            preview.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Vista Previa</title>
+                    <style>
+                        body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; padding: 2rem; max-width: 900px; margin: 0 auto; }
+                        code { background: #1e293b; padding: 2px 6px; border-radius: 4px; color: #22d3ee; }
+                        pre { background: #1e293b; padding: 1rem; border-radius: 8px; overflow-x: auto; }
+                        h2, h3 { color: #3b82f6; }
+                        strong { color: #60a5fa; }
+                    </style>
+                </head>
+                <body>${contenido}</body>
+                </html>
+            `);
+        }
+
+        // Mensajes
+        function mostrarExito(mensaje) {
+            const msg = document.getElementById('successMessage');
+            const text = document.getElementById('successText');
+            text.textContent = mensaje;
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 3000);
+        }
+
+        function mostrarError(mensaje) {
+            const msg = document.getElementById('errorMessage');
+            const text = document.getElementById('errorText');
+            text.textContent = mensaje;
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 3000);
+        }
+
+        // Inicializar
+        cargarTutoriales();
+    </script>
+</body>
+</html>

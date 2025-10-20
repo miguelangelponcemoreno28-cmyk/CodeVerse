@@ -1,0 +1,417 @@
+{% extends "base.html" %}
+
+{% block title %}Convertidor de Unidades - CodeVerse{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse-glow {
+            from {
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+            }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .input-focus {
+            transition: all 0.3s ease;
+        }
+        
+        .input-focus:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+
+        .tab-button {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(34, 197, 94, 0.3));
+            border-color: rgba(59, 130, 246, 0.6);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .converter-card {
+            transition: all 0.3s ease;
+        }
+
+        .converter-card:hover {
+            transform: translateY(-5px);
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            padding-right: 2.5rem;
+        }
+    </style>
+
+    <!-- Animated background particles -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-4 -left-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse"></div>
+        <div class="absolute -top-4 -right-4 w-72 h-72 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style="animation-delay: 4s;"></div>
+    </div>
+
+    <main class="min-h-screen flex flex-col items-center justify-center p-4 relative z-10">
+        <!-- Main container -->
+        <div class="container max-w-2xl w-full glass-effect rounded-3xl shadow-2xl p-8 space-y-8 floating border border-slate-700/50">
+            <!-- Header -->
+            <div class="space-y-4 text-center">
+                <div class="mx-auto w-20 h-20 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+                    <i class="fas fa-exchange-alt text-white text-3xl"></i>
+                </div>
+                <h1 class="text-3xl font-black text-slate-100 leading-tight">
+                    Convertidor de
+                    <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Unidades</span>
+                </h1>
+                <p class="text-slate-400 font-medium">
+                    Convierte entre diferentes unidades de forma rápida y precisa
+                </p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="grid grid-cols-4 gap-2">
+                <button type="button" class="tab-button active border-2 border-slate-700 rounded-xl py-3 px-4 text-sm font-semibold text-slate-300 hover:text-slate-100 transition-all" data-tab="longitud">
+                    <i class="fas fa-ruler mr-2"></i>Longitud
+                </button>
+                <button type="button" class="tab-button border-2 border-slate-700 rounded-xl py-3 px-4 text-sm font-semibold text-slate-300 hover:text-slate-100 transition-all" data-tab="peso">
+                    <i class="fas fa-weight mr-2"></i>Peso
+                </button>
+                <button type="button" class="tab-button border-2 border-slate-700 rounded-xl py-3 px-4 text-sm font-semibold text-slate-300 hover:text-slate-100 transition-all" data-tab="temperatura">
+                    <i class="fas fa-thermometer-half mr-2"></i>Temp.
+                </button>
+                <button type="button" class="tab-button border-2 border-slate-700 rounded-xl py-3 px-4 text-sm font-semibold text-slate-300 hover:text-slate-100 transition-all" data-tab="volumen">
+                    <i class="fas fa-cube mr-2"></i>Volumen
+                </button>
+            </div>
+
+            <!-- Converter sections -->
+            <section class="space-y-6">
+                <!-- Longitud -->
+                <article id="longitud" class="tab-content active converter-card space-y-4">
+                    <h2 class="text-lg font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fas fa-ruler text-blue-400"></i> Longitud
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">Valor</label>
+                            <input type="number" id="longitud-valor" placeholder="Ingresa valor" class="input-focus w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/80 text-slate-100 placeholder-slate-500 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">De</label>
+                            <select id="longitud-de" class="input-focus w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/80 text-slate-100 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30">
+                                <option value="m">Metros (m)</option>
+                                <option value="km">Kilómetros (km)</option>
+                                <option value="cm">Centímetros (cm)</option>
+                                <option value="mm">Milímetros (mm)</option>
+                                <option value="mi">Millas (mi)</option>
+                                <option value="yd">Yardas (yd)</option>
+                                <option value="ft">Pies (ft)</option>
+                                <option value="in">Pulgadas (in)</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">Resultado</label>
+                            <input type="text" id="longitud-resultado" readonly placeholder="Resultado" class="w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/50 text-slate-100 placeholder-slate-500">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">A</label>
+                            <select id="longitud-a" class="input-focus w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/80 text-slate-100 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30">
+                                <option value="m">Metros (m)</option>
+                                <option value="km">Kilómetros (km)</option>
+                                <option value="cm">Centímetros (cm)</option>
+                                <option value="mm">Milímetros (mm)</option>
+                                <option value="mi">Millas (mi)</option>
+                                <option value="yd">Yardas (yd)</option>
+                                <option value="ft">Pies (ft)</option>
+                                <option value="in">Pulgadas (in)</option>
+                            </select>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Peso -->
+                <article id="peso" class="tab-content converter-card space-y-4">
+                    <h2 class="text-lg font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fas fa-weight text-green-400"></i> Peso
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">Valor</label>
+                            <input type="number" id="peso-valor" placeholder="Ingresa valor" class="input-focus w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/80 text-slate-100 placeholder-slate-500 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">De</label>
+                            <select id="peso-de" class="input-focus w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/80 text-slate-100 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30">
+                                <option value="kg">Kilogramos (kg)</option>
+                                <option value="g">Gramos (g)</option>
+                                <option value="mg">Miligramos (mg)</option>
+                                <option value="lb">Libras (lb)</option>
+                                <option value="oz">Onzas (oz)</option>
+                                <option value="ton">Toneladas (ton)</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">Resultado</label>
+                            <input type="text" id="peso-resultado" readonly placeholder="Resultado" class="w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/50 text-slate-100 placeholder-slate-500">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">A</label>
+                            <select id="peso-a" class="input-focus w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/80 text-slate-100 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30">
+                                <option value="kg">Kilogramos (kg)</option>
+                                <option value="g">Gramos (g)</option>
+                                <option value="mg">Miligramos (mg)</option>
+                                <option value="lb">Libras (lb)</option>
+                                <option value="oz">Onzas (oz)</option>
+                                <option value="ton">Toneladas (ton)</option>
+                            </select>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Temperatura -->
+                <article id="temperatura" class="tab-content converter-card space-y-4">
+                    <h2 class="text-lg font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fas fa-thermometer-half text-red-400"></i> Temperatura
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">Valor</label>
+                            <input type="number" id="temperatura-valor" placeholder="Ingresa valor" class="input-focus w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/80 text-slate-100 placeholder-slate-500 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">De</label>
+                            <select id="temperatura-de" class="input-focus w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/80 text-slate-100 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30">
+                                <option value="c">Celsius (°C)</option>
+                                <option value="f">Fahrenheit (°F)</option>
+                                <option value="k">Kelvin (K)</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">Resultado</label>
+                            <input type="text" id="temperatura-resultado" readonly placeholder="Resultado" class="w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/50 text-slate-100 placeholder-slate-500">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">A</label>
+                            <select id="temperatura-a" class="input-focus w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/80 text-slate-100 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30">
+                                <option value="c">Celsius (°C)</option>
+                                <option value="f">Fahrenheit (°F)</option>
+                                <option value="k">Kelvin (K)</option>
+                            </select>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Volumen -->
+                <article id="volumen" class="tab-content converter-card space-y-4">
+                    <h2 class="text-lg font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fas fa-cube text-purple-400"></i> Volumen
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">Valor</label>
+                            <input type="number" id="volumen-valor" placeholder="Ingresa valor" class="input-focus w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/80 text-slate-100 placeholder-slate-500 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">De</label>
+                            <select id="volumen-de" class="input-focus w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/80 text-slate-100 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30">
+                                <option value="l">Litros (L)</option>
+                                <option value="ml">Mililitros (mL)</option>
+                                <option value="m3">Metros cúbicos (m³)</option>
+                                <option value="cm3">Centímetros cúbicos (cm³)</option>
+                                <option value="gal">Galones (gal)</option>
+                                <option value="pt">Pintas (pt)</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">Resultado</label>
+                            <input type="text" id="volumen-resultado" readonly placeholder="Resultado" class="w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/50 text-slate-100 placeholder-slate-500">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-semibold text-slate-300">A</label>
+                            <select id="volumen-a" class="input-focus w-full px-4 py-3 border-2 border-slate-700 rounded-xl bg-slate-900/80 text-slate-100 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30">
+                                <option value="l">Litros (L)</option>
+                                <option value="ml">Mililitros (mL)</option>
+                                <option value="m3">Metros cúbicos (m³)</option>
+                                <option value="cm3">Centímetros cúbicos (cm³)</option>
+                                <option value="gal">Galones (gal)</option>
+                                <option value="pt">Pintas (pt)</option>
+                            </select>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Quick conversions -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 pt-4 border-t border-slate-700/50">
+                <button class="quick-convert bg-blue-500/10 border border-blue-400/30 rounded-lg py-2 px-3 text-center hover:bg-blue-500/20 transition-all text-sm" data-from="kg" data-to="lb">
+                    <div class="text-xs text-slate-400">1 kg =</div>
+                    <div class="text-sm font-bold text-blue-400">2.205 lb</div>
+                </button>
+                <button class="quick-convert bg-green-500/10 border border-green-400/30 rounded-lg py-2 px-3 text-center hover:bg-green-500/20 transition-all text-sm" data-from="m" data-to="ft">
+                    <div class="text-xs text-slate-400">1 m =</div>
+                    <div class="text-sm font-bold text-green-400">3.281 ft</div>
+                </button>
+                <button class="quick-convert bg-red-500/10 border border-red-400/30 rounded-lg py-2 px-3 text-center hover:bg-red-500/20 transition-all text-sm" data-from="c" data-to="f">
+                    <div class="text-xs text-slate-400">0°C =</div>
+                    <div class="text-sm font-bold text-red-400">32°F</div>
+                </button>
+                <button class="quick-convert bg-purple-500/10 border border-purple-400/30 rounded-lg py-2 px-3 text-center hover:bg-purple-500/20 transition-all text-sm" data-from="l" data-to="gal">
+                    <div class="text-xs text-slate-400">1 L =</div>
+                    <div class="text-sm font-bold text-purple-400">0.264 gal</div>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Factores de conversión
+        const conversiones = {
+            longitud: {
+                m: 1,
+                km: 0.001,
+                cm: 100,
+                mm: 1000,
+                mi: 0.000621371,
+                yd: 1.09361,
+                ft: 3.28084,
+                in: 39.3701
+            },
+            peso: {
+                kg: 1,
+                g: 1000,
+                mg: 1000000,
+                lb: 2.20462,
+                oz: 35.274,
+                ton: 0.001
+            },
+            temperatura: {
+                c: (v, to) => {
+                    if (to === 'f') return (v * 9/5) + 32;
+                    if (to === 'k') return v + 273.15;
+                    return v;
+                },
+                f: (v, to) => {
+                    if (to === 'c') return (v - 32) * 5/9;
+                    if (to === 'k') return (v - 32) * 5/9 + 273.15;
+                    return v;
+                },
+                k: (v, to) => {
+                    if (to === 'c') return v - 273.15;
+                    if (to === 'f') return (v - 273.15) * 9/5 + 32;
+                    return v;
+                }
+            },
+            volumen: {
+                l: 1,
+                ml: 1000,
+                m3: 0.001,
+                cm3: 1000,
+                gal: 0.264172,
+                pt: 2.11338
+            }
+        };
+
+        // Tabs functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabName = button.getAttribute('data-tab');
+                
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                button.classList.add('active');
+                document.getElementById(tabName).classList.add('active');
+            });
+        });
+
+        // Conversión function
+        function convertir(tipo) {
+            const valor = parseFloat(document.getElementById(`${tipo}-valor`).value);
+            const de = document.getElementById(`${tipo}-de`).value;
+            const a = document.getElementById(`${tipo}-a`).value;
+            
+            if (isNaN(valor) || valor === '') {
+                document.getElementById(`${tipo}-resultado`).value = '';
+                return;
+            }
+
+            let resultado;
+            if (tipo === 'temperatura') {
+                resultado = conversiones[tipo][de](valor, a);
+            } else {
+                const valorEnBase = valor / conversiones[tipo][de];
+                resultado = valorEnBase * conversiones[tipo][a];
+            }
+
+            document.getElementById(`${tipo}-resultado`).value = resultado.toFixed(6).replace(/\.?0+$/, '');
+        }
+
+        // Event listeners para conversiones
+        ['longitud', 'peso', 'temperatura', 'volumen'].forEach(tipo => {
+            document.getElementById(`${tipo}-valor`).addEventListener('input', () => convertir(tipo));
+            document.getElementById(`${tipo}-de`).addEventListener('change', () => convertir(tipo));
+            document.getElementById(`${tipo}-a`).addEventListener('change', () => convertir(tipo));
+        });
+
+        // Quick conversions
+        document.querySelectorAll('.quick-convert').forEach(button => {
+            button.addEventListener('click', () => {
+                alert('Conversión rápida: ' + button.getAttribute('data-from') + ' a ' + button.getAttribute('data-to'));
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CodeVerse - Herramientas{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(100px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideOutDown {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(100px); }
+        }
+
+        .notification-coffee {
+            animation: slideInUp 0.5s ease-out;
+        }
+        .notification-coffee.closing {
+            animation: slideOutDown 0.5s ease-out;
+        }
+
+        .coffee-button {
+            background: linear-gradient(135deg, #FFDD00 0%, #FFA500 100%);
+            box-shadow: 0 8px 24px rgba(255, 221, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .coffee-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(255, 221, 0, 0.4);
+        }
+        .coffee-button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-slate-100">
+    
+    <!-- 🌐 NAVBAR -->
+    <nav class="sticky top-0 z-50 border-b border-slate-700 bg-slate-950/95 backdrop-blur-md shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 text-2xl font-bold hover:opacity-80 transition">
+                <i class="fas fa-code text-blue-400"></i>
+                <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">CodeVerse</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="/" class="text-slate-300 hover:text-blue-400 transition font-medium">Inicio</a>
+                <a href="/tutoriales" class="text-slate-300 hover:text-blue-400 transition font-medium">Tutoriales</a>
+                <a href="/snippets" class="text-slate-300 hover:text-blue-400 transition font-medium">Snippets</a>
+                <a href="/herramientas" class="text-blue-400 font-bold transition">Herramientas</a>
+            </div>
+            <button id="mobileMenuBtn" class="md:hidden text-slate-300 hover:text-blue-400">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 🔹 CONTENIDO PRINCIPAL -->
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- ⚙️ FOOTER -->
+    <footer class="border-t border-slate-700 bg-gradient-to-b from-slate-950 to-slate-900 py-12 px-6 mt-20">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-slate-400">© 2025 CodeVerse. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- ☕ NOTIFICACIÓN BUY ME A COFFEE -->
+    <div id="coffeeNotification" class="fixed bottom-6 right-6 z-40 max-w-sm notification-coffee hidden">
+        <div class="bg-gradient-to-br from-slate-900 to-slate-800 border-2 border-yellow-500 rounded-xl shadow-2xl p-6 backdrop-blur-md">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-mug-hot text-yellow-400 text-2xl"></i>
+                    <h3 class="text-lg font-bold text-white">¿Te gusta CodeVerse?</h3>
+                </div>
+                <button id="closeCoffeeNotif" class="text-slate-400 hover:text-white transition">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <p class="text-slate-300 text-sm mb-4 leading-relaxed">
+                Tu apoyo nos ayuda a mantener, actualizar y mejorar esta plataforma. 
+                <span class="text-yellow-300 font-semibold">¡Cada café cuenta!</span>
+            </p>
+
+            <a href="https://buymeacoffee.com/lunor" 
+               target="_blank"
+               class="coffee-button w-full py-3 px-4 rounded-lg font-semibold text-slate-900 flex items-center justify-center gap-2 mb-3"
+               onclick="closeCoffeeNotifOnClick()">
+                <i class="fas fa-heart text-red-500"></i>
+                <span>Apoyar en Buy Me a Coffee</span>
+            </a>
+
+            <p class="text-xs text-slate-400 text-center">
+                ✨ Esta notificación reaparecerá en 24 horas
+            </p>
+        </div>
+    </div>
+
+    <!-- 📜 SCRIPTS -->
+    <script>
+        const STORAGE_KEY = 'codeverse_coffee_notification_time';
+        const NOTIFICATION_INTERVAL = 24 * 60 * 60 * 1000; // 24 horas
+
+        function showCoffeeNotification() {
+            const lastShowTime = localStorage.getItem(STORAGE_KEY);
+            const now = Date.now();
+
+            if (!lastShowTime || (now - parseInt(lastShowTime)) >= NOTIFICATION_INTERVAL) {
+                const notifElement = document.getElementById('coffeeNotification');
+                notifElement.classList.remove('hidden');
+                localStorage.setItem(STORAGE_KEY, now.toString());
+            }
+        }
+
+        function closeCoffeeNotif() {
+            const notifElement = document.getElementById('coffeeNotification');
+            notifElement.classList.add('closing');
+            setTimeout(() => {
+                notifElement.classList.add('hidden');
+                notifElement.classList.remove('closing');
+            }, 500);
+        }
+
+        document.getElementById('closeCoffeeNotif').addEventListener('click', closeCoffeeNotif);
+        function closeCoffeeNotifOnClick() { closeCoffeeNotif(); }
+
+        window.addEventListener('load', showCoffeeNotification);
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

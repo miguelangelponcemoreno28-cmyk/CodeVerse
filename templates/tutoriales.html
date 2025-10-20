@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriales de Programación | CodeVerse - Aprende Gratis</title>
+    <meta name="description" content="Tutoriales gratuitos de programación en español. HTML, CSS, JavaScript, Python, Java y más. Aprende desde cero con ejemplos prácticos.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</head>
+<body class="bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-slate-100">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-slate-700 bg-slate-950/95 backdrop-blur-md shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 text-2xl font-bold hover:opacity-80 transition">
+                <i class="fas fa-code text-blue-400"></i>
+                <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">CodeVerse</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="/" class="text-slate-300 hover:text-blue-400 transition font-medium">Inicio</a>
+                <a href="/snippets" class="text-slate-300 hover:text-blue-400 transition font-medium">Snippets</a>
+                <a href="/tutoriales" class="text-blue-400 font-medium border-b-2 border-blue-400 pb-1">Tutoriales</a>
+                <a href="/herramientas" class="text-slate-300 hover:text-blue-400 transition font-medium">Herramientas</a>
+            </div>
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuBtn" class="md:hidden text-slate-300 hover:text-blue-400">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-slate-900/95 backdrop-blur-md border-t border-slate-700">
+            <div class="px-6 py-4 space-y-3">
+                <a href="/" class="block text-slate-300 hover:text-blue-400 transition font-medium py-2">Inicio</a>
+                <a href="/snippets" class="block text-slate-300 hover:text-blue-400 transition font-medium py-2">Snippets</a>
+                <a href="/tutoriales" class="block text-blue-400 font-medium py-2">Tutoriales</a>
+                <a href="/herramientas" class="block text-slate-300 hover:text-blue-400 transition font-medium py-2">Herramientas</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Mejorado -->
+    <section class="py-20 px-6 bg-gradient-to-b from-blue-600/20 via-cyan-600/10 to-transparent relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-7xl mx-auto text-center relative z-10">
+            <a href="/" class="inline-flex items-center gap-2 text-blue-400 hover:text-cyan-400 transition mb-8 font-medium group">
+                <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i> Volver al Inicio
+            </a>
+            
+            <div class="mb-6 inline-block">
+                <span class="bg-blue-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-semibold border border-blue-400/30 animate-pulse-slow">
+                    <i class="fas fa-graduation-cap mr-2"></i>Biblioteca de Tutoriales
+                </span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Aprende a <span class="bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent animate-gradient">Programar</span>
+            </h1>
+            <p class="text-xl text-slate-300 max-w-2xl mx-auto mb-8">
+                Tutoriales paso a paso para dominar diferentes lenguajes de programación. Desde principiante hasta experto.
+            </p>
+            
+            <!-- Stats Mini -->
+            <div class="flex flex-wrap justify-center gap-6 text-slate-400 text-sm">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-book text-blue-400"></i>
+                    <span><span class="font-bold text-white" id="totalTutorials">0</span> Tutoriales</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-users text-cyan-400"></i>
+                    <span>+10,000 Estudiantes</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-check-circle text-green-400"></i>
+                    <span>100% Gratis</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Bar -->
+    <section class="px-6 -mt-8 relative z-20">
+        <div class="max-w-3xl mx-auto">
+            <div class="bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-2 shadow-2xl">
+                <div class="flex gap-2">
+                    <div class="relative flex-1">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input 
+                            type="text" 
+                            id="searchInput"
+                            placeholder="Buscar tutoriales por título, descripción o lenguaje..."
+                            class="w-full bg-transparent border-0 pl-12 pr-4 py-4 text-white placeholder-slate-400 focus:outline-none"
+                        >
+                    </div>
+                    <button id="searchBtn" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold px-6 py-4 rounded-xl transition-all shadow-lg shadow-blue-500/30">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters Mejorados -->
+    <section class="px-6 py-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-slate-800/30 backdrop-blur border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-filter text-blue-400"></i>
+                        Filtrar por Lenguaje
+                    </h3>
+                    <div class="flex items-center gap-3">
+                        <span class="text-slate-400 text-sm">Nivel:</span>
+                        <select id="levelFilter" class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="all">Todos los niveles</option>
+                            <option value="principiante">Principiante</option>
+                            <option value="intermedio">Intermedio</option>
+                            <option value="avanzado">Avanzado</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-3">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-th"></i> Todos
+                    </button>
+                    <button class="filter-btn" data-filter="html">
+                        <i class="fab fa-html5"></i> HTML
+                    </button>
+                    <button class="filter-btn" data-filter="css">
+                        <i class="fab fa-css3-alt"></i> CSS
+                    </button>
+                    <button class="filter-btn" data-filter="javascript">
+                        <i class="fab fa-js-square"></i> JavaScript
+                    </button>
+                    <button class="filter-btn" data-filter="python">
+                        <i class="fab fa-python"></i> Python
+                    </button>
+                    <button class="filter-btn" data-filter="java">
+                        <i class="fab fa-java"></i> Java
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutoriales Grid -->
+    <section class="px-6 py-12">
+        <div class="max-w-7xl mx-auto">
+            <!-- Results Count -->
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-white">
+                    <span id="resultsCount">0</span> Tutoriales Disponibles
+                </h2>
+                <div class="flex items-center gap-2 text-slate-400">
+                    <i class="fas fa-sort-amount-down"></i>
+                    <span class="text-sm">Más recientes</span>
+                </div>
+            </div>
+            
+            <div id="tutorialsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Loading State -->
+                <div class="col-span-full text-center py-20">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+                    <p class="text-slate-400 mt-4">Cargando tutoriales...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Section Mejorado -->
+    <section class="px-6 py-8">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-6">
+            <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-l-4 border-blue-400 rounded-xl p-8 backdrop-blur shadow-xl hover:shadow-2xl transition-all">
+                <div class="flex items-start gap-4">
+                    <i class="fas fa-graduation-cap text-blue-400 text-3xl mt-1"></i>
+                    <div>
+                        <strong class="text-blue-300 text-xl block mb-2">🎓 Empieza tu viaje de aprendizaje</strong>
+                        <p class="text-slate-300 text-base leading-relaxed">
+                            Cada tutorial está diseñado para que aprendas de forma progresiva. Comienza con los tutoriales para principiantes y avanza a tu propio ritmo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-l-4 border-purple-400 rounded-xl p-8 backdrop-blur shadow-xl hover:shadow-2xl transition-all">
+                <div class="flex items-start gap-4">
+                    <i class="fas fa-lightbulb text-purple-400 text-3xl mt-1"></i>
+                    <div>
+                        <strong class="text-purple-300 text-xl block mb-2">💡 Aprende Practicando</strong>
+                        <p class="text-slate-300 text-base leading-relaxed">
+                            Cada lección incluye ejemplos de código que puedes copiar y modificar. La mejor forma de aprender es haciendo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-700 bg-gradient-to-b from-slate-950 to-slate-900 py-12 px-6 mt-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 text-lg font-bold mb-3">
+                        <i class="fas fa-code text-blue-400"></i>
+                        <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">CodeVerse</span>
+                    </div>
+                    <p class="text-slate-400 text-sm mb-4">Aprende a programar desde cero</p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all">
+                            <i class="fab fa-twitter text-slate-400"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all">
+                            <i class="fab fa-github text-slate-400"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-blue-400">Recursos</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="/tutoriales" class="hover:text-blue-400 transition flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs"></i>Tutoriales
+                        </a></li>
+                        <li><a href="/snippets" class="hover:text-blue-400 transition flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs"></i>Snippets
+                        </a></li>
+                        <li><a href="/herramientas" class="hover:text-blue-400 transition flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs"></i>Herramientas
+                        </a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-cyan-400">Lenguajes</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="#" class="hover:text-cyan-400 transition flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs"></i>HTML & CSS
+                        </a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs"></i>JavaScript
+                        </a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs"></i>Python & Java
+                        </a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-green-400">Legal</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="#" class="hover:text-green-400 transition flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs"></i>Privacidad
+                        </a></li>
+                        <li><a href="#" class="hover:text-green-400 transition flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs"></i>Términos
+                        </a></li>
+                        <li><a href="#" class="hover:text-green-400 transition flex items-center gap-2">
+                            <i class="fas fa-chevron-right text-xs"></i>Contacto
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-700 pt-8 text-center text-slate-400">
+                <p>© 2025 CodeVerse. Aprende a programar con tutoriales prácticos.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top -->
+    <button id="scrollToTop" class="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white rounded-full shadow-2xl shadow-blue-500/50 flex items-center justify-center transition-all opacity-0 pointer-events-none hover:scale-110">
+        <i class="fas fa-arrow-up text-xl"></i>
+    </button>
+
+    <style>
+        .filter-btn {
+            @apply px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 border-2 border-slate-600 text-slate-300 hover:border-blue-400 hover:text-blue-400 hover:shadow-lg hover:shadow-blue-500/20 hover:-translate-y-0.5 flex items-center gap-2;
+        }
+        
+        .filter-btn.active {
+            @apply border-blue-500 bg-gradient-to-r from-blue-600/40 to-cyan-600/40 text-white shadow-lg shadow-blue-500/40 backdrop-blur;
+        }
+
+        .tutorial-card-link {
+            @apply block;
+        }
+
+        .tutorial-card {
+            @apply h-full bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl overflow-hidden transition-all duration-300 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-2 cursor-pointer;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradient {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes bounceSlow {
+            0%, 100% {
+                transform: translateY(0) rotate(3deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(3deg);
+            }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.4s ease-out forwards;
+        }
+
+        .animate-gradient {
+            background-size: 200% 200%;
+            animation: gradient 3s ease infinite;
+        }
+
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .animate-bounce-slow {
+            animation: bounceSlow 3s ease-in-out infinite;
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #3b82f6, #06b6d4);
+            border-radius: 5px;
+        }
+    </style>
+
+    <script>
+        // Datos de tutoriales (esto viene del backend)
+        const tutorialesData = {{ tutoriales | tojson }};
+
+        let currentFilter = 'all';
+        let currentLevel = 'all';
+        let searchQuery = '';
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Scroll to Top
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.style.opacity = '1';
+                scrollToTopBtn.style.pointerEvents = 'auto';
+            } else {
+                scrollToTopBtn.style.opacity = '0';
+                scrollToTopBtn.style.pointerEvents = 'none';
+            }
+        });
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        function getStars(level) {
+            const stars = { 
+                'principiante': '⭐', 
+                'intermedio': '⭐⭐', 
+                'avanzado': '⭐⭐⭐' 
+            };
+            return stars[level] || '⭐';
+        }
+
+        function getLevelColor(level) {
+            const colors = {
+                'principiante': { bg: 'from-emerald-500/20 to-emerald-600/20', border: 'border-emerald-500/40', text: 'text-emerald-300' },
+                'intermedio': { bg: 'from-blue-500/20 to-blue-600/20', border: 'border-blue-500/40', text: 'text-blue-300' },
+                'avanzado': { bg: 'from-orange-500/20 to-orange-600/20', border: 'border-orange-500/40', text: 'text-orange-300' }
+            };
+            return colors[level] || colors['principiante'];
+        }
+
+        function getLanguageIcon(language) {
+            const icons = {
+                'html': 'fa-html5',
+                'css': 'fa-css3-alt',
+                'javascript': 'fa-js-square',
+                'python': 'fa-python',
+                'java': 'fa-java'
+            };
+            return icons[language] || 'fa-code';
+        }
+
+        function getLanguageColor(language) {
+            const colors = {
+                'html': 'text-orange-400',
+                'css': 'text-blue-400',
+                'javascript': 'text-yellow-400',
+                'python': 'text-green-400',
+                'java': 'text-red-400'
+            };
+            return colors[language] || 'text-blue-400';
+        }
+
+        function createTutorialCard(tutorial) {
+            const levelColor = getLevelColor(tutorial.level);
+            const capitalizedLevel = tutorial.level.charAt(0).toUpperCase() + tutorial.level.slice(1);
+            const languageIcon = getLanguageIcon(tutorial.language);
+            const languageColor = getLanguageColor(tutorial.language);
+            
+            return `
+                <a href="/tutorial/${tutorial._id}" class="tutorial-card-link">
+                    <div class="tutorial-card animate-slide-up group">
+                        <!-- Header -->
+                        <div class="bg-gradient-to-r from-slate-800/80 to-slate-800/50 border-b border-slate-700/50 p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-2">
+                                    <i class="fab ${languageIcon} text-2xl ${languageColor}"></i>
+                                    <span class="text-xs uppercase font-bold text-slate-400 tracking-wider">${tutorial.language}</span>
+                                </div>
+                                <span class="inline-flex items-center gap-1 bg-gradient-to-r ${levelColor.bg} border ${levelColor.border} px-3 py-1 rounded-full text-xs font-bold ${levelColor.text}">
+                                    ${getStars(tutorial.level)} ${capitalizedLevel}
+                                </span>
+                            </div>
+                            
+                            <h3 class="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-blue-300 transition">
+                                ${tutorial.title}
+                            </h3>
+                        </div>
+                        
+                        <!-- Body -->
+                        <div class="p-6">
+                            <p class="text-slate-400 mb-6 line-clamp-3 leading-relaxed">
+                                ${tutorial.description}
+                            </p>
+                            
+                            <!-- Footer -->
+                            <div class="flex items-center justify-between pt-4 border-t border-slate-700/50">
+                                <div class="flex items-center gap-2 text-slate-400 text-sm">
+                                    <i class="fas fa-clock text-blue-400"></i>
+                                    <span>${tutorial.duration}</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-blue-400 font-semibold text-sm">
+                                    <span class="group-hover:translate-x-1 transition">Ver Tutorial</span>
+                                    <i class="fas fa-arrow-right group-hover:translate-x-1 transition"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `;
+        }
+
+        function filterTutorials() {
+            let filtered = tutorialesData;
+
+            // Filtrar por lenguaje
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(t => t.language === currentFilter);
+            }
+
+            // Filtrar por nivel
+            if (currentLevel !== 'all') {
+                filtered = filtered.filter(t => t.level === currentLevel);
+            }
+
+            // Filtrar por búsqueda
+            if (searchQuery) {
+                filtered = filtered.filter(t => 
+                    t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    t.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    t.language.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            }
+
+            return filtered;
+        }
+
+        function renderTutorials() {
+            const grid = document.getElementById('tutorialsGrid');
+            const filtered = filterTutorials();
+
+            // Actualizar contador
+            document.getElementById('resultsCount').textContent = filtered.length;
+            document.getElementById('totalTutorials').textContent = tutorialesData.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-20 bg-slate-900/50 rounded-2xl border border-slate-700/50">
+                        <i class="fas fa-search text-6xl text-slate-600 mb-4 block"></i>
+                        <p class="text-slate-400 text-lg font-medium mb-2">No se encontraron tutoriales</p>
+                        <p class="text-slate-500 text-sm">Intenta con otros filtros o términos de búsqueda</p>
+                        <button onclick="resetFilters()" class="mt-6 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition-all">
+                            <i class="fas fa-redo mr-2"></i>Resetear Filtros
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(createTutorialCard).join('');
+        }
+
+        function resetFilters() {
+            currentFilter = 'all';
+            currentLevel = 'all';
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('levelFilter').value = 'all';
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-filter="all"]').classList.add('active');
+            renderTutorials();
+        }
+
+        // Event listeners para filtros de lenguaje
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                renderTutorials();
+            });
+        });
+
+        // Event listener para filtro de nivel
+        document.getElementById('levelFilter').addEventListener('change', function() {
+            currentLevel = this.value;
+            renderTutorials();
+        });
+
+        // Event listeners para búsqueda
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+
+        searchBtn.addEventListener('click', function() {
+            searchQuery = searchInput.value.trim();
+            renderTutorials();
+        });
+
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchQuery = this.value.trim();
+                renderTutorials();
+            }
+        });
+
+        // Búsqueda en tiempo real (opcional)
+        searchInput.addEventListener('input', function() {
+            searchQuery = this.value.trim();
+            // Debounce para no renderizar en cada tecla
+            clearTimeout(window.searchTimeout);
+            window.searchTimeout = setTimeout(() => {
+                renderTutorials();
+            }, 500);
+        });
+
+        // Inicializar
+        renderTutorials();
+
+        // Animación de aparición gradual
+        setTimeout(() => {
+            document.querySelectorAll('.tutorial-card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.animation = `slideUp 0.5s ease-out ${index * 0.1}s forwards`;
+                }, 100);
+            });
+        }, 100);
+    </script>
+</body>
+</html>

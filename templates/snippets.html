@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeVerse - Snippets de Código</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</head>
+<body class="bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-slate-100">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-slate-700 bg-slate-950/95 backdrop-blur-md shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 text-2xl font-bold hover:opacity-80 transition">
+                <i class="fas fa-code text-blue-400"></i>
+                <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">CodeVerse</span>
+            </a>
+            <div class="hidden md:flex gap-8">
+                <a href="/" class="text-slate-300 hover:text-blue-400 transition font-medium">Inicio</a>
+                <a href="/snippets" class="text-blue-400 font-medium border-b-2 border-blue-400 pb-1">Snippets</a>
+                <a href="/tutoriales" class="text-slate-300 hover:text-blue-400 transition font-medium">Tutoriales</a>
+                <a href="/herramientas" class="text-slate-300 hover:text-blue-400 transition font-medium">Herramientas</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="py-20 px-6 bg-gradient-to-b from-blue-600/20 via-cyan-600/10 to-transparent">
+        <div class="max-w-7xl mx-auto text-center">
+            <a href="/" class="inline-flex items-center gap-2 text-blue-400 hover:text-cyan-400 transition mb-8 font-medium group">
+                <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i> Volver al Inicio
+            </a>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Snippets de <span class="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">Código</span>
+            </h1>
+            <p class="text-xl text-slate-400 max-w-2xl mx-auto">Fragmentos de código listos para copiar y usar en tus proyectos. Acelera tu desarrollo.</p>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="px-6 py-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-wrap gap-3 justify-center bg-slate-800/30 backdrop-blur border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-th"></i> Ver Todo
+                </button>
+                <button class="filter-btn" data-filter="html">
+                    <i class="fab fa-html5"></i> HTML
+                </button>
+                <button class="filter-btn" data-filter="css">
+                    <i class="fab fa-css3-alt"></i> CSS
+                </button>
+                <button class="filter-btn" data-filter="javascript">
+                    <i class="fab fa-js-square"></i> JavaScript
+                </button>
+                <button class="filter-btn" data-filter="python">
+                    <i class="fab fa-python"></i> Python
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Snippets Content -->
+    <section class="px-6 py-12">
+        <div class="max-w-7xl mx-auto">
+            <div id="snippetsContent" class="space-y-8">
+                <!-- Snippets generados dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Box -->
+    <section class="px-6 py-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-l-4 border-blue-400 rounded-xl p-8 backdrop-blur shadow-xl">
+                <div class="flex items-start gap-4">
+                    <i class="fas fa-lightbulb text-blue-400 text-3xl mt-1"></i>
+                    <div>
+                        <strong class="text-blue-300 text-xl block mb-2">💡 Consejo Pro</strong>
+                        <p class="text-slate-300 text-lg">Haz clic en el botón "Copiar" para copiar el snippet al portapapeles. Luego pégalo en tu editor de código y personalízalo según tus necesidades.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-700 bg-gradient-to-b from-slate-950 to-slate-900 py-12 px-6 mt-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 text-lg font-bold mb-3">
+                        <i class="fas fa-code text-blue-400"></i>
+                        <span>CodeVerse</span>
+                    </div>
+                    <p class="text-slate-400 text-sm">Aprende a programar desde cero</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-blue-400">Recursos</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="/tutoriales" class="hover:text-blue-400 transition">Tutoriales</a></li>
+                        <li><a href="/snippets" class="hover:text-blue-400 transition">Snippets</a></li>
+                        <li><a href="/herramientas" class="hover:text-blue-400 transition">Herramientas</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-cyan-400">Lenguajes</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="#" class="hover:text-cyan-400 transition">HTML & CSS</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition">JavaScript</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition">Python & Java</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 text-green-400">Legal</h4>
+                    <ul class="space-y-2 text-slate-400 text-sm">
+                        <li><a href="#" class="hover:text-green-400 transition">Privacidad</a></li>
+                        <li><a href="#" class="hover:text-green-400 transition">Términos</a></li>
+                        <li><a href="#" class="hover:text-green-400 transition">Contacto</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-700 pt-8 text-center text-slate-400">
+                <p>© 2025 CodeVerse. Snippets y código reutilizable.</p>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        .filter-btn {
+            @apply px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 border-2 border-slate-600 text-slate-300 hover:border-blue-400 hover:text-blue-400 hover:shadow-lg hover:shadow-blue-500/20 hover:-translate-y-0.5 flex items-center gap-2;
+        }
+        
+        .filter-btn.active {
+            @apply border-blue-500 bg-gradient-to-r from-blue-600/40 to-cyan-600/40 text-white shadow-lg shadow-blue-500/40 backdrop-blur;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+
+    <script>
+        const snippets = {
+            html: [
+                {
+                    title: "HTML5 Base",
+                    description: "Estructura básica completa de HTML5 con metaetiquetas esenciales",
+                    language: "HTML",
+                    icon: "fa-html5",
+                    color: "orange",
+                    code: `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Página</title>
+</head>
+<body>
+    <h1>Hola Mundo</h1>
+</body>
+</html>`
+                },
+                {
+                    title: "Formulario HTML",
+                    description: "Formulario completo con validación básica y mejores prácticas",
+                    language: "HTML",
+                    icon: "fa-html5",
+                    color: "orange",
+                    code: `<form method="POST" action="/submit">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required>
+    
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    
+    <button type="submit">Enviar</button>
+</form>`
+                }
+            ],
+            css: [
+                {
+                    title: "Flexbox Container",
+                    description: "Layout flexible con flexbox para diseños responsivos modernos",
+                    language: "CSS",
+                    icon: "fa-css3-alt",
+                    color: "blue",
+                    code: `.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.container > * {
+    flex: 1 1 auto;
+    min-width: 200px;
+}`
+                },
+                {
+                    title: "Grid Responsivo",
+                    description: "Grid layout automático que se adapta a cualquier tamaño de pantalla",
+                    language: "CSS",
+                    icon: "fa-css3-alt",
+                    color: "blue",
+                    code: `.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}`
+                }
+            ],
+            javascript: [
+                {
+                    title: "Fetch API",
+                    description: "Solicitud HTTP moderna con async/await y manejo de errores",
+                    language: "JavaScript",
+                    icon: "fa-js-square",
+                    color: "yellow",
+                    code: `async function obtenerDatos(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(\`HTTP error! status: \${response.status}\`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+obtenerDatos('https://api.ejemplo.com/datos');`
+                },
+                {
+                    title: "Event Listener",
+                    description: "Agregar escuchadores de eventos de forma eficiente",
+                    language: "JavaScript",
+                    icon: "fa-js-square",
+                    color: "yellow",
+                    code: `// Click simple
+document.getElementById('btn').addEventListener('click', () => {
+    console.log('Botón clickeado');
+});
+
+// Múltiples elementos
+document.querySelectorAll('.btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Click en', e.target);
+    });
+});`
+                }
+            ],
+            python: [
+                {
+                    title: "Flask App Básica",
+                    description: "Aplicación Flask simple con rutas y API REST",
+                    language: "Python",
+                    icon: "fa-python",
+                    color: "green",
+                    code: `from flask import Flask, render_template, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/api/datos', methods=['GET'])
+def obtener_datos():
+    return jsonify({'mensaje': 'Hola desde Flask'})
+
+if __name__ == '__main__':
+    app.run(debug=True)`
+                },
+                {
+                    title: "Función con Decorador",
+                    description: "Crear y utilizar decoradores en Python para extender funcionalidad",
+                    language: "Python",
+                    icon: "fa-python",
+                    color: "green",
+                    code: `def mi_decorador(func):
+    def envolvente(*args, **kwargs):
+        print(f"Ejecutando {func.__name__}")
+        resultado = func(*args, **kwargs)
+        print(f"Completado {func.__name__}")
+        return resultado
+    return envolvente
+
+@mi_decorador
+def saludar(nombre):
+    return f"Hola {nombre}"
+
+print(saludar("Juan"))`
+                }
+            ]
+        };
+
+        let filterActual = 'all';
+
+        function getColorClasses(color) {
+            const colors = {
+                'orange': {
+                    badge: 'bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-400/40 text-orange-300',
+                    icon: 'text-orange-400'
+                },
+                'blue': {
+                    badge: 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border-blue-400/40 text-blue-300',
+                    icon: 'text-blue-400'
+                },
+                'yellow': {
+                    badge: 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-yellow-400/40 text-yellow-300',
+                    icon: 'text-yellow-400'
+                },
+                'green': {
+                    badge: 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 border-green-400/40 text-green-300',
+                    icon: 'text-green-400'
+                }
+            };
+            return colors[color] || colors['blue'];
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function createSnippetCard(snippet, globalIdx) {
+            const colors = getColorClasses(snippet.color);
+            
+            return `
+                <div class="animate-fade-in bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl overflow-hidden shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1 hover:border-slate-600">
+                    <!-- Header -->
+                    <div class="bg-gradient-to-r from-slate-800/80 to-slate-800/50 border-b border-slate-700/50 px-8 py-6">
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <i class="fab ${snippet.icon} text-3xl ${colors.icon}"></i>
+                                    <h3 class="text-2xl font-bold text-white">${snippet.title}</h3>
+                                </div>
+                                <p class="text-slate-400 text-base leading-relaxed">${snippet.description}</p>
+                            </div>
+                            <span class="inline-flex items-center gap-2 ${colors.badge} border rounded-lg px-4 py-2 text-sm font-bold whitespace-nowrap">
+                                <i class="fab ${snippet.icon}"></i>
+                                ${snippet.language}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Code Body -->
+                    <div class="relative bg-slate-950 p-8 group">
+                        <pre class="overflow-x-auto"><code class="text-cyan-400 font-mono text-sm leading-relaxed">${escapeHtml(snippet.code)}</code></pre>
+                        
+                        <button onclick="copiarSnippet(this, ${globalIdx})" 
+                                class="absolute top-6 right-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold px-6 py-3 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 opacity-0 group-hover:opacity-100 flex items-center gap-2">
+                            <i class="fas fa-copy"></i>
+                            <span class="copy-text">Copiar Código</span>
+                        </button>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="bg-gradient-to-r from-slate-800/50 to-slate-800/30 border-t border-slate-700/50 px-8 py-4">
+                        <div class="flex items-center gap-3 text-sm text-slate-400">
+                            <i class="fas fa-info-circle ${colors.icon}"></i>
+                            <span>Click en "Copiar Código" o usa <kbd class="bg-slate-900 border border-slate-700 px-2 py-1 rounded text-xs font-mono mx-1">Ctrl+C</kbd> en el código seleccionado</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSnippets() {
+            const content = document.getElementById('snippetsContent');
+            let snippetsAMostrar = [];
+
+            if (filterActual === 'all') {
+                Object.values(snippets).forEach(grupo => {
+                    snippetsAMostrar = snippetsAMostrar.concat(grupo);
+                });
+            } else {
+                snippetsAMostrar = snippets[filterActual] || [];
+            }
+
+            if (snippetsAMostrar.length === 0) {
+                content.innerHTML = `
+                    <div class="text-center py-20 bg-slate-900/50 rounded-2xl border border-slate-700/50">
+                        <i class="fas fa-search text-6xl text-slate-600 mb-4 block"></i>
+                        <p class="text-slate-400 text-lg font-medium">No hay snippets disponibles para este filtro</p>
+                    </div>
+                `;
+                return;
+            }
+
+            content.innerHTML = snippetsAMostrar.map((snippet, idx) => createSnippetCard(snippet, idx)).join('');
+        }
+
+        function copiarSnippet(btn, idx) {
+            let snippetsAMostrar = [];
+            if (filterActual === 'all') {
+                Object.values(snippets).forEach(grupo => {
+                    snippetsAMostrar = snippetsAMostrar.concat(grupo);
+                });
+            } else {
+                snippetsAMostrar = snippets[filterActual] || [];
+            }
+
+            const codigo = snippetsAMostrar[idx].code;
+            const copyText = btn.querySelector('.copy-text');
+            const icon = btn.querySelector('i');
+
+            navigator.clipboard.writeText(codigo).then(() => {
+                copyText.textContent = '¡Copiado!';
+                icon.className = 'fas fa-check';
+                
+                btn.classList.remove('from-blue-600', 'to-cyan-600', 'hover:from-blue-500', 'hover:to-cyan-500');
+                btn.classList.add('from-emerald-600', 'to-green-600');
+                
+                setTimeout(() => {
+                    copyText.textContent = 'Copiar Código';
+                    icon.className = 'fas fa-copy';
+                    btn.classList.remove('from-emerald-600', 'to-green-600');
+                    btn.classList.add('from-blue-600', 'to-cyan-600', 'hover:from-blue-500', 'hover:to-cyan-500');
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar:', err);
+            });
+        }
+
+        // Event listeners para filtros
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                filterActual = this.dataset.filter;
+                renderSnippets();
+            });
+        });
+
+        // Inicializar
+        renderSnippets();
+    </script>
+</body>
+</html>

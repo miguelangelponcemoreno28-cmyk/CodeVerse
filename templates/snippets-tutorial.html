@@ -1,0 +1,616 @@
+{% extends "base.html" %}
+
+{% block title %}Tutorial: Crear Snippets en VS Code - CodeVerse{% endblock %}
+
+{% block content %}
+
+    <!-- Breadcrumb -->
+    <div class="max-w-5xl mx-auto px-6 py-6">
+        <div class="text-slate-400 text-sm mb-4">
+            <a href="/snippets" class="hover:text-blue-400 transition">Snippets</a> 
+            <span class="mx-2">/</span> 
+            <span class="text-slate-300">Crear Snippets en VS Code</span>
+        </div>
+        
+        <a href="/snippets" class="inline-flex items-center gap-2 text-blue-400 hover:text-cyan-400 transition font-medium group">
+            <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i> Volver a Snippets
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-5xl mx-auto px-6 pb-20">
+        <!-- Header -->
+        <div class="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 mb-8 shadow-xl backdrop-blur">
+            <div class="flex items-start gap-4 mb-4">
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-code text-white text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-4xl font-bold mb-3 text-white">Cómo Crear tus Propios Snippets en VS Code</h1>
+                    <p class="text-lg text-slate-300">Aprende a crear fragmentos de código reutilizables para acelerar tu desarrollo</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap gap-3 mt-6">
+                <span class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 rounded-lg px-3 py-1 text-sm font-bold text-blue-300">
+                    <i class="fas fa-clock"></i>
+                    15 minutos
+                </span>
+                <span class="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 rounded-lg px-3 py-1 text-sm font-bold text-emerald-300">
+                    <i class="fas fa-signal"></i>
+                    Principiante
+                </span>
+                <span class="inline-flex items-center gap-2 bg-purple-500/20 border border-purple-400/30 rounded-lg px-3 py-1 text-sm font-bold text-purple-300">
+                    <i class="fas fa-laptop-code"></i>
+                    VS Code
+                </span>
+            </div>
+        </div>
+
+        <!-- Intro -->
+        <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl p-8 mb-8 shadow-xl">
+            <p class="text-lg text-slate-300 leading-relaxed mb-6">
+                Un snippet es un fragmento de código que puedes insertar rápidamente escribiendo un atajo y presionando Tab. En este tutorial aprenderás a crear snippets personalizados para acelerar tu flujo de desarrollo.
+            </p>
+
+            <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-l-4 border-blue-400 rounded-lg p-6 backdrop-blur">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-info-circle text-blue-400 text-xl mt-1"></i>
+                    <div>
+                        <strong class="text-blue-300 text-lg">Requisito:</strong>
+                        <p class="text-slate-300 mt-1">Tener VS Code instalado. Los snippets funcionan igual en Windows, macOS y Linux.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Beneficios -->
+        <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl p-8 mb-8 shadow-xl">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <i class="fas fa-rocket text-cyan-400"></i>
+                ¿Por qué usar snippets?
+            </h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-bolt text-yellow-400 text-xl mt-1"></i>
+                        <div>
+                            <h3 class="font-bold text-white mb-1">Velocidad</h3>
+                            <p class="text-slate-400 text-sm">Ahorra tiempo escribiendo código repetitivo</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-emerald-400 text-xl mt-1"></i>
+                        <div>
+                            <h3 class="font-bold text-white mb-1">Consistencia</h3>
+                            <p class="text-slate-400 text-sm">Garantiza que sigas siempre el mismo patrón</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-shield-alt text-blue-400 text-xl mt-1"></i>
+                        <div>
+                            <h3 class="font-bold text-white mb-1">Menos errores</h3>
+                            <p class="text-slate-400 text-sm">Reduce errores tipográficos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-star text-purple-400 text-xl mt-1"></i>
+                        <div>
+                            <h3 class="font-bold text-white mb-1">Profesionalismo</h3>
+                            <p class="text-slate-400 text-sm">Mantén estándares en tu equipo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 1 -->
+        <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl p-8 mb-8 shadow-xl">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <span class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-lg font-bold">1</span>
+                Abrir el Editor de Snippets
+            </h2>
+
+            <div class="space-y-4">
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fab fa-windows text-blue-400 text-xl"></i>
+                        <strong class="text-white">En Windows/Linux:</strong>
+                    </div>
+                    <p class="text-slate-300">Presiona <kbd class="bg-slate-950 border border-slate-600 px-3 py-1 rounded text-sm font-mono mx-1">Ctrl</kbd> + <kbd class="bg-slate-950 border border-slate-600 px-3 py-1 rounded text-sm font-mono mx-1">Shift</kbd> + <kbd class="bg-slate-950 border border-slate-600 px-3 py-1 rounded text-sm font-mono mx-1">P</kbd></p>
+                </div>
+
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fab fa-apple text-slate-300 text-xl"></i>
+                        <strong class="text-white">En Mac:</strong>
+                    </div>
+                    <p class="text-slate-300">Presiona <kbd class="bg-slate-950 border border-slate-600 px-3 py-1 rounded text-sm font-mono mx-1">Cmd</kbd> + <kbd class="bg-slate-950 border border-slate-600 px-3 py-1 rounded text-sm font-mono mx-1">Shift</kbd> + <kbd class="bg-slate-950 border border-slate-600 px-3 py-1 rounded text-sm font-mono mx-1">P</kbd></p>
+                </div>
+
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-5">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fas fa-keyboard text-cyan-400 text-xl"></i>
+                        <strong class="text-white">En la paleta de comandos:</strong>
+                    </div>
+                    <p class="text-slate-300">Escribe: <code class="bg-slate-950 text-cyan-400 px-2 py-1 rounded text-sm">Configure User Snippets</code></p>
+                </div>
+
+                <div class="bg-gradient-to-r from-orange-500/10 to-red-500/10 border-l-4 border-orange-400 rounded-lg p-5 backdrop-blur">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-lightbulb text-orange-400 text-xl mt-1"></i>
+                        <div>
+                            <strong class="text-orange-300">Alternativa:</strong>
+                            <p class="text-slate-300 mt-1">También puedes ir a <strong>Archivo → Preferencias → Fragmentos de usuario</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 2 -->
+        <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl overflow-hidden mb-8 shadow-xl">
+            <div class="bg-gradient-to-r from-slate-800/80 to-slate-800/50 border-b border-slate-700/50 p-8">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <span class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-lg font-bold">2</span>
+                    Entender la Estructura JSON
+                </h2>
+            </div>
+
+            <div class="p-8">
+                <p class="text-slate-300 mb-6">Los snippets se escriben en formato JSON. Aquí está la estructura básica:</p>
+
+                <div class="relative bg-slate-950 border border-slate-700 rounded-xl p-6 group">
+                    <pre class="overflow-x-auto"><code class="text-cyan-400 font-mono text-sm leading-relaxed">{
+  "Nombre del Snippet": {
+    "prefix": "atajo",
+    "body": [
+      "línea 1",
+      "línea 2",
+      "línea 3"
+    ],
+    "description": "Descripción corta"
+  }
+}</code></pre>
+                    <button onclick="copiarCodigo(this)" class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold px-4 py-2 rounded-lg transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 opacity-0 group-hover:opacity-100 flex items-center gap-2">
+                        <i class="fas fa-copy"></i>
+                        <span class="copy-text">Copiar</span>
+                    </button>
+                </div>
+
+                <div class="mt-6 space-y-3">
+                    <h3 class="text-xl font-bold text-white mb-4">Explicación de campos:</h3>
+                    <div class="flex items-start gap-3 text-slate-300">
+                        <i class="fas fa-chevron-right text-blue-400 mt-1"></i>
+                        <p><strong class="text-white">prefix:</strong> El atajo que escribes para activar el snippet (ej: "htmlbase")</p>
+                    </div>
+                    <div class="flex items-start gap-3 text-slate-300">
+                        <i class="fas fa-chevron-right text-blue-400 mt-1"></i>
+                        <p><strong class="text-white">body:</strong> Array con las líneas de código. Cada línea es un string</p>
+                    </div>
+                    <div class="flex items-start gap-3 text-slate-300">
+                        <i class="fas fa-chevron-right text-blue-400 mt-1"></i>
+                        <p><strong class="text-white">description:</strong> Descripción que aparece en el autocompletado</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 3 -->
+        <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl overflow-hidden mb-8 shadow-xl">
+            <div class="bg-gradient-to-r from-slate-800/80 to-slate-800/50 border-b border-slate-700/50 p-8">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <span class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-lg font-bold">3</span>
+                    Crear tu Primer Snippet
+                </h2>
+            </div>
+
+            <div class="p-8">
+                <p class="text-slate-300 mb-6">Vamos a crear un snippet simple. Copia este código en tu archivo de snippets:</p>
+
+                <div class="relative bg-slate-950 border border-slate-700 rounded-xl p-6 mb-6 group">
+                    <pre class="overflow-x-auto"><code class="text-cyan-400 font-mono text-sm leading-relaxed">{
+  "React Functional Component": {
+    "prefix": "rfc",
+    "body": [
+      "import React from 'react';",
+      "",
+      "export default function ${1:ComponentName}() {",
+      "  return (",
+      "    &lt;div&gt;",
+      "      $0",
+      "    &lt;/div&gt;",
+      "  );",
+      "}"
+    ],
+    "description": "Componente funcional de React"
+  }
+}</code></pre>
+                    <button onclick="copiarCodigo(this)" class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold px-4 py-2 rounded-lg transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 opacity-0 group-hover:opacity-100 flex items-center gap-2">
+                        <i class="fas fa-copy"></i>
+                        <span class="copy-text">Copiar</span>
+                    </button>
+                </div>
+
+                <p class="text-slate-300 mb-4">Ahora prueba: abre un archivo JavaScript/React, escribe <code class="bg-slate-800 text-cyan-400 px-2 py-1 rounded">rfc</code> y presiona <kbd class="bg-slate-950 border border-slate-600 px-3 py-1 rounded text-sm font-mono">Tab</kbd></p>
+
+                <div class="bg-gradient-to-r from-emerald-500/10 to-green-500/10 border-l-4 border-emerald-400 rounded-lg p-6 backdrop-blur">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-emerald-400 text-xl mt-1"></i>
+                        <div>
+                            <strong class="text-emerald-300 text-lg">Resultado:</strong>
+                            <p class="text-slate-300 mt-1">Se insertará automáticamente el código del componente y el cursor estará en <code class="bg-slate-800 text-cyan-400 px-2 py-1 rounded text-sm">ComponentName</code> para que edites.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paso 4: Variables -->
+        <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl overflow-hidden mb-8 shadow-xl">
+            <div class="bg-gradient-to-r from-slate-800/80 to-slate-800/50 border-b border-slate-700/50 p-8">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <span class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-lg font-bold">4</span>
+                    Variables y Placeholders
+                </h2>
+            </div>
+
+            <div class="p-8 space-y-8">
+                <p class="text-slate-300">Los snippets usan placeholders para posiciones del cursor. Los más importantes son:</p>
+
+                <!-- $1, $2, $3 -->
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-dollar-sign text-cyan-400"></i>
+                        $1, $2, $3 - Posiciones de tabulación
+                    </h3>
+                    <p class="text-slate-300 mb-4">Cada número es una posición donde el cursor saltará cuando presiones <kbd class="bg-slate-950 border border-slate-600 px-3 py-1 rounded text-sm font-mono">Tab</kbd>:</p>
+
+                    <div class="relative bg-slate-950 border border-slate-700 rounded-xl p-6 group">
+                        <pre class="overflow-x-auto"><code class="text-cyan-400 font-mono text-sm leading-relaxed">{
+  "Función con argumentos": {
+    "prefix": "fn",
+    "body": [
+      "function ${1:nombreFuncion}(${2:args}) {",
+      "  ${3:// tu código aquí}",
+      "  return ${0};",
+      "}"
+    ],
+    "description": "Función de JavaScript"
+  }
+}</code></pre>
+                        <button onclick="copiarCodigo(this)" class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold px-4 py-2 rounded-lg transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 opacity-0 group-hover:opacity-100 flex items-center gap-2">
+                            <i class="fas fa-copy"></i>
+                            <span class="copy-text">Copiar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Valores predeterminados -->
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-tag text-purple-400"></i>
+                        ${1:valor_por_defecto} - Valores predeterminados
+                    </h3>
+                    <p class="text-slate-300 mb-4">Puedes poner un valor que aparezca automáticamente:</p>
+
+                    <div class="relative bg-slate-950 border border-slate-700 rounded-xl p-6 group">
+                        <pre class="overflow-x-auto"><code class="text-cyan-400 font-mono text-sm leading-relaxed">{
+  "Console log": {
+    "prefix": "cl",
+    "body": [
+      "console.log(${1:'mensaje'});"
+    ],
+    "description": "Imprime en consola"
+  }
+}</code></pre>
+                        <button onclick="copiarCodigo(this)" class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold px-4 py-2 rounded-lg transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 opacity-0 group-hover:opacity-100 flex items-center gap-2">
+                            <i class="fas fa-copy"></i>
+                            <span class="copy-text">Copiar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejemplos Prácticos -->
+        <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl overflow-hidden mb-8 shadow-xl">
+            <div class="bg-gradient-to-r from-slate-800/80 to-slate-800/50 border-b border-slate-700/50 p-8">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <span class="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-lg font-bold">5</span>
+                    Ejemplos Prácticos Listos para Usar
+                </h2>
+            </div>
+
+            <div class="p-8 space-y-8">
+                <!-- Python Class -->
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fab fa-python text-green-400"></i>
+                        1. Snippet de Clase Python
+                    </h3>
+                    <div class="relative bg-slate-950 border border-slate-700 rounded-xl p-6 group">
+                        <pre class="overflow-x-auto"><code class="text-cyan-400 font-mono text-sm leading-relaxed">{
+  "Python Class": {
+    "prefix": "pyclass",
+    "body": [
+      "class ${1:ClassName}:",
+      "    def __init__(self, ${2:params}):",
+      "        ${3:# Tu código}",
+      "        pass",
+      "",
+      "    def ${4:method_name}(self):",
+      "        ${0:pass}"
+    ],
+    "description": "Clase de Python"
+  }
+}</code></pre>
+                        <button onclick="copiarCodigo(this)" class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold px-4 py-2 rounded-lg transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 opacity-0 group-hover:opacity-100 flex items-center gap-2">
+                            <i class="fas fa-copy"></i>
+                            <span class="copy-text">Copiar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Try Catch -->
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fab fa-js-square text-yellow-400"></i>
+                        2. Snippet de Try-Catch JavaScript
+                    </h3>
+                    <div class="relative bg-slate-950 border border-slate-700 rounded-xl p-6 group">
+                        <pre class="overflow-x-auto"><code class="text-cyan-400 font-mono text-sm leading-relaxed">{
+  "Try Catch": {
+    "prefix": "tc",
+    "body": [
+      "try {",
+      "  $1",
+      "} catch (error) {",
+      "  console.error('Error:', error);",
+      "  $0",
+      "}"
+    ],
+    "description": "Bloque try-catch"
+  }
+}</code></pre>
+                        <button onclick="copiarCodigo(this)" class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold px-4 py-2 rounded-lg transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 opacity-0 group-hover:opacity-100 flex items-center gap-2">
+                            <i class="fas fa-copy"></i>
+                            <span class="copy-text">Copiar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Async/Await -->
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-sync text-blue-400"></i>
+                        3. Snippet de Async/Await
+                    </h3>
+                    <div class="relative bg-slate-950 border border-slate-700 rounded-xl p-6 group">
+                        <pre class="overflow-x-auto"><code class="text-cyan-400 font-mono text-sm leading-relaxed">{
+  "Async Function": {
+    "prefix": "async",
+    "body": [
+      "async function ${1:nombreFuncion}() {",
+      "  try {",
+      "    const resultado = await ${2:promesa};",
+      "    ${3:// procesa resultado}",
+      "    return resultado;",
+      "  } catch (error) {",
+      "    console.error(error);",
+      "  }",
+      "}"
+    ],
+    "description": "Función asincrónica"
+  }
+}</code></pre>
+                        <button onclick="copiarCodigo(this)" class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold px-4 py-2 rounded-lg transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 opacity-0 group-hover:opacity-100 flex items-center gap-2">
+                            <i class="fas fa-copy"></i>
+                            <span class="copy-text">Copiar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Consejos Pro -->
+        <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl p-8 mb-8 shadow-xl">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <i class="fas fa-lightbulb text-yellow-400"></i>
+                Consejos Pro
+            </h2>
+
+            <div class="space-y-4">
+                <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-l-4 border-blue-400 rounded-lg p-5 backdrop-blur">
+                    <strong class="text-blue-300">Prefixes cortos:</strong>
+                    <p class="text-slate-300 mt-1">Usa atajos de 2-4 caracteres (rfc, fc, tc) para máxima velocidad</p>
+                </div>
+
+                <div class="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-l-4 border-purple-400 rounded-lg p-5 backdrop-blur">
+                    <strong class="text-purple-300">Un snippet = Una idea:</strong>
+                    <p class="text-slate-300 mt-1">Mantén snippets pequeños y específicos, no hagas "mega-snippets"</p>
+                </div>
+
+                <div class="bg-gradient-to-r from-emerald-500/10 to-green-500/10 border-l-4 border-emerald-400 rounded-lg p-5 backdrop-blur">
+                    <strong class="text-emerald-300">Nombres descriptivos:</strong>
+                    <p class="text-slate-300 mt-1">En el campo "description" sé claro sobre qué hace</p>
+                </div>
+
+                <div class="bg-gradient-to-r from-orange-500/10 to-red-500/10 border-l-4 border-orange-400 rounded-lg p-5 backdrop-blur">
+                    <strong class="text-orange-300">Prueba antes de compartir:</strong>
+                    <p class="text-slate-300 mt-1">Asegúrate de que el snippet funciona antes de usarlo en el equipo</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Errores Comunes -->
+        <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl p-8 mb-8 shadow-xl">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <i class="fas fa-exclamation-triangle text-red-400"></i>
+                Errores Comunes y Soluciones
+            </h2>
+
+            <div class="space-y-4">
+                <div class="bg-gradient-to-r from-red-500/10 to-pink-500/10 border-l-4 border-red-400 rounded-lg p-5 backdrop-blur">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-times-circle text-red-400 text-xl mt-1"></i>
+                        <div>
+                            <strong class="text-red-300">Error: "Invalid JSON"</strong>
+                            <p class="text-slate-300 mt-1">Asegúrate de poner comas entre propiedades y comillas correctas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-red-500/10 to-pink-500/10 border-l-4 border-red-400 rounded-lg p-5 backdrop-blur">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-times-circle text-red-400 text-xl mt-1"></i>
+                        <div>
+                            <strong class="text-red-300">El snippet no aparece:</strong>
+                            <p class="text-slate-300 mt-1">Recarga VS Code o cierra y abre el archivo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-red-500/10 to-pink-500/10 border-l-4 border-red-400 rounded-lg p-5 backdrop-blur">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-times-circle text-red-400 text-xl mt-1"></i>
+                        <div>
+                            <strong class="text-red-300">Las variables no funcionan:</strong>
+                            <p class="text-slate-300 mt-1">Verifica que uses $1, $2, $0 (con $ adelante)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compartir Snippets -->
+        <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl p-8 mb-8 shadow-xl">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <i class="fas fa-share-alt text-cyan-400"></i>
+                Compartir Snippets con tu Equipo
+            </h2>
+
+            <p class="text-slate-300 mb-6">Los archivos de snippets se guardan en:</p>
+
+            <div class="space-y-3 mb-6">
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
+                    <div class="flex items-center gap-2 text-slate-400 text-sm mb-1">
+                        <i class="fab fa-windows text-blue-400"></i>
+                        <strong>Windows:</strong>
+                    </div>
+                    <code class="text-cyan-400 text-sm">%APPDATA%\Code\User\snippets</code>
+                </div>
+
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
+                    <div class="flex items-center gap-2 text-slate-400 text-sm mb-1">
+                        <i class="fab fa-apple text-slate-300"></i>
+                        <strong>Mac:</strong>
+                    </div>
+                    <code class="text-cyan-400 text-sm">~/Library/Application Support/Code/User/snippets</code>
+                </div>
+
+                <div class="bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
+                    <div class="flex items-center gap-2 text-slate-400 text-sm mb-1">
+                        <i class="fab fa-linux text-slate-300"></i>
+                        <strong>Linux:</strong>
+                    </div>
+                    <code class="text-cyan-400 text-sm">~/.config/Code/User/snippets</code>
+                </div>
+            </div>
+
+            <p class="text-slate-300 mb-4">Puedes:</p>
+            <ol class="space-y-3 ml-6">
+                <li class="flex items-start gap-3 text-slate-300">
+                    <span class="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</span>
+                    <span>Compartir archivos <code class="bg-slate-800 text-cyan-400 px-2 py-1 rounded text-sm">.code-snippets</code> por email</span>
+                </li>
+                <li class="flex items-start gap-3 text-slate-300">
+                    <span class="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm">2</span>
+                    <span>Subirlos a un repositorio Git</span>
+                </li>
+                <li class="flex items-start gap-3 text-slate-300">
+                    <span class="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-sm">3</span>
+                    <span>Usar extensiones de VS Code que incluyen snippets</span>
+                </li>
+            </ol>
+        </div>
+
+        <!-- Recursos -->
+        <div class="bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl p-8 mb-8 shadow-xl">
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <i class="fas fa-book text-purple-400"></i>
+                Recursos Adicionales
+            </h2>
+
+            <ul class="space-y-3">
+                <li class="flex items-start gap-3 text-slate-300">
+                    <i class="fas fa-link text-blue-400 mt-1"></i>
+                    <span>Documentación oficial: <a href="https://code.visualstudio.com/docs/editor/userdefinedsnippets" target="_blank" class="text-blue-400 hover:text-cyan-400 underline">code.visualstudio.com/docs/editor/userdefinedsnippets</a></span>
+                </li>
+                <li class="flex items-start gap-3 text-slate-300">
+                    <i class="fas fa-code text-cyan-400 mt-1"></i>
+                    <span>Variables especiales: Puedes usar $TM_FILENAME, $TM_LINE_NUMBER, etc.</span>
+                </li>
+                <li class="flex items-start gap-3 text-slate-300">
+                    <i class="fas fa-magic text-purple-400 mt-1"></i>
+                    <span>Expresiones regulares: Los snippets avanzados pueden incluir transformaciones</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Conclusión -->
+        <div class="bg-gradient-to-br from-emerald-600/20 via-green-600/20 to-emerald-600/20 border border-emerald-500/30 rounded-2xl p-8 shadow-xl">
+            <div class="flex items-start gap-4">
+                <i class="fas fa-check-circle text-emerald-400 text-4xl"></i>
+                <div>
+                    <h3 class="text-2xl font-bold text-white mb-3">¡Listo para crear tus propios snippets!</h3>
+                    <p class="text-slate-300 text-lg leading-relaxed">
+                        Ahora tienes todo lo necesario para crear snippets personalizados que acelerarán tu desarrollo. Comienza con uno simple y ve agregando más según lo necesites. ¡La práctica hace al maestro!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="mt-12 text-center">
+            <a href="/snippets" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1">
+                <i class="fas fa-arrow-left"></i>
+                Volver a Snippets
+            </a>
+        </div>
+    </div>
+
+
+    <script>
+        function copiarCodigo(btn) {
+            const codeBlock = btn.closest('.group');
+            const texto = codeBlock.querySelector('code').innerText;
+            const copyText = btn.querySelector('.copy-text');
+            const icon = btn.querySelector('i');
+            
+            navigator.clipboard.writeText(texto).then(() => {
+                copyText.textContent = '¡Copiado!';
+                icon.className = 'fas fa-check';
+                
+                btn.classList.remove('from-blue-600', 'to-cyan-600');
+                btn.classList.add('from-emerald-600', 'to-green-600');
+                
+                setTimeout(() => {
+                    copyText.textContent = 'Copiar';
+                    icon.className = 'fas fa-copy';
+                    btn.classList.remove('from-emerald-600', 'to-green-600');
+                    btn.classList.add('from-blue-600', 'to-cyan-600');
+                }, 2000);
+            }).catch(err => {
+                alert('Error al copiar: ' + err);
+            });
+        }
+    </script>
+</body>
+{% endblock %}

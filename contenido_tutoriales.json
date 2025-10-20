@@ -1,0 +1,19 @@
+{
+  "id_tutorial_html_1": {
+    "title": "Introducción a HTML",
+    "content": "<h3>¿Qué es HTML?</h3><p>HTML es...</p>"
+  },
+  "id_tutorial_html_2": {
+    "title": "Estructura Semántica HTML5",
+    "content": "<h3>Etiquetas semánticas</h3><p>Las etiquetas semánticas..."
+  },
+  "68f443dafe048a16ed34a904": {
+    "title": "Introducción a HTML",
+    "language": "html",
+    "level": "principiante",
+    "duration": "30 min",
+    "description": "Aprende los fundamentos de HTML y cómo crear tu primera página web.",
+    "content": "<h3>Hola</h3><p>Les enseñare lo prncipal para empezar a aprender HTML</p>",
+    "lastUpdated": "2025-10-19T19:19:53.693855"
+  }
+}

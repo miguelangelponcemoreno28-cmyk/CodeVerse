@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Calculadora Científica Avanzada - CodeVerse{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-start pt-12 pb-16 px-4">
+    <main class="bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-2xl shadow-2xl w-full max-w-md p-6">
+        
+        <!-- Pantalla de la calculadora -->
+        <input type="text" 
+               id="display"
+               disabled
+               class="w-full h-16 text-4xl text-right p-4 mb-5 rounded-xl bg-gray-900 text-white font-mono shadow-inner focus:outline-none"
+               placeholder="0"
+        />
+
+        <!-- Botones -->
+        <section class="grid grid-cols-4 gap-2">
+            <!-- Funciones científicas -->
+            <button data-action="sin" class="calculator-btn bg-cyan-700 hover:bg-cyan-600 text-white">sin</button>
+            <button data-action="cos" class="calculator-btn bg-cyan-700 hover:bg-cyan-600 text-white">cos</button>
+            <button data-action="tan" class="calculator-btn bg-cyan-700 hover:bg-cyan-600 text-white">tan</button>
+            <button data-action="log" class="calculator-btn bg-cyan-700 hover:bg-cyan-600 text-white">log</button>
+
+            <!-- Limpieza y paréntesis -->
+            <button data-action="clear" class="calculator-btn bg-red-600 hover:bg-red-500 text-white font-bold">C</button>
+            <button data-action="backspace" class="calculator-btn bg-gray-600 hover:bg-gray-500 text-white">←</button>
+            <button data-action="(" class="calculator-btn bg-gray-600 hover:bg-gray-500 text-lg text-white">(</button>
+            <button data-action=")" class="calculator-btn bg-gray-600 hover:bg-gray-500 text-lg text-white">)</button>
+
+            <!-- Números y operadores -->
+            <button class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white">7</button>
+            <button class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white">8</button>
+            <button class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white">9</button>
+            <button data-action="/" class="calculator-btn bg-purple-600 hover:bg-purple-500 text-white">÷</button>
+
+            <button class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white">4</button>
+            <button class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white">5</button>
+            <button class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white">6</button>
+            <button data-action="*" class="calculator-btn bg-purple-600 hover:bg-purple-500 text-white">×</button>
+
+            <button class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white">1</button>
+            <button class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white">2</button>
+            <button class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white">3</button>
+            <button data-action="-" class="calculator-btn bg-purple-600 hover:bg-purple-500 text-white">−</button>
+
+            <button class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white col-span-2">0</button>
+            <button class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white text-2xl">.</button>
+            <button data-action="^" class="calculator-btn bg-gray-600 hover:bg-gray-500 text-white">^</button>
+            <button data-action="+" class="calculator-btn bg-purple-600 hover:bg-purple-500 text-white">+</button>
+
+            <button data-action="ans" class="calculator-btn bg-gray-600 hover:bg-gray-500 text-white">Ans</button>
+            <button data-action="equal" class="calculator-btn col-span-3 bg-orange-500 hover:bg-orange-400 text-white font-bold text-3xl">=</button>
+        </section>
+
+        <!-- Información adicional -->
+        <div class="mt-6 p-4 bg-gray-800/70 rounded-lg text-slate-300 text-sm shadow-inner">
+            <p>
+                <i class="fas fa-info-circle mr-2 text-blue-400"></i>
+                Calculadora científica avanzada. Todos los ángulos se calculan en <strong>grados</strong>. 
+                Usa <strong>Ans</strong> para continuar cálculos con el último resultado.
+            </p>
+        </div>
+
+    </main>
+</div>
+
+<script>
+const display = document.getElementById('display');
+const buttons = document.querySelectorAll('button');
+
+let expression = '';
+let lastAnswer = '';
+
+function toRadians(deg) { return deg * (Math.PI/180); }
+
+function isValidExpression(expr) {
+    if(/[+\-*/^]{2,}/.test(expr)) return false;
+    if(expr.trim()==='') return false;
+    let stack = 0;
+    for(let c of expr){
+        if(c==='(') stack++;
+        else if(c===')') stack--;
+        if(stack<0) return false;
+    }
+    return stack===0;
+}
+
+function evaluateExpression(expr){
+    try{
+        if(!isValidExpression(expr)) return 'Error de Sintaxis';
+let sanitized = expr
+    .replace(/sin\(([^)]+)\)/g, 'Math.sin(toRadians($1))')
+    .replace(/cos\(([^)]+)\)/g, 'Math.cos(toRadians($1))')
+    .replace(/tan\(([^)]+)\)/g, 'Math.tan(toRadians($1))')
+    .replace(/log\(([^)]+)\)/g, 'Math.log10($1)')
+    .replace(/\^/g, '**')
+    .replace(/Ans/g, lastAnswer || '0');
+
+        let result = eval(sanitized);
+        if(typeof result==='number' && isFinite(result)){
+            result = Math.round((result + Number.EPSILON)*1e10)/1e10;
+        } else if(!isFinite(result)) return 'Indefinido';
+        return result.toString();
+    } catch(e){ return 'Error'; }
+}
+
+buttons.forEach(button=>{
+    button.addEventListener('click', ()=>{
+        const action = button.getAttribute('data-action');
+        const value = button.textContent.trim();
+
+        if(display.value==='Error' || display.value==='Error de Sintaxis' || display.value==='Indefinido'){
+            expression=''; display.value='';
+        }
+
+        switch(action){
+            case 'clear': expression=''; display.value=''; break;
+            case 'backspace': expression=expression.slice(0,-1); display.value=expression; break;
+            case 'equal':
+                let result = evaluateExpression(expression);
+                display.value=result;
+                if(result!=='Error' && result!=='Error de Sintaxis' && result!=='Indefinido'){
+                    lastAnswer=result;
+                    expression=result;
+                } else expression='';
+                break;
+            case 'sin':
+            case 'cos':
+            case 'tan':
+            case 'log':
+                expression+=`${action}(`;
+                display.value=expression;
+                break;
+            case 'ans':
+                if(lastAnswer){ expression+='Ans'; display.value=expression; }
+                break;
+            case '^':
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+            case '(':
+            case ')':
+                expression+=action;
+                display.value=expression;
+                break;
+            default:
+                expression+=value;
+                display.value=expression;
+                break;
+        }
+    });
+});
+
+document.addEventListener('keydown', (event)=>{
+    const allowedKeys='0123456789+-*/().^';
+    const key = event.key;
+
+    if(display.value==='Error' || display.value==='Error de Sintaxis' || display.value==='Indefinido'){
+        expression=''; display.value='';
+    }
+
+    if(allowedKeys.includes(key)){
+        expression+=key;
+        display.value=expression;
+    } else if(key==='Enter' || key==='='){
+        let result=evaluateExpression(expression);
+        display.value=result;
+        if(result!=='Error' && result!=='Error de Sintaxis' && result!=='Indefinido'){
+            lastAnswer=result;
+            expression=result;
+        } else expression='';
+        event.preventDefault();
+    } else if(key==='Backspace'){
+        expression=expression.slice(0,-1);
+        display.value=expression;
+        event.preventDefault();
+    } else if(key==='Escape'){
+        expression=''; display.value='';
+        event.preventDefault();
+    }
+});
+</script>
+{% endblock %}

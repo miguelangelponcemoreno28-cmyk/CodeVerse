@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}Descargar videos tik tok - CodeVerse{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes pulse-glow {
+            from {
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+            }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .input-focus {
+            transition: all 0.3s ease;
+        }
+        
+        .input-focus:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+
+
+
+    <!-- Animated background particles -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-4 -left-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse"></div>
+        <div class="absolute -top-4 -right-4 w-72 h-72 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse" style="animation-delay: 4s;"></div>
+    </div>
+
+    <main class="min-h-screen flex flex-col items-center justify-center p-4 relative z-10">
+        <!-- Main container -->
+        <div class="container max-w-md w-full glass-effect rounded-3xl shadow-2xl p-8 space-y-8 text-center floating border border-slate-700/50">
+            <!-- Header -->
+            <div class="space-y-4">
+                <div class="mx-auto w-20 h-20 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+                    <i class="fab fa-tiktok text-white text-3xl"></i>
+                </div>
+                <h1 class="text-3xl font-black text-slate-100 leading-tight">
+                    Descarga Videos de
+                    <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">TikTok</span>
+                </h1>
+                <p class="text-slate-400 font-medium">
+                    Descarga tus videos favoritos de forma rápida y sencilla
+                </p>
+            </div>
+
+            <!-- Form section -->
+            <section class="space-y-6">
+                <article>
+                    <form id="download-form" action="/tiktok-download" method="POST" class="space-y-6">
+                        <!-- URL Input -->
+                        <div class="input-group relative">
+                            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-500 z-10">
+                                <i class="fa-solid fa-link text-lg"></i>
+                            </div>
+                            <input type="url" 
+                                   name="url" 
+                                   placeholder="Pega aquí tu enlace de TikTok..." 
+                                   required
+                                   class="input-focus w-full pl-12 pr-16 py-4 border-2 border-slate-700 rounded-2xl shadow-sm focus:ring-4 focus:ring-blue-500/30 focus:border-blue-400 bg-slate-900/80 text-slate-100 text-base placeholder-slate-500 font-medium backdrop-blur-sm transition-all">
+                            
+                            <!-- TikTok icon button -->
+                            <div class="absolute right-2 top-1/2 transform -translate-y-1/2">
+                                <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center shadow-md shadow-blue-500/30">
+                                    <i class="fab fa-tiktok text-white text-sm"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Download button -->
+                        <button type="submit" class="download-btn w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/50 transform hover:scale-105 transition-all duration-300 flex items-center justify-center text-lg group pulse-glow relative overflow-hidden">
+                            <i class="fa-solid fa-download mr-3 group-hover:animate-bounce"></i> 
+                            <span>Descargar Video</span>
+                            <div class="absolute inset-0 shimmer rounded-2xl opacity-0 group-hover:opacity-100"></div>
+                        </button>
+                    </form>
+                </article>
+
+                <!-- Features -->
+                <div class="grid grid-cols-3 gap-4 pt-4">
+                    <div class="text-center space-y-2">
+                        <div class="w-12 h-12 bg-blue-500/20 border border-blue-400/30 rounded-xl flex items-center justify-center mx-auto">
+                            <i class="fas fa-bolt text-blue-400"></i>
+                        </div>
+                        <p class="text-xs font-semibold text-slate-300">Rápido</p>
+                    </div>
+                    <div class="text-center space-y-2">
+                        <div class="w-12 h-12 bg-cyan-500/20 border border-cyan-400/30 rounded-xl flex items-center justify-center mx-auto">
+                            <i class="fas fa-shield-alt text-cyan-400"></i>
+                        </div>
+                        <p class="text-xs font-semibold text-slate-300">Seguro</p>
+                    </div>
+                    <div class="text-center space-y-2">
+                        <div class="w-12 h-12 bg-purple-500/20 border border-purple-400/30 rounded-xl flex items-center justify-center mx-auto">
+                            <i class="fas fa-gift text-purple-400"></i>
+                        </div>
+                        <p class="text-xs font-semibold text-slate-300">Gratis</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('download-form');
+            const input = form.querySelector('input[name="url"]');
+            const button = form.querySelector('.download-btn');
+            const buttonOriginalText = `
+                <i class="fa-solid fa-download mr-3 group-hover:animate-bounce"></i> 
+                <span>Descargar Video</span>
+                <div class="absolute inset-0 shimmer rounded-2xl opacity-0 group-hover:opacity-100"></div>
+            `;
+
+            // Cambiar color del input
+            input.addEventListener('input', function() {
+                if (this.value.includes('tiktok.com')) {
+                    this.classList.add('border-cyan-400', 'ring-cyan-500/30', 'focus:border-cyan-400');
+                    this.classList.remove('border-slate-700');
+                } else {
+                    this.classList.remove('border-cyan-400', 'ring-cyan-500/30', 'focus:border-cyan-400');
+                    this.classList.add('border-slate-700');
+                }
+            });
+
+            // Manejar envío del formulario
+            form.addEventListener('submit', function(e) {
+                button.innerHTML = '<i class="fas fa-spinner fa-spin mr-3"></i>Procesando...';
+                button.disabled = true;
+
+                setTimeout(() => {
+                    button.innerHTML = buttonOriginalText;
+                    button.disabled = false;
+                }, 5000);
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,1094 @@
+{% extends "base.html" %}
+
+{% block title %}Generador de QR Personalizado - CodeVerse{% endblock %}
+
+{% block content %}
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- QR.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+    <style>
+        * {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .glass-effect {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .dark .glass-effect {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid rgba(55, 65, 81, 0.3);
+        }
+
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(150, 249, 45, 0.3);
+        }
+
+        .color-picker {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #fff;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .color-picker:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .qr-preview {
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(150, 249, 45, 0.1) 0%, transparent 25%),
+                radial-gradient(circle at 75% 75%, rgba(59, 130, 246, 0.1) 0%, transparent 25%);
+        }
+
+        .drag-area {
+            border: 2px dashed #94a3b8;
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.05) 0%, rgba(148, 163, 184, 0.1) 100%);
+            transition: all 0.3s ease;
+        }
+
+        .drag-area.dragover {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.2) 100%);
+            transform: scale(1.02);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            background-size: 200% 100%;
+            animation: gradient-flow 2s ease-in-out infinite;
+        }
+
+        @keyframes gradient-flow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .grid-cols-4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        @media (max-width: 768px) {
+            .grid-cols-4 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+
+<body class="gradient-bg min-h-screen text-gray-100">
+    <!-- Background Effects -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-80 w-80 h-80 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-20 blur-3xl floating-animation"></div>
+        <div class="absolute -bottom-40 -left-80 w-80 h-80 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 opacity-20 blur-3xl floating-animation" style="animation-delay: -3s;"></div>
+    </div>
+
+    <main class="min-h-screen flex items-center justify-center p-4 relative z-10">
+        <div class="container max-w-7xl w-full">
+            
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-5xl sm:text-6xl font-black mb-4">
+                    <span class="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                        QR Generator Pro
+                    </span>
+                </h1>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Crea códigos QR personalizados con logos, colores y múltiples tipos de contenido
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- Configuration Panel -->
+                <div class="glass-effect rounded-2xl p-8 slide-in">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-cogs mr-3 text-blue-400"></i>
+                        Configuración
+                    </h2>
+
+                    <form id="qrForm" class="space-y-6">
+                        
+                        <!-- Content Type Selection -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-3">
+                                <i class="fas fa-list mr-2"></i>Tipo de Contenido
+                            </label>
+                            <div class="grid grid-cols-4 gap-2 mb-4">
+                                <button type="button" class="content-type-btn active bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg transition-all duration-300 text-xs font-medium" data-type="url">
+                                    <i class="fas fa-link mr-1"></i>URL
+                                </button>
+                                <button type="button" class="content-type-btn bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 px-3 rounded-lg transition-all duration-300 text-xs font-medium" data-type="text">
+                                    <i class="fas fa-font mr-1"></i>Texto
+                                </button>
+                                <button type="button" class="content-type-btn bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 px-3 rounded-lg transition-all duration-300 text-xs font-medium" data-type="wifi">
+                                    <i class="fas fa-wifi mr-1"></i>WiFi
+                                </button>
+                                <button type="button" class="content-type-btn bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 px-3 rounded-lg transition-all duration-300 text-xs font-medium" data-type="contact">
+                                    <i class="fas fa-address-card mr-1"></i>Contacto
+                                </button>
+                                <button type="button" class="content-type-btn bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 px-3 rounded-lg transition-all duration-300 text-xs font-medium" data-type="email">
+                                    <i class="fas fa-envelope mr-1"></i>Email
+                                </button>
+                                <button type="button" class="content-type-btn bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 px-3 rounded-lg transition-all duration-300 text-xs font-medium" data-type="phone">
+                                    <i class="fas fa-phone mr-1"></i>Teléfono
+                                </button>
+                                <button type="button" class="content-type-btn bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 px-3 rounded-lg transition-all duration-300 text-xs font-medium" data-type="sms">
+                                    <i class="fas fa-sms mr-1"></i>SMS
+                                </button>
+                                <button type="button" class="content-type-btn bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 px-3 rounded-lg transition-all duration-300 text-xs font-medium" data-type="whatsapp">
+                                    <i class="fab fa-whatsapp mr-1"></i>WhatsApp
+                                </button>
+                                <button type="button" class="content-type-btn bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 px-3 rounded-lg transition-all duration-300 text-xs font-medium" data-type="location">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>Ubicación
+                                </button>
+                                <button type="button" class="content-type-btn bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 px-3 rounded-lg transition-all duration-300 text-xs font-medium" data-type="event">
+                                    <i class="fas fa-calendar mr-1"></i>Evento
+                                </button>
+                                <button type="button" class="content-type-btn bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 px-3 rounded-lg transition-all duration-300 text-xs font-medium" data-type="social">
+                                    <i class="fas fa-share-alt mr-1"></i>Redes
+                                </button>
+                                <button type="button" class="content-type-btn bg-gray-700 hover:bg-gray-600 text-gray-300 py-2 px-3 rounded-lg transition-all duration-300 text-xs font-medium" data-type="bitcoin">
+                                    <i class="fab fa-bitcoin mr-1"></i>Bitcoin
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Content Input -->
+                        <div id="contentInputs">
+                            <!-- URL Input (default) -->
+                            <div id="urlInput" class="content-input">
+                                <label class="block text-sm font-semibold text-gray-300 mb-3">
+                                    <i class="fas fa-link mr-2 text-green-400"></i>URL o Enlace
+                                </label>
+                                <input type="url" id="urlField" placeholder="https://ejemplo.com" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                            </div>
+
+                            <!-- Text Input -->
+                            <div id="textInput" class="content-input hidden">
+                                <label class="block text-sm font-semibold text-gray-300 mb-3">
+                                    <i class="fas fa-font mr-2 text-purple-400"></i>Texto Personalizado
+                                </label>
+                                <textarea id="textField" placeholder="Escribe tu mensaje aquí..." rows="3"
+                                          class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300 resize-none"></textarea>
+                            </div>
+
+                            <!-- WiFi Input -->
+                            <div id="wifiInput" class="content-input hidden space-y-4">
+                                <h3 class="text-lg font-semibold text-gray-300 flex items-center">
+                                    <i class="fas fa-wifi mr-2 text-blue-400"></i>Configuración WiFi
+                                </h3>
+                                <input type="text" id="wifiSSID" placeholder="Nombre de la red (SSID)" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                <input type="password" id="wifiPassword" placeholder="Contraseña" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                <select id="wifiSecurity" class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                    <option value="WPA">WPA/WPA2</option>
+                                    <option value="WEP">WEP</option>
+                                    <option value="nopass">Sin contraseña</option>
+                                </select>
+                            </div>
+
+                            <!-- Contact Input -->
+                            <div id="contactInput" class="content-input hidden space-y-4">
+                                <h3 class="text-lg font-semibold text-gray-300 flex items-center">
+                                    <i class="fas fa-address-card mr-2 text-pink-400"></i>Información de Contacto
+                                </h3>
+                                <input type="text" id="contactName" placeholder="Nombre completo" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                <input type="tel" id="contactPhone" placeholder="Teléfono" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                <input type="email" id="contactEmail" placeholder="Email" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                            </div>
+
+                            <!-- Email Input -->
+                            <div id="emailInput" class="content-input hidden space-y-4">
+                                <h3 class="text-lg font-semibold text-gray-300 flex items-center">
+                                    <i class="fas fa-envelope mr-2 text-red-400"></i>Configuración Email
+                                </h3>
+                                <input type="email" id="emailTo" placeholder="destinatario@ejemplo.com" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                <input type="text" id="emailSubject" placeholder="Asunto del email" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                <textarea id="emailBody" placeholder="Cuerpo del mensaje..." rows="3"
+                                          class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300 resize-none"></textarea>
+                            </div>
+
+                            <!-- Phone Input -->
+                            <div id="phoneInput" class="content-input hidden">
+                                <label class="block text-sm font-semibold text-gray-300 mb-3">
+                                    <i class="fas fa-phone mr-2 text-green-400"></i>Número de Teléfono
+                                </label>
+                                <input type="tel" id="phoneNumber" placeholder="+52 123 456 7890" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                            </div>
+
+                            <!-- SMS Input -->
+                            <div id="smsInput" class="content-input hidden space-y-4">
+                                <h3 class="text-lg font-semibold text-gray-300 flex items-center">
+                                    <i class="fas fa-sms mr-2 text-yellow-400"></i>Configuración SMS
+                                </h3>
+                                <input type="tel" id="smsNumber" placeholder="+52 123 456 7890" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                <textarea id="smsMessage" placeholder="Tu mensaje SMS..." rows="3"
+                                          class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300 resize-none"></textarea>
+                            </div>
+
+                            <!-- WhatsApp Input -->
+                            <div id="whatsappInput" class="content-input hidden space-y-4">
+                                <h3 class="text-lg font-semibold text-gray-300 flex items-center">
+                                    <i class="fab fa-whatsapp mr-2 text-green-400"></i>Configuración WhatsApp
+                                </h3>
+                                <input type="tel" id="whatsappNumber" placeholder="521234567890 (sin +)" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                <textarea id="whatsappMessage" placeholder="Hola! Te escribo desde un código QR" rows="3"
+                                          class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300 resize-none"></textarea>
+                            </div>
+
+                            <!-- Location Input -->
+                            <div id="locationInput" class="content-input hidden space-y-4">
+                                <h3 class="text-lg font-semibold text-gray-300 flex items-center">
+                                    <i class="fas fa-map-marker-alt mr-2 text-red-400"></i>Coordenadas GPS
+                                </h3>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input type="number" step="any" id="locationLat" placeholder="Latitud (20.521)" 
+                                           class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                    <input type="number" step="any" id="locationLng" placeholder="Longitud (-100.814)" 
+                                           class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                </div>
+                            </div>
+
+                            <!-- Event Input -->
+                            <div id="eventInput" class="content-input hidden space-y-4">
+                                <h3 class="text-lg font-semibold text-gray-300 flex items-center">
+                                    <i class="fas fa-calendar mr-2 text-purple-400"></i>Información del Evento
+                                </h3>
+                                <input type="text" id="eventTitle" placeholder="Título del evento" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input type="datetime-local" id="eventStart" 
+                                           class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                    <input type="datetime-local" id="eventEnd" 
+                                           class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                </div>
+                                <input type="text" id="eventLocation" placeholder="Ubicación del evento" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                            </div>
+
+                            <!-- Social Input -->
+                            <div id="socialInput" class="content-input hidden space-y-4">
+                                <h3 class="text-lg font-semibold text-gray-300 flex items-center">
+                                    <i class="fas fa-share-alt mr-2 text-blue-400"></i>Redes Sociales
+                                </h3>
+                                <select id="socialPlatform" class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                    <option value="instagram">Instagram</option>
+                                    <option value="twitter">Twitter/X</option>
+                                    <option value="facebook">Facebook</option>
+                                    <option value="linkedin">LinkedIn</option>
+                                    <option value="tiktok">TikTok</option>
+                                    <option value="youtube">YouTube</option>
+                                </select>
+                                <input type="text" id="socialUsername" placeholder="@usuario" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                            </div>
+
+                            <!-- Bitcoin Input -->
+                            <div id="bitcoinInput" class="content-input hidden space-y-4">
+                                <h3 class="text-lg font-semibold text-gray-300 flex items-center">
+                                    <i class="fab fa-bitcoin mr-2 text-yellow-400"></i>Configuración Bitcoin
+                                </h3>
+                                <input type="text" id="bitcoinAddress" placeholder="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" 
+                                       class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input type="number" step="0.00000001" id="bitcoinAmount" placeholder="0.001" 
+                                           class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                    <input type="text" id="bitcoinLabel" placeholder="Etiqueta" 
+                                           class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Logo Upload -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-3">
+                                <i class="fas fa-image mr-2 text-yellow-400"></i>Logo/Imagen Central
+                            </label>
+                            <div class="drag-area rounded-xl p-6 text-center cursor-pointer" id="logoDropArea">
+                                <input type="file" id="logoInput" accept="image/*" class="hidden">
+                                <div id="logoUploadContent">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                                    <p class="text-gray-400">Arrastra una imagen o haz clic para seleccionar</p>
+                                    <p class="text-xs text-gray-500 mt-2">PNG, JPG, SVG hasta 5MB</p>
+                                </div>
+                                <div id="logoPreview" class="hidden">
+                                    <img id="logoPreviewImg" class="max-w-24 max-h-24 mx-auto rounded-lg">
+                                    <button type="button" id="removeLogo" class="mt-2 text-red-400 hover:text-red-300 text-sm">
+                                        <i class="fas fa-trash mr-1"></i>Eliminar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Color Customization -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-3">
+                                <i class="fas fa-palette mr-2 text-pink-400"></i>Personalización de Colores
+                            </label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs text-gray-400 mb-2">Color Principal</label>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="color" id="foregroundColor" value="#000000" class="color-picker">
+                                        <span id="foregroundHex" class="text-sm text-gray-300">#000000</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-400 mb-2">Color de Fondo</label>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="color" id="backgroundColor" value="#ffffff" class="color-picker">
+                                        <span id="backgroundHex" class="text-sm text-gray-300">#ffffff</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- QR Size -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-3">
+                                <i class="fas fa-expand-arrows-alt mr-2 text-cyan-400"></i>Tamaño del QR
+                            </label>
+                            <div class="flex items-center space-x-4">
+                                <input type="range" id="qrSize" min="200" max="800" value="400" 
+                                       class="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                                <span id="sizeValue" class="text-sm text-gray-300 min-w-16">400px</span>
+                            </div>
+                        </div>
+
+                        <!-- File Name -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-300 mb-3">
+                                <i class="fas fa-file-signature mr-2 text-orange-400"></i>Nombre del Archivo
+                            </label>
+                            <input type="text" id="fileName" placeholder="mi-codigo-qr" 
+                                   class="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-all duration-300">
+                            <p class="text-xs text-gray-500 mt-1">Se guardará como: nombre.png</p>
+                        </div>
+
+                    </form>
+                </div>
+
+                <!-- Preview Panel -->
+                <div class="glass-effect rounded-2xl p-8 slide-in">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-eye mr-3 text-green-400"></i>
+                        Vista Previa
+                    </h2>
+
+                    <div class="qr-preview rounded-2xl p-8 mb-6 flex items-center justify-center min-h-96">
+                        <div id="qrContainer" class="bg-white rounded-2xl p-6 shadow-2xl hidden">
+                            <canvas id="qrCanvas" class="rounded-xl"></canvas>
+                        </div>
+                        <div id="qrPlaceholder" class="text-center text-gray-400">
+                            <i class="fas fa-qrcode text-6xl mb-4"></i>
+                            <p class="text-lg font-medium">Tu código QR aparecerá aquí</p>
+                            <p class="text-sm">Completa los campos para generar</p>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div id="progressContainer" class="hidden mb-6">
+                        <div class="bg-gray-700 rounded-full h-2 overflow-hidden">
+                            <div id="progressBar" class="progress-bar h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <p id="progressText" class="text-sm text-gray-400 mt-2 text-center">Generando...</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="space-y-4">
+                        <button id="generateBtn" 
+                                class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fas fa-magic mr-3"></i>Generar Código QR
+                        </button>
+                        
+                        <button id="downloadBtn" 
+                                class="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed hidden">
+                            <i class="fas fa-download mr-3"></i>Descargar QR
+                        </button>
+                    </div>
+
+                    <!-- QR Info -->
+                    <div id="qrInfo" class="mt-6 p-4 bg-gray-800/30 rounded-xl border border-gray-700 hidden">
+                        <h3 class="font-semibold text-gray-300 mb-2">Información del QR:</h3>
+                        <div class="space-y-1 text-sm text-gray-400">
+                            <p><span class="text-gray-300">Tipo:</span> <span id="infoType">-</span></p>
+                            <p><span class="text-gray-300">Tamaño:</span> <span id="infoSize">-</span></p>
+                            <p><span class="text-gray-300">Contenido:</span> <span id="infoContent">-</span></p>
+                            <p class="text-green-400"><i class="fas fa-check mr-1"></i> Los códigos QR no caducan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="mt-8 glass-effect rounded-2xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-question-circle mr-2"></i>¿Los códigos QR caducan?
+                </h3>
+                <div class="grid md:grid-cols-2 gap-6 text-gray-300">
+                    <div>
+                        <h4 class="font-semibold text-green-400 mb-2">
+                            <i class="fas fa-check mr-2"></i>QR Estáticos (Este generador)
+                        </h4>
+                        <ul class="space-y-1 text-sm">
+                            <li>• No caducan nunca</li>
+                            <li>• Información permanente</li>
+                            <li>• No requieren internet para generarse</li>
+                            <li>• Perfectos para URLs, contactos, WiFi</li>
+                            <li>• Funcionan mientras el contenido exista</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-red-400 mb-2">
+                            <i class="fas fa-times mr-2"></i>QR Dinámicos
+                        </h4>
+                        <ul class="space-y-1 text-sm">
+                            <li>• Pueden caducar según el servicio</li>
+                            <li>• Requieren suscripción en muchos casos</li>
+                            <li>• Permiten cambiar el contenido</li>
+                            <li>• Incluyen estadísticas de uso</li>
+                            <li>• Dependen del proveedor del servicio</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        class QRGenerator {
+            constructor() {
+                this.qr = null;
+                this.logoImage = null;
+                this.currentType = 'url';
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.setupColorPickers();
+                this.setupFileUpload();
+            }
+
+            setupEventListeners() {
+                // Content type buttons
+                document.querySelectorAll('.content-type-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        this.switchContentType(e.target.dataset.type);
+                    });
+                });
+
+                // Generate button
+                document.getElementById('generateBtn').addEventListener('click', () => {
+                    this.generateQR();
+                });
+
+                // Download button
+                document.getElementById('downloadBtn').addEventListener('click', () => {
+                    this.downloadQR();
+                });
+
+                // Size slider
+                document.getElementById('qrSize').addEventListener('input', (e) => {
+                    document.getElementById('sizeValue').textContent = e.target.value + 'px';
+                });
+
+                // Real-time updates for inputs
+                const inputIds = [
+                    'urlField', 'textField', 'wifiSSID', 'wifiPassword', 'wifiSecurity',
+                    'contactName', 'contactPhone', 'contactEmail',
+                    'emailTo', 'emailSubject', 'emailBody',
+                    'phoneNumber', 'smsNumber', 'smsMessage',
+                    'whatsappNumber', 'whatsappMessage',
+                    'locationLat', 'locationLng',
+                    'eventTitle', 'eventStart', 'eventEnd', 'eventLocation',
+                    'socialPlatform', 'socialUsername',
+                    'bitcoinAddress', 'bitcoinAmount', 'bitcoinLabel'
+                ];
+
+                inputIds.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.addEventListener('input', () => {
+                            // Auto-generate if there's already a QR
+                            if (this.qr && this.getQRContent().trim()) {
+                                this.generateQR();
+                            }
+                        });
+                    }
+                });
+            }
+
+            setupColorPickers() {
+                const foregroundPicker = document.getElementById('foregroundColor');
+                const backgroundPicker = document.getElementById('backgroundColor');
+
+                foregroundPicker.addEventListener('change', (e) => {
+                    document.getElementById('foregroundHex').textContent = e.target.value;
+                    if (this.qr) this.generateQR();
+                });
+
+                backgroundPicker.addEventListener('change', (e) => {
+                    document.getElementById('backgroundHex').textContent = e.target.value;
+                    if (this.qr) this.generateQR();
+                });
+            }
+
+            setupFileUpload() {
+                const dropArea = document.getElementById('logoDropArea');
+                const fileInput = document.getElementById('logoInput');
+                const removeBtn = document.getElementById('removeLogo');
+
+                dropArea.addEventListener('click', () => fileInput.click());
+                dropArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    dropArea.classList.add('dragover');
+                });
+                dropArea.addEventListener('dragleave', () => {
+                    dropArea.classList.remove('dragover');
+                });
+                dropArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropArea.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) this.handleFile(files[0]);
+                });
+
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) this.handleFile(e.target.files[0]);
+                });
+
+                removeBtn.addEventListener('click', () => {
+                    this.removeLogo();
+                });
+            }
+
+            handleFile(file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    this.showMessage('El archivo es demasiado grande. Máximo 5MB.', 'error');
+                    return;
+                }
+
+                if (!file.type.startsWith('image/')) {
+                    this.showMessage('Por favor selecciona un archivo de imagen válido.', 'error');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        this.logoImage = img;
+                        document.getElementById('logoPreviewImg').src = e.target.result;
+                        document.getElementById('logoUploadContent').classList.add('hidden');
+                        document.getElementById('logoPreview').classList.remove('hidden');
+                        if (this.qr) this.generateQR();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+
+            removeLogo() {
+                this.logoImage = null;
+                document.getElementById('logoUploadContent').classList.remove('hidden');
+                document.getElementById('logoPreview').classList.add('hidden');
+                document.getElementById('logoInput').value = '';
+                if (this.qr) this.generateQR();
+            }
+
+            switchContentType(type) {
+                // Update buttons
+                document.querySelectorAll('.content-type-btn').forEach(btn => {
+                    btn.classList.remove('active', 'bg-blue-600');
+                    btn.classList.add('bg-gray-700');
+                });
+                document.querySelector(`[data-type="${type}"]`).classList.add('active', 'bg-blue-600');
+                document.querySelector(`[data-type="${type}"]`).classList.remove('bg-gray-700');
+
+                // Hide all inputs
+                document.querySelectorAll('.content-input').forEach(input => {
+                    input.classList.add('hidden');
+                });
+
+                // Show selected input
+                document.getElementById(`${type}Input`).classList.remove('hidden');
+                this.currentType = type;
+            }
+
+            getQRContent() {
+                switch (this.currentType) {
+                    case 'url':
+                        return document.getElementById('urlField').value || '';
+                    case 'text':
+                        return document.getElementById('textField').value || '';
+                    case 'wifi':
+                        const ssid = document.getElementById('wifiSSID').value || '';
+                        const password = document.getElementById('wifiPassword').value || '';
+                        const security = document.getElementById('wifiSecurity').value;
+                        return ssid ? `WIFI:T:${security};S:${ssid};P:${password};;` : '';
+                    case 'contact':
+                        const name = document.getElementById('contactName').value || '';
+                        const phone = document.getElementById('contactPhone').value || '';
+                        const email = document.getElementById('contactEmail').value || '';
+                        return name ? `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nEND:VCARD` : '';
+                    case 'email':
+                        const emailTo = document.getElementById('emailTo').value || '';
+                        const subject = document.getElementById('emailSubject').value || '';
+                        const body = document.getElementById('emailBody').value || '';
+                        return emailTo ? `mailto:${emailTo}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` : '';
+                    case 'phone':
+                        const phoneNum = document.getElementById('phoneNumber').value || '';
+                        return phoneNum ? `tel:${phoneNum}` : '';
+                    case 'sms':
+                        const smsNumber = document.getElementById('smsNumber').value || '';
+                        const smsMessage = document.getElementById('smsMessage').value || '';
+                        return smsNumber ? `sms:${smsNumber}?body=${encodeURIComponent(smsMessage)}` : '';
+                    case 'whatsapp':
+                        const whatsappNumber = document.getElementById('whatsappNumber').value || '';
+                        const whatsappMessage = document.getElementById('whatsappMessage').value || '';
+                        return whatsappNumber ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}` : '';
+                    case 'location':
+                        const lat = document.getElementById('locationLat').value || '';
+                        const lng = document.getElementById('locationLng').value || '';
+                        return (lat && lng) ? `geo:${lat},${lng}` : '';
+                    case 'event':
+                        const title = document.getElementById('eventTitle').value || '';
+                        const start = document.getElementById('eventStart').value || '';
+                        const end = document.getElementById('eventEnd').value || '';
+                        const location = document.getElementById('eventLocation').value || '';
+                        
+                        const formatDate = (dateStr) => {
+                            if (!dateStr) return '';
+                            return new Date(dateStr).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+                        };
+                        
+                        return title ? `BEGIN:VEVENT\nSUMMARY:${title}\nDTSTART:${formatDate(start)}\nDTEND:${formatDate(end)}\nLOCATION:${location}\nEND:VEVENT` : '';
+                    case 'social':
+                        const platform = document.getElementById('socialPlatform').value;
+                        const username = document.getElementById('socialUsername').value.replace('@', '') || '';
+                        
+                        if (!username) return '';
+                        
+                        const socialUrls = {
+                            instagram: `https://instagram.com/${username}`,
+                            twitter: `https://twitter.com/${username}`,
+                            facebook: `https://facebook.com/${username}`,
+                            linkedin: `https://linkedin.com/in/${username}`,
+                            tiktok: `https://tiktok.com/@${username}`,
+                            youtube: `https://youtube.com/@${username}`
+                        };
+                        
+                        return socialUrls[platform];
+                    case 'bitcoin':
+                        const address = document.getElementById('bitcoinAddress').value || '';
+                        const amount = document.getElementById('bitcoinAmount').value || '';
+                        const label = document.getElementById('bitcoinLabel').value || '';
+                        
+                        if (!address) return '';
+                        
+                        let content = `bitcoin:${address}`;
+                        if (amount) content += `?amount=${amount}`;
+                        if (label) content += `${amount ? '&' : '?'}label=${encodeURIComponent(label)}`;
+                        return content;
+                    default:
+                        return '';
+                }
+            }
+
+            async generateQR() {
+                const content = this.getQRContent();
+                if (!content.trim()) {
+                    this.showMessage('Por favor completa los campos requeridos para generar el código QR.', 'warning');
+                    return;
+                }
+
+                this.showProgress();
+
+                try {
+                    const size = parseInt(document.getElementById('qrSize').value);
+                    const foregroundColor = document.getElementById('foregroundColor').value;
+                    const backgroundColor = document.getElementById('backgroundColor').value;
+
+                    // Create QR code
+                    this.qr = new QRious({
+                        element: document.getElementById('qrCanvas'),
+                        value: content,
+                        size: size,
+                        foreground: foregroundColor,
+                        background: backgroundColor,
+                        level: 'H', // High error correction for logo integration
+                        padding: 20
+                    });
+
+                    // Add integrated logo if exists
+                    if (this.logoImage) {
+                        await this.addIntegratedLogoToQR();
+                    }
+
+                    // Hide placeholder and show QR
+                    document.getElementById('qrPlaceholder').classList.add('hidden');
+                    document.getElementById('qrContainer').classList.remove('hidden');
+                    document.getElementById('downloadBtn').classList.remove('hidden');
+
+                    // Update info
+                    this.updateQRInfo(content, size);
+
+                    this.hideProgress();
+                } catch (error) {
+                    console.error('Error generating QR:', error);
+                    this.showMessage('Error al generar el código QR. Por favor verifica el contenido.', 'error');
+                    this.hideProgress();
+                }
+            }
+
+           async addIntegratedLogoToQR() {
+        const canvas = document.getElementById('qrCanvas');
+        const ctx = canvas.getContext('2d');
+        const size = canvas.width;
+        
+        // Crear un canvas temporal para trabajar con la imagen
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCanvas.width = size;
+        tempCanvas.height = size;
+        
+        // Copiar el QR original al canvas temporal
+        tempCtx.drawImage(canvas, 0, 0);
+        
+        // Configurar el área donde se integrará la imagen (más grande que antes)
+        const logoSize = size * 0.35; // 35% del tamaño del QR
+        const logoX = (size - logoSize) / 2;
+        const logoY = (size - logoSize) / 2;
+        
+        // Crear máscara circular para la imagen
+        ctx.save();
+        
+        // Limpiar el área central
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, logoSize / 2, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        // Restaurar modo de composición
+        ctx.globalCompositeOperation = 'source-over';
+        
+        // Crear borde decorativo
+        ctx.strokeStyle = document.getElementById('foregroundColor').value;
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, logoSize / 2 + 5, 0, 2 * Math.PI);
+        ctx.stroke();
+        
+        // Crear un segundo borde interno
+        ctx.strokeStyle = document.getElementById('backgroundColor').value;
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, logoSize / 2 + 1, 0, 2 * Math.PI);
+        ctx.stroke();
+        
+        // Dibujar la imagen dentro del círculo
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, logoSize / 2 - 2, 0, 2 * Math.PI);
+        ctx.clip();
+        
+        // Calcular dimensiones para mantener proporción de la imagen
+        const imgRatio = this.logoImage.width / this.logoImage.height;
+        let drawWidth, drawHeight, drawX, drawY;
+        
+        if (imgRatio > 1) {
+            // Imagen más ancha que alta
+            drawHeight = logoSize - 4;
+            drawWidth = drawHeight * imgRatio;
+            drawX = logoX + (logoSize - drawWidth) / 2;
+            drawY = logoY + 2;
+        } else {
+            // Imagen más alta que ancha
+            drawWidth = logoSize - 4;
+            drawHeight = drawWidth / imgRatio;
+            drawX = logoX + 2;
+            drawY = logoY + (logoSize - drawHeight) / 2;
+        }
+        
+        ctx.drawImage(this.logoImage, drawX, drawY, drawWidth, drawHeight);
+        ctx.restore();
+        
+        // Añadir efecto de integración con el patrón QR
+        this.addPatternIntegration(ctx, size, logoSize);
+        
+        ctx.restore();
+    }
+    
+    addPatternIntegration(ctx, size, logoSize) {
+        const centerX = size / 2;
+        const centerY = size / 2;
+        const radius = logoSize / 2;
+        
+        // Crear pequeños cuadrados decorativos alrededor del logo
+        ctx.fillStyle = document.getElementById('foregroundColor').value;
+        
+        const squareSize = 6;
+        const numSquares = 16;
+        
+        for (let i = 0; i < numSquares; i++) {
+            const angle = (i / numSquares) * 2 * Math.PI;
+            const x = centerX + Math.cos(angle) * (radius + 15) - squareSize / 2;
+            const y = centerY + Math.sin(angle) * (radius + 15) - squareSize / 2;
+            
+            // Añadir variación en el tamaño para efecto más orgánico
+            const variation = 1 + Math.sin(i * 0.8) * 0.3;
+            const currentSize = squareSize * variation;
+            
+            ctx.fillRect(x, y, currentSize, currentSize);
+        }
+        
+        // Añadir algunos puntos más pequeños para transición suave
+        ctx.fillStyle = document.getElementById('foregroundColor').value + '80'; // Semi-transparente
+        
+        for (let i = 0; i < 24; i++) {
+            const angle = (i / 24) * 2 * Math.PI;
+            const distance = radius + 25 + Math.random() * 10;
+            const x = centerX + Math.cos(angle) * distance;
+            const y = centerY + Math.sin(angle) * distance;
+            
+            ctx.beginPath();
+            ctx.arc(x, y, 2 + Math.random() * 2, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+    }
+            
+            showProgress() {
+                document.getElementById('progressContainer').classList.remove('hidden');
+                let progress = 0;
+                const progressBar = document.getElementById('progressBar');
+                const progressText = document.getElementById('progressText');
+
+                const interval = setInterval(() => {
+                    progress += Math.random() * 25 + 5;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(interval);
+                        progressText.textContent = '¡Completado!';
+                    }
+                    progressBar.style.width = progress + '%';
+                }, 100);
+            }
+
+            hideProgress() {
+                setTimeout(() => {
+                    document.getElementById('progressContainer').classList.add('hidden');
+                    document.getElementById('progressBar').style.width = '0%';
+                    document.getElementById('progressText').textContent = 'Generando...';
+                }, 500);
+            }
+
+            updateQRInfo(content, size) {
+                const typeLabels = {
+                    url: 'URL/Enlace',
+                    text: 'Texto',
+                    wifi: 'WiFi',
+                    contact: 'Contacto (vCard)',
+                    email: 'Email',
+                    phone: 'Teléfono',
+                    sms: 'SMS',
+                    whatsapp: 'WhatsApp',
+                    location: 'Ubicación',
+                    event: 'Evento (iCal)',
+                    social: 'Red Social',
+                    bitcoin: 'Bitcoin'
+                };
+
+                document.getElementById('infoType').textContent = typeLabels[this.currentType] || 'Desconocido';
+                document.getElementById('infoSize').textContent = `${size}x${size}px`;
+                document.getElementById('infoContent').textContent = content.length > 50 ? 
+                    content.substring(0, 50) + '...' : content;
+                document.getElementById('qrInfo').classList.remove('hidden');
+            }
+
+            downloadQR() {
+                if (!this.qr) {
+                    this.showMessage('Primero genera un código QR.', 'warning');
+                    return;
+                }
+
+                const canvas = document.getElementById('qrCanvas');
+                const fileName = document.getElementById('fileName').value || 'codigo-qr';
+
+                // Create download link
+                const link = document.createElement('a');
+                link.download = `${fileName}.png`;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                
+                // Trigger download
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Show success message
+                this.showMessage('¡QR descargado exitosamente!', 'success');
+            }
+
+            showMessage(message, type = 'info') {
+                const colors = {
+                    success: 'from-green-500 to-green-600',
+                    error: 'from-red-500 to-red-600',
+                    warning: 'from-yellow-500 to-yellow-600',
+                    info: 'from-blue-500 to-blue-600'
+                };
+
+                const icons = {
+                    success: 'fa-check-circle',
+                    error: 'fa-exclamation-circle',
+                    warning: 'fa-exclamation-triangle',
+                    info: 'fa-info-circle'
+                };
+
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `fixed top-4 right-4 bg-gradient-to-r ${colors[type]} text-white px-6 py-3 rounded-xl shadow-lg z-50 slide-in`;
+                messageDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas ${icons[type]} mr-3"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                
+                document.body.appendChild(messageDiv);
+                
+                setTimeout(() => {
+                    messageDiv.remove();
+                }, 4000);
+            }
+        }
+
+        // Initialize QR Generator when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new QRGenerator();
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + Enter to generate QR
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('generateBtn').click();
+            }
+            
+            // Ctrl/Cmd + S to download (if QR exists)
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                if (!document.getElementById('downloadBtn').classList.contains('hidden')) {
+                    document.getElementById('downloadBtn').click();
+                }
+            }
+        });
+
+        // Enhanced hover effects
+        document.addEventListener('DOMContentLoaded', () => {
+            // Button hover effects
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Input focus effects
+            document.querySelectorAll('input, textarea, select').forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.transform = 'scale(1.02)';
+                    this.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.3)';
+                });
+                input.addEventListener('blur', function() {
+                    this.style.transform = 'scale(1)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        });
+
+        // Mobile responsive animations
+        if (window.innerWidth <= 768) {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.glass-effect').forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(element);
+            });
+        }
+    </script>
+
+
+{% endblock %}
