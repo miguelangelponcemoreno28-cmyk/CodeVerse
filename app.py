@@ -13,6 +13,7 @@ import uuid
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
 
+
 load_dotenv()
 
 app = Flask(__name__)

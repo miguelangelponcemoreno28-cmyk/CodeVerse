@@ -1,19 +1,12 @@
 {
-  "id_tutorial_html_1": {
-    "title": "Introducción a HTML",
-    "content": "<h3>¿Qué es HTML?</h3><p>HTML es...</p>"
-  },
-  "id_tutorial_html_2": {
-    "title": "Estructura Semántica HTML5",
-    "content": "<h3>Etiquetas semánticas</h3><p>Las etiquetas semánticas..."
-  },
-  "68f443dafe048a16ed34a904": {
-    "title": "Introducción a HTML",
+
+  "68f6dee44378a72569352332": {
+    "title": "Etiquetas de HTML",
     "language": "html",
     "level": "principiante",
-    "duration": "30 min",
-    "description": "Aprende los fundamentos de HTML y cómo crear tu primera página web.",
-    "content": "<h3>Hola</h3><p>Les enseñare lo prncipal para empezar a aprender HTML</p>",
-    "lastUpdated": "2025-10-19T19:19:53.693855"
+    "duration": "15",
+    "description": "Etiquetas basicas de HTML",
+    "content": "<h2>Mini tutorial de etiquetas HTML básicas</h2>\n\n<h3>1. &lt;h1&gt; a &lt;h6&gt; — Encabezados</h3>\n<p>Se usan para los títulos y subtítulos. &lt;h1&gt; es el más grande e importante, y &lt;h6&gt; el más pequeño.</p>\n<pre><code>&lt;h1&gt;Título principal&lt;/h1&gt;\n&lt;h3&gt;Subtítulo o sección&lt;/h3&gt;</code></pre>\n\n<h3>2. &lt;p&gt; — Párrafo</h3>\n<p>Sirve para escribir texto normal, como párrafos de información o explicación.</p>\n<pre><code>&lt;p&gt;Este es un párrafo de ejemplo.&lt;/p&gt;</code></pre>\n\n<h3>3. &lt;a&gt; — Enlaces</h3>\n<p>Permite crear enlaces a otras páginas o sitios web. Se usa con el atributo <code>href</code> para indicar la dirección.</p>\n<pre><code>&lt;a href=\"https://example.com\"&gt;Visitar sitio&lt;/a&gt;</code></pre>\n\n<h3>4. &lt;img&gt; — Imágenes</h3>\n<p>Muestra una imagen en tu página. Se usa con los atributos <code>src</code> (ruta de la imagen) y <code>alt</code> (texto alternativo).</p>\n<pre><code>&lt;img src=\"imagen.jpg\" alt=\"Descripción de la imagen\"&gt;</code></pre>\n\n<h3>5. &lt;ul&gt; y &lt;li&gt; — Listas</h3>\n<p>Se usan para crear listas de elementos. &lt;ul&gt; es una lista sin orden y &lt;li&gt; son los elementos dentro de ella.</p>\n<pre><code>&lt;ul&gt;\n  &lt;li&gt;Elemento 1&lt;/li&gt;\n  &lt;li&gt;Elemento 2&lt;/li&gt;\n&lt;/ul&gt;</code></pre>\n\n<h3>6. &lt;strong&gt; y &lt;em&gt; — Negrita y cursiva</h3>\n<p>&lt;strong&gt; resalta texto en <strong>negrita</strong> y &lt;em&gt; lo pone en <em>cursiva</em>.</p>\n<pre><code>&lt;p&gt;Esto es &lt;strong&gt;importante&lt;/strong&gt; y esto &lt;em&gt;está enfatizado&lt;/em&gt;.&lt;/p&gt;</code></pre>\n\n<h3>7. &lt;br&gt; y &lt;hr&gt; — Saltos y líneas</h3>\n<p>&lt;br&gt; hace un salto de línea y &lt;hr&gt; dibuja una línea horizontal para separar contenido.</p>\n<pre><code>&lt;p&gt;Línea 1&lt;br&gt;Línea 2&lt;/p&gt;\n&lt;hr&gt;</code></pre>\n\n<h3>8. &lt;div&gt; y &lt;span&gt; — Contenedores</h3>\n<p>&lt;div&gt; agrupa bloques grandes de contenido y &lt;span&gt; agrupa texto pequeño o palabras dentro de una línea.</p>\n<pre><code>&lt;div&gt;\n  &lt;h3&gt;Sección&lt;/h3&gt;\n  &lt;p&gt;Contenido dentro del div.&lt;/p&gt;\n&lt;/div&gt;\n\n&lt;p&gt;Texto con &lt;span&gt;palabra resaltada&lt;/span&gt;.&lt;/p&gt;</code></pre>\n\n<h3>9. &lt;form&gt; — Formularios básicos</h3>\n<p>Sirve para recoger datos del usuario. Usa etiquetas como &lt;label&gt;, &lt;input&gt; y &lt;button&gt;.</p>\n<pre><code>&lt;form&gt;\n  &lt;label for=\"nombre\"&gt;Nombre:&lt;/label&gt;\n  &lt;input id=\"nombre\" type=\"text\"&gt;\n  &lt;button&gt;Enviar&lt;/button&gt;\n&lt;/form&gt;</code></pre>",
+    "lastUpdated": "2025-10-20T19:16:20.560509"
   }
 }
