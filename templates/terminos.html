@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}Términos y Condiciones | CodeVerse{% endblock %}
+
+{% block content %}
+<section class="py-20 px-6">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <a href="/" class="inline-flex items-center gap-2 text-blue-400 hover:text-cyan-400 transition mb-8 font-medium group">
+                <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i>
+                Volver al Inicio
+            </a>
+            
+            <div class="mb-6 inline-block">
+                <span class="bg-purple-500/20 text-purple-300 px-4 py-2 rounded-full text-sm font-semibold border border-purple-400/30">
+                    <i class="fas fa-file-contract mr-2"></i>Última actualización: Octubre 2025
+                </span>
+            </div>
+            
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+                Términos y Condiciones
+            </h1>
+            <p class="text-xl text-slate-300">
+                Normas de uso de la plataforma CodeVerse
+            </p>
+        </div>
+
+        <!-- Content -->
+        <div class="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 md:p-12 backdrop-blur">
+            
+            <div class="prose prose-invert max-w-none">
+                <!-- Aceptación -->
+                <div class="mb-10">
+                    <h2 class="text-3xl font-bold text-blue-400 mb-4 flex items-center gap-3">
+                        <i class="fas fa-handshake"></i>
+                        Aceptación de los Términos
+                    </h2>
+                    <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-l-4 border-blue-400 rounded-lg p-6">
+                        <p class="text-slate-300 leading-relaxed text-lg">
+                            Al acceder y utilizar CodeVerse, aceptas estar sujeto a estos términos y condiciones. 
+                            Si no estás de acuerdo con alguna parte de estos términos, no debes usar nuestra plataforma.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Uso de la Plataforma -->
+                <div class="mb-10">
+                    <h2 class="text-3xl font-bold text-cyan-400 mb-4 flex items-center gap-3">
+                        <i class="fas fa-laptop-code"></i>
+                        Uso de la Plataforma
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+                            <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                                <i class="fas fa-check-circle text-emerald-400"></i>
+                                Permitido
+                            </h3>
+                            <ul class="space-y-2 text-slate-300 ml-6">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-emerald-400 mt-1"></i>
+                                    <span>Acceder a todos los tutoriales y contenido educativo gratuitamente</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-emerald-400 mt-1"></i>
+                                    <span>Copiar y usar snippets de código en tus proyectos personales o comerciales</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-emerald-400 mt-1"></i>
+                                    <span>Compartir enlaces a tutoriales específicos</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-check text-emerald-400 mt-1"></i>
+                                    <span>Utilizar las herramientas proporcionadas en la plataforma</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-red-700/50">
+                            <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                                <i class="fas fa-times-circle text-red-400"></i>
+                                Prohibido
+                            </h3>
+                            <ul class="space-y-2 text-slate-300 ml-6">
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times text-red-400 mt-1"></i>
+                                    <span>Copiar, redistribuir o vender el contenido completo de la plataforma</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times text-red-400 mt-1"></i>
+                                    <span>Usar la plataforma para actividades ilegales o dañinas</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times text-red-400 mt-1"></i>
+                                    <span>Intentar hackear, sobrecargar o comprometer la seguridad</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fas fa-times text-red-400 mt-1"></i>
+                                    <span>Reproducir tutoriales completos en otras plataformas sin autorización</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Propiedad Intelectual -->
+                <div class="mb-10">
+                    <h2 class="text-3xl font-bold text-purple-400 mb-4 flex items-center gap-3">
+                        <i class="fas fa-copyright"></i>
+                        Propiedad Intelectual
+                    </h2>
+                    <div class="space-y-4 text-slate-300 text-lg">
+                        <p class="leading-relaxed">
+                            Todo el contenido de CodeVerse, incluyendo pero no limitado a tutoriales, textos, gráficos, 
+                            logos, y diseño del sitio, es propiedad de CodeVerse y está protegido por leyes de derechos de autor.
+                        </p>
+                        
+                        <div class="bg-purple-500/10 rounded-xl p-6 border border-purple-500/30">
+                            <h3 class="text-xl font-bold text-white mb-3">
+                                <i class="fas fa-code text-purple-400 mr-2"></i>
+                                Licencia de Código
+                            </h3>
+                            <p class="text-slate-300">
+                                Los snippets de código proporcionados en la plataforma están disponibles para uso libre 
+                                en proyectos personales y comerciales. Sin embargo, el contenido educativo (tutoriales, explicaciones) 
+                                no puede ser reproducido sin autorización.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Disclaimer -->
+                <div class="mb-10">
+                    <h2 class="text-3xl font-bold text-yellow-400 mb-4 flex items-center gap-3">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Descargo de Responsabilidad
+                    </h2>
+                    <div class="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border-l-4 border-yellow-400 rounded-lg p-6">
+                        <ul class="space-y-3 text-slate-300 text-lg">
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-info-circle text-yellow-400 mt-1 flex-shrink-0"></i>
+                                <span>
+                                    <strong class="text-white">Contenido "Como Está":</strong> 
+                                    Proporcionamos el contenido educativo sin garantías de ningún tipo
+                                </span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-info-circle text-yellow-400 mt-1 flex-shrink-0"></i>
+                                <span>
+                                    <strong class="text-white">Sin Responsabilidad:</strong> 
+                                    No somos responsables de errores en el código o pérdidas derivadas del uso del contenido
+                                </span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-info-circle text-yellow-400 mt-1 flex-shrink-0"></i>
+                                <span>
+                                    <strong class="text-white">Enlaces Externos:</strong> 
+                                    No somos responsables del contenido de sitios web de terceros
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Modificaciones -->
+                <div class="mb-10">
+                    <h2 class="text-3xl font-bold text-green-400 mb-4 flex items-center gap-3">
+                        <i class="fas fa-sync-alt"></i>
+                        Modificaciones
+                    </h2>
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+                        <p class="text-slate-300 leading-relaxed text-lg">
+                            CodeVerse se reserva el derecho de modificar estos términos en cualquier momento. 
+                            Los cambios entrarán en vigor inmediatamente después de su publicación en la plataforma. 
+                            Tu uso continuado de CodeVerse después de dichos cambios constituye tu aceptación de los nuevos términos.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Terminación -->
+                <div class="mb-10">
+                    <h2 class="text-3xl font-bold text-red-400 mb-4 flex items-center gap-3">
+                        <i class="fas fa-ban"></i>
+                        Terminación de Acceso
+                    </h2>
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-red-700/50">
+                        <p class="text-slate-300 leading-relaxed text-lg mb-4">
+                            Nos reservamos el derecho de suspender o terminar tu acceso a CodeVerse si:
+                        </p>
+                        <ul class="space-y-2 text-slate-300 ml-6">
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-gavel text-red-400 mt-1"></i>
+                                <span>Violas estos términos y condiciones</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-gavel text-red-400 mt-1"></i>
+                                <span>Utilizas la plataforma de manera fraudulenta o ilegal</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fas fa-gavel text-red-400 mt-1"></i>
+                                <span>Intentas dañar la plataforma o a otros usuarios</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Ley Aplicable -->
+                <div class="mb-10">
+                    <h2 class="text-3xl font-bold text-indigo-400 mb-4 flex items-center gap-3">
+                        <i class="fas fa-balance-scale"></i>
+                        Ley Aplicable
+                    </h2>
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700/50">
+                        <p class="text-slate-300 leading-relaxed text-lg">
+                            Estos términos se rigen por las leyes de México. Cualquier disputa relacionada con 
+                            estos términos estará sujeta a la jurisdicción exclusiva de los tribunales de México.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Contacto -->
+                <div class="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-xl p-8 text-center">
+                    <h2 class="text-2xl font-bold text-white mb-4">
+                        <i class="fas fa-question-circle text-blue-400 mr-2"></i>
+                        ¿Dudas sobre los Términos?
+                    </h2>
+                    <p class="text-slate-300 mb-6">
+                        Si tienes preguntas sobre estos términos y condiciones, no dudes en contactarnos
+                    </p>
+                    <a href="/contacto" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg hover:-translate-y-1">
+                        <i class="fas fa-paper-plane"></i>
+                        Contáctanos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

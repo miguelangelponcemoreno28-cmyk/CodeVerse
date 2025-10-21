@@ -1,187 +1,220 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeVerse - Aprende a Programar desde Cero | Tutoriales Gratis</title>
-    <meta name="description" content="Aprende programación con tutoriales gratuitos en español. HTML, CSS, JavaScript, Python y más. Snippets listos para usar y herramientas para desarrolladores.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-</head>
-<body class="bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-slate-100">
-    <!-- Navbar Mejorado -->
-    <nav class="sticky top-0 z-50 border-b border-slate-700 bg-slate-950/95 backdrop-blur-md shadow-lg">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/" class="flex items-center gap-3 text-2xl font-bold hover:opacity-80 transition">
-                <i class="fas fa-code text-blue-400"></i>
-                <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">CodeVerse</span>
-            </a>
-            <div class="hidden md:flex items-center gap-8">
-                <a href="#features" class="text-slate-300 hover:text-blue-400 transition font-medium">Características</a>
-                <a href="/tutoriales" class="text-slate-300 hover:text-blue-400 transition font-medium">Tutoriales</a>
-                <a href="/snippets" class="text-slate-300 hover:text-blue-400 transition font-medium">Snippets</a>
-                <a href="/herramientas" class="text-slate-300 hover:text-blue-400 transition font-medium">Herramientas</a>
-                <a href="/tutoriales" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white px-6 py-2 rounded-lg font-semibold transition-all shadow-lg shadow-blue-500/30">
-                    Empezar Gratis
-                </a>
-            </div>
-            <!-- Mobile Menu Button -->
-            <button id="mobileMenuBtn" class="md:hidden text-slate-300 hover:text-blue-400">
-                <i class="fas fa-bars text-2xl"></i>
-            </button>
+{% extends "base.html" %} {% block title %}CodeVerse - Aprende a Programar desde
+Cero | Tutoriales Gratis{% endblock %} {% block content %}
+
+<!-- Hero Section Mejorado -->
+<section class="py-20 md:py-32 px-6 overflow-hidden">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div class="animate-fade-in">
+        <div class="mb-6 inline-block">
+          <span
+            class="bg-blue-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-semibold border border-blue-400/30 animate-pulse-slow"
+          >
+            <i class="fas fa-sparkles mr-2"></i>Bienvenido a CodeVerse
+          </span>
         </div>
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden bg-slate-900/95 backdrop-blur-md border-t border-slate-700">
-            <div class="px-6 py-4 space-y-3">
-                <a href="#features" class="block text-slate-300 hover:text-blue-400 transition font-medium py-2">Características</a>
-                <a href="/tutoriales" class="block text-slate-300 hover:text-blue-400 transition font-medium py-2">Tutoriales</a>
-                <a href="/snippets" class="block text-slate-300 hover:text-blue-400 transition font-medium py-2">Snippets</a>
-                <a href="/herramientas" class="block text-slate-300 hover:text-blue-400 transition font-medium py-2">Herramientas</a>
-            </div>
+        <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          Aprende a
+          <span
+            class="bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent animate-gradient"
+            >Programar</span
+          >
+          desde Cero
+        </h1>
+        <p class="text-xl text-slate-300 mb-8 leading-relaxed">
+          Tutoriales interactivos, snippets listos para usar y herramientas
+          prácticas. Todo en español y completamente gratis.
+        </p>
+        <div class="flex gap-4 flex-wrap">
+          <a
+            href="/tutoriales"
+            class="group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-4 rounded-xl font-semibold transition-all transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/50 flex items-center gap-2"
+          >
+            <i class="fas fa-play"></i>
+            <span>Explorar Tutoriales</span>
+            <i
+              class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"
+            ></i>
+          </a>
+          <a
+            href="/snippets"
+            class="border-2 border-slate-400 text-slate-300 hover:border-blue-400 hover:text-blue-400 px-8 py-4 rounded-xl font-semibold transition-all hover:shadow-lg flex items-center gap-2"
+          >
+            <i class="fas fa-code"></i>
+            Ver Snippets
+          </a>
         </div>
-    </nav>
-
-    <!-- Hero Section Mejorado -->
-    <section class="py-20 md:py-32 px-6 overflow-hidden">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="animate-fade-in">
-                    <div class="mb-6 inline-block">
-                        <span class="bg-blue-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-semibold border border-blue-400/30 animate-pulse-slow">
-                            <i class="fas fa-sparkles mr-2"></i>Bienvenido a CodeVerse
-                        </span>
-                    </div>
-                    <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                        Aprende a <span class="bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent animate-gradient">Programar</span> desde Cero
-                    </h1>
-                    <p class="text-xl text-slate-300 mb-8 leading-relaxed">
-                        Tutoriales interactivos, snippets listos para usar y herramientas prácticas. Todo en español y completamente gratis.
-                    </p>
-                    <div class="flex gap-4 flex-wrap">
-                        <a href="/tutoriales" class="group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-4 rounded-xl font-semibold transition-all transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/50 flex items-center gap-2">
-                            <i class="fas fa-play"></i>
-                            <span>Explorar Tutoriales</span>
-                            <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                        </a>
-                        <a href="/snippets" class="border-2 border-slate-400 text-slate-300 hover:border-blue-400 hover:text-blue-400 px-8 py-4 rounded-xl font-semibold transition-all hover:shadow-lg flex items-center gap-2">
-                            <i class="fas fa-code"></i>
-                            Ver Snippets
-                        </a>
-                    </div>
-                    <!-- Trust Badges -->
-                    <div class="mt-8 flex flex-wrap gap-6 text-slate-400 text-sm">
-                        <div class="flex items-center gap-2">
-                            <i class="fas fa-check-circle text-green-400"></i>
-                            <span>100% Gratis</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <i class="fas fa-users text-blue-400"></i>
-                            <span>+10,000 Estudiantes</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <i class="fas fa-star text-yellow-400"></i>
-                            <span>4.9/5 Rating</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- Hero Visual Mejorado -->
-                <div class="hidden md:block animate-fade-in-right">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-3xl blur-3xl"></div>
-                        <div class="relative bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-3xl p-8 border border-blue-400/30 backdrop-blur-sm">
-                            <div class="space-y-4">
-                                <div class="bg-slate-800/80 rounded-xl p-5 border border-slate-700 hover:border-green-500/50 transition-all hover:scale-105 cursor-pointer">
-                                    <div class="flex items-center gap-3 mb-3">
-                                        <i class="fas fa-brackets-curly text-green-400 text-xl"></i>
-                                        <span class="text-sm font-mono text-slate-300">const learning = true;</span>
-                                    </div>
-                                    <div class="w-full h-1 bg-slate-700 rounded-full overflow-hidden">
-                                        <div class="h-full bg-gradient-to-r from-green-400 to-emerald-400 animate-loading"></div>
-                                    </div>
-                                </div>
-                                <div class="bg-slate-800/80 rounded-xl p-5 border border-slate-700 hover:border-yellow-500/50 transition-all hover:scale-105 cursor-pointer">
-                                    <div class="flex items-center gap-3 mb-3">
-                                        <i class="fas fa-star text-yellow-400 text-xl"></i>
-                                        <span class="text-sm font-mono text-slate-300">experience++;</span>
-                                    </div>
-                                    <div class="w-full h-1 bg-slate-700 rounded-full overflow-hidden">
-                                        <div class="h-full bg-gradient-to-r from-yellow-400 to-orange-400 animate-loading" style="animation-delay: 0.5s;"></div>
-                                    </div>
-                                </div>
-                                <div class="bg-slate-800/80 rounded-xl p-5 border border-slate-700 hover:border-red-500/50 transition-all hover:scale-105 cursor-pointer">
-                                    <div class="flex items-center gap-3 mb-3">
-                                        <i class="fas fa-rocket text-red-400 text-xl"></i>
-                                        <span class="text-sm font-mono text-slate-300">launchProject();</span>
-                                    </div>
-                                    <div class="w-full h-1 bg-slate-700 rounded-full overflow-hidden">
-                                        <div class="h-full bg-gradient-to-r from-red-400 to-pink-400 animate-loading" style="animation-delay: 1s;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Trust Badges -->
+        <div class="mt-8 flex flex-wrap gap-6 text-slate-400 text-sm">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-check-circle text-green-400"></i>
+            <span>100% Gratis</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fas fa-users text-blue-400"></i>
+            <span>+10,000 Estudiantes</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fas fa-star text-yellow-400"></i>
+            <span>4.9/5 Rating</span>
+          </div>
         </div>
-    </section>
-
-    <!-- Sección Tutorial Snippets -->
-    <section class="max-w-7xl mx-auto px-6 py-16">
-        <div class="bg-gradient-to-br from-slate-800/50 via-blue-900/30 to-slate-800/50 border border-slate-700/50 rounded-3xl p-8 md:p-12 shadow-2xl backdrop-blur">
-            <div class="grid md:grid-cols-2 gap-8 items-center">
-                <div>
-                    <div class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 rounded-full px-4 py-2 mb-6">
-                        <i class="fas fa-graduation-cap text-blue-400"></i>
-                        <span class="text-blue-300 font-semibold text-sm">Tutorial Destacado</span>
-                    </div>
-                    
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-                        Aprende a Crear tus Propios Snippets en VS Code
-                    </h2>
-                    
-                    <p class="text-slate-300 text-lg mb-6 leading-relaxed">
-                        Descubre cómo crear fragmentos de código reutilizables que acelerarán tu desarrollo. Desde lo básico hasta técnicas avanzadas con variables y placeholders.
-                    </p>
-
-                    <div class="space-y-3 mb-8">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-emerald-500/20 border border-emerald-400/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-clock text-emerald-400 text-sm"></i>
-                            </div>
-                            <span class="text-slate-300">Solo 15 minutos de lectura</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-purple-500/20 border border-purple-400/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-code text-purple-400 text-sm"></i>
-                            </div>
-                            <span class="text-slate-300">Ejemplos listos para copiar y usar</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-blue-500/20 border border-blue-400/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-rocket text-blue-400 text-sm"></i>
-                            </div>
-                            <span class="text-slate-300">Acelera tu flujo de trabajo</span>
-                        </div>
-                    </div>
-
-                    <a href="/tutorial/snippets" class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 group">
-                        <span>Ver Tutorial Completo</span>
-                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition"></i>
-                    </a>
+      </div>
+      <!-- Hero Visual Mejorado -->
+      <div class="hidden md:block animate-fade-in-right">
+        <div class="relative">
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-3xl blur-3xl"
+          ></div>
+          <div
+            class="relative bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-3xl p-8 border border-blue-400/30 backdrop-blur-sm"
+          >
+            <div class="space-y-4">
+              <div
+                class="bg-slate-800/80 rounded-xl p-5 border border-slate-700 hover:border-green-500/50 transition-all hover:scale-105 cursor-pointer"
+              >
+                <div class="flex items-center gap-3 mb-3">
+                  <i class="fas fa-brackets-curly text-green-400 text-xl"></i>
+                  <span class="text-sm font-mono text-slate-300"
+                    >const learning = true;</span
+                  >
                 </div>
+                <div
+                  class="w-full h-1 bg-slate-700 rounded-full overflow-hidden"
+                >
+                  <div
+                    class="h-full bg-gradient-to-r from-green-400 to-emerald-400 animate-loading"
+                  ></div>
+                </div>
+              </div>
+              <div
+                class="bg-slate-800/80 rounded-xl p-5 border border-slate-700 hover:border-yellow-500/50 transition-all hover:scale-105 cursor-pointer"
+              >
+                <div class="flex items-center gap-3 mb-3">
+                  <i class="fas fa-star text-yellow-400 text-xl"></i>
+                  <span class="text-sm font-mono text-slate-300"
+                    >experience++;</span
+                  >
+                </div>
+                <div
+                  class="w-full h-1 bg-slate-700 rounded-full overflow-hidden"
+                >
+                  <div
+                    class="h-full bg-gradient-to-r from-yellow-400 to-orange-400 animate-loading"
+                    style="animation-delay: 0.5s"
+                  ></div>
+                </div>
+              </div>
+              <div
+                class="bg-slate-800/80 rounded-xl p-5 border border-slate-700 hover:border-red-500/50 transition-all hover:scale-105 cursor-pointer"
+              >
+                <div class="flex items-center gap-3 mb-3">
+                  <i class="fas fa-rocket text-red-400 text-xl"></i>
+                  <span class="text-sm font-mono text-slate-300"
+                    >launchProject();</span
+                  >
+                </div>
+                <div
+                  class="w-full h-1 bg-slate-700 rounded-full overflow-hidden"
+                >
+                  <div
+                    class="h-full bg-gradient-to-r from-red-400 to-pink-400 animate-loading"
+                    style="animation-delay: 1s"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-                <div class="relative">
-                    <div class="bg-slate-900/80 border border-slate-700 rounded-2xl p-6 shadow-2xl">
-                        <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-700">
-                            <div class="flex gap-2">
-                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                            </div>
-                            <span class="text-slate-400 text-sm font-mono">snippets.json</span>
-                        </div>
-                        
-                        <pre class="text-sm font-mono leading-relaxed overflow-x-auto"><code><span class="text-slate-500">{</span>
+<!-- Sección Tutorial Snippets -->
+<section class="max-w-7xl mx-auto px-6 py-16">
+  <div
+    class="bg-gradient-to-br from-slate-800/50 via-blue-900/30 to-slate-800/50 border border-slate-700/50 rounded-3xl p-8 md:p-12 shadow-2xl backdrop-blur"
+  >
+    <div class="grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <div
+          class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 rounded-full px-4 py-2 mb-6"
+        >
+          <i class="fas fa-graduation-cap text-blue-400"></i>
+          <span class="text-blue-300 font-semibold text-sm"
+            >Tutorial Destacado</span
+          >
+        </div>
+
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+          Aprende a Crear tus Propios Snippets en VS Code
+        </h2>
+
+        <p class="text-slate-300 text-lg mb-6 leading-relaxed">
+          Descubre cómo crear fragmentos de código reutilizables que acelerarán
+          tu desarrollo. Desde lo básico hasta técnicas avanzadas con variables
+          y placeholders.
+        </p>
+
+        <div class="space-y-3 mb-8">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 bg-emerald-500/20 border border-emerald-400/30 rounded-lg flex items-center justify-center flex-shrink-0"
+            >
+              <i class="fas fa-clock text-emerald-400 text-sm"></i>
+            </div>
+            <span class="text-slate-300">Solo 15 minutos de lectura</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 bg-purple-500/20 border border-purple-400/30 rounded-lg flex items-center justify-center flex-shrink-0"
+            >
+              <i class="fas fa-code text-purple-400 text-sm"></i>
+            </div>
+            <span class="text-slate-300"
+              >Ejemplos listos para copiar y usar</span
+            >
+          </div>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 bg-blue-500/20 border border-blue-400/30 rounded-lg flex items-center justify-center flex-shrink-0"
+            >
+              <i class="fas fa-rocket text-blue-400 text-sm"></i>
+            </div>
+            <span class="text-slate-300">Acelera tu flujo de trabajo</span>
+          </div>
+        </div>
+
+        <a
+          href="/tutorial/snippets"
+          class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 group"
+        >
+          <span>Ver Tutorial Completo</span>
+          <i
+            class="fas fa-arrow-right group-hover:translate-x-1 transition"
+          ></i>
+        </a>
+      </div>
+
+      <div class="relative">
+        <div
+          class="bg-slate-900/80 border border-slate-700 rounded-2xl p-6 shadow-2xl"
+        >
+          <div
+            class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-700"
+          >
+            <div class="flex gap-2">
+              <div class="w-3 h-3 rounded-full bg-red-500"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            </div>
+            <span class="text-slate-400 text-sm font-mono">snippets.json</span>
+          </div>
+
+          <pre
+            class="text-sm font-mono leading-relaxed overflow-x-auto"
+          ><code><span class="text-slate-500">{</span>
   <span class="text-cyan-400">"React Component"</span><span class="text-slate-500">:</span> <span class="text-slate-500">{</span>
     <span class="text-purple-400">"prefix"</span><span class="text-slate-500">:</span> <span class="text-green-400">"rfc"</span><span class="text-slate-500">,</span>
     <span class="text-purple-400">"body"</span><span class="text-slate-500">:</span> <span class="text-slate-500">[</span>
@@ -193,123 +226,200 @@
     <span class="text-slate-500">]</span>
   <span class="text-slate-500">}</span>
 <span class="text-slate-500">}</span></code></pre>
-                    </div>
-
-                    <div class="absolute -top-4 -right-4 bg-gradient-to-br from-emerald-500 to-green-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg transform rotate-3 animate-bounce-slow">
-                        <i class="fas fa-fire"></i> Popular
-                    </div>
-                    
-                    <div class="absolute -bottom-4 -left-4 bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg transform -rotate-3">
-                        <i class="fas fa-star"></i> Gratis
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section Mejorado -->
-    <section id="features" class="py-20 px-6 bg-gradient-to-b from-transparent via-slate-900/50 to-transparent">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold mb-4">
-                    ¿Qué <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Encontrarás</span> Aquí?
-                </h2>
-                <p class="text-xl text-slate-400">Todo lo que necesitas para dominar la programación</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700 hover:border-blue-500/50 rounded-2xl p-8 transition-all hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-2 cursor-pointer">
-                    <div class="text-5xl mb-6 text-blue-400 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3 group-hover:text-blue-400 transition">Tutoriales Completos</h3>
-                    <p class="text-slate-300 mb-6">Guías paso a paso en HTML, CSS, JavaScript, Python, Java y más. Desde principiante hasta avanzado.</p>
-                    <div class="flex items-center justify-between pt-6 border-t border-slate-700">
-                        <span class="text-blue-400 font-semibold text-sm">50+ tutoriales</span>
-                        <i class="fas fa-arrow-right text-blue-400 group-hover:translate-x-2 transition-transform"></i>
-                    </div>
-                </div>
-
-                <div class="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700 hover:border-cyan-500/50 rounded-2xl p-8 transition-all hover:shadow-2xl hover:shadow-cyan-500/20 hover:-translate-y-2 cursor-pointer">
-                    <div class="text-5xl mb-6 text-cyan-400 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3 group-hover:text-cyan-400 transition">Snippets Listos</h3>
-                    <p class="text-slate-300 mb-6">Fragmentos de código reutilizable que puedes copiar y usar inmediatamente en tus proyectos.</p>
-                    <div class="flex items-center justify-between pt-6 border-t border-slate-700">
-                        <span class="text-cyan-400 font-semibold text-sm">100+ snippets</span>
-                        <i class="fas fa-arrow-right text-cyan-400 group-hover:translate-x-2 transition-transform"></i>
-                    </div>
-                </div>
-
-                <div class="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700 hover:border-green-500/50 rounded-2xl p-8 transition-all hover:shadow-2xl hover:shadow-green-500/20 hover:-translate-y-2 cursor-pointer">
-                    <div class="text-5xl mb-6 text-green-400 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-tools"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3 group-hover:text-green-400 transition">Herramientas Prácticas</h3>
-                    <p class="text-slate-300 mb-6">Calculadoras, convertidores y utilidades diseñadas para acelerar tu desarrollo diario.</p>
-                    <div class="flex items-center justify-between pt-6 border-t border-slate-700">
-                        <span class="text-green-400 font-semibold text-sm">20+ herramientas</span>
-                        <i class="fas fa-arrow-right text-green-400 group-hover:translate-x-2 transition-transform"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Cómo Funciona -->
-    <section class="max-w-7xl mx-auto px-6 py-20">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-white mb-4">
-                Aprende en 3 Simples Pasos
-            </h2>
-            <p class="text-slate-400 text-lg">Tu camino hacia convertirte en desarrollador</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="relative">
-                <div class="bg-slate-900/50 border border-slate-700/50 rounded-2xl p-8 text-center backdrop-blur hover:border-blue-500/50 transition-all group">
-                    <div class="w-20 h-20 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl font-bold text-white group-hover:scale-110 transition-transform">
-                        1
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Elige un Tutorial</h3>
-                    <p class="text-slate-400">
-                        Explora nuestra biblioteca y encuentra el tema perfecto para ti
-                    </p>
-                </div>
-                <div class="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                    <i class="fas fa-arrow-right text-blue-400 text-3xl"></i>
-                </div>
-            </div>
-
-            <div class="relative">
-                <div class="bg-slate-900/50 border border-slate-700/50 rounded-2xl p-8 text-center backdrop-blur hover:border-purple-500/50 transition-all group">
-                    <div class="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl font-bold text-white group-hover:scale-110 transition-transform">
-                        2
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Practica</h3>
-                    <p class="text-slate-400">
-                        Sigue paso a paso y escribe código real
-                    </p>
-                </div>
-                <div class="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                    <i class="fas fa-arrow-right text-purple-400 text-3xl"></i>
-                </div>
-            </div>
-
-            <div class="bg-slate-900/50 border border-slate-700/50 rounded-2xl p-8 text-center backdrop-blur hover:border-emerald-500/50 transition-all group">
-                <div class="w-20 h-20 bg-gradient-to-br from-emerald-600 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl font-bold text-white group-hover:scale-110 transition-transform">
-                    3
-                </div>
-                <h3 class="text-xl font-bold text-white mb-3">Crea Proyectos</h3>
-                <p class="text-slate-400">
-                    Aplica lo aprendido en tus propios proyectos
-                </p>
-            </div>
+        <div
+          class="absolute -top-4 -right-4 bg-gradient-to-br from-emerald-500 to-green-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg transform rotate-3 animate-bounce-slow"
+        >
+          <i class="fas fa-fire"></i> Popular
         </div>
-    </section>
 
-    <!-- 
+        <div
+          class="absolute -bottom-4 -left-4 bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold px-4 py-2 rounded-xl shadow-lg transform -rotate-3"
+        >
+          <i class="fas fa-star"></i> Gratis
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section Mejorado -->
+<section
+  id="features"
+  class="py-20 px-6 bg-gradient-to-b from-transparent via-slate-900/50 to-transparent"
+>
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold mb-4">
+        ¿Qué
+        <span
+          class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent"
+          >Encontrarás</span
+        >
+        Aquí?
+      </h2>
+      <p class="text-xl text-slate-400">
+        Todo lo que necesitas para dominar la programación
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div
+        class="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700 hover:border-blue-500/50 rounded-2xl p-8 transition-all hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-2 cursor-pointer"
+      >
+        <div
+          class="text-5xl mb-6 text-blue-400 group-hover:scale-110 transition-transform"
+        >
+          <i class="fas fa-book"></i>
+        </div>
+        <h3
+          class="text-2xl font-bold mb-3 group-hover:text-blue-400 transition"
+        >
+          Tutoriales Completos
+        </h3>
+        <p class="text-slate-300 mb-6">
+          Guías paso a paso en HTML, CSS, JavaScript, Python, Java y más. Desde
+          principiante hasta avanzado.
+        </p>
+        <div
+          class="flex items-center justify-between pt-6 border-t border-slate-700"
+        >
+          <span class="text-blue-400 font-semibold text-sm"
+            >50+ tutoriales</span
+          >
+          <i
+            class="fas fa-arrow-right text-blue-400 group-hover:translate-x-2 transition-transform"
+          ></i>
+        </div>
+      </div>
+
+      <div
+        class="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700 hover:border-cyan-500/50 rounded-2xl p-8 transition-all hover:shadow-2xl hover:shadow-cyan-500/20 hover:-translate-y-2 cursor-pointer"
+      >
+        <div
+          class="text-5xl mb-6 text-cyan-400 group-hover:scale-110 transition-transform"
+        >
+          <i class="fas fa-code"></i>
+        </div>
+        <h3
+          class="text-2xl font-bold mb-3 group-hover:text-cyan-400 transition"
+        >
+          Snippets Listos
+        </h3>
+        <p class="text-slate-300 mb-6">
+          Fragmentos de código reutilizable que puedes copiar y usar
+          inmediatamente en tus proyectos.
+        </p>
+        <div
+          class="flex items-center justify-between pt-6 border-t border-slate-700"
+        >
+          <span class="text-cyan-400 font-semibold text-sm">100+ snippets</span>
+          <i
+            class="fas fa-arrow-right text-cyan-400 group-hover:translate-x-2 transition-transform"
+          ></i>
+        </div>
+      </div>
+
+      <div
+        class="group bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700 hover:border-green-500/50 rounded-2xl p-8 transition-all hover:shadow-2xl hover:shadow-green-500/20 hover:-translate-y-2 cursor-pointer"
+      >
+        <div
+          class="text-5xl mb-6 text-green-400 group-hover:scale-110 transition-transform"
+        >
+          <i class="fas fa-tools"></i>
+        </div>
+        <h3
+          class="text-2xl font-bold mb-3 group-hover:text-green-400 transition"
+        >
+          Herramientas Prácticas
+        </h3>
+        <p class="text-slate-300 mb-6">
+          Calculadoras, convertidores y utilidades diseñadas para acelerar tu
+          desarrollo diario.
+        </p>
+        <div
+          class="flex items-center justify-between pt-6 border-t border-slate-700"
+        >
+          <span class="text-green-400 font-semibold text-sm"
+            >20+ herramientas</span
+          >
+          <i
+            class="fas fa-arrow-right text-green-400 group-hover:translate-x-2 transition-transform"
+          ></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cómo Funciona -->
+<section class="max-w-7xl mx-auto px-6 py-20">
+  <div class="text-center mb-16">
+    <h2 class="text-4xl font-bold text-white mb-4">
+      Aprende en 3 Simples Pasos
+    </h2>
+    <p class="text-slate-400 text-lg">
+      Tu camino hacia convertirte en desarrollador
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-8">
+    <div class="relative">
+      <div
+        class="bg-slate-900/50 border border-slate-700/50 rounded-2xl p-8 text-center backdrop-blur hover:border-blue-500/50 transition-all group"
+      >
+        <div
+          class="w-20 h-20 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl font-bold text-white group-hover:scale-110 transition-transform"
+        >
+          1
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3">Elige un Tutorial</h3>
+        <p class="text-slate-400">
+          Explora nuestra biblioteca y encuentra el tema perfecto para ti
+        </p>
+      </div>
+      <div
+        class="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10"
+      >
+        <i class="fas fa-arrow-right text-blue-400 text-3xl"></i>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div
+        class="bg-slate-900/50 border border-slate-700/50 rounded-2xl p-8 text-center backdrop-blur hover:border-purple-500/50 transition-all group"
+      >
+        <div
+          class="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl font-bold text-white group-hover:scale-110 transition-transform"
+        >
+          2
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3">Practica</h3>
+        <p class="text-slate-400">Sigue paso a paso y escribe código real</p>
+      </div>
+      <div
+        class="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10"
+      >
+        <i class="fas fa-arrow-right text-purple-400 text-3xl"></i>
+      </div>
+    </div>
+
+    <div
+      class="bg-slate-900/50 border border-slate-700/50 rounded-2xl p-8 text-center backdrop-blur hover:border-emerald-500/50 transition-all group"
+    >
+      <div
+        class="w-20 h-20 bg-gradient-to-br from-emerald-600 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl font-bold text-white group-hover:scale-110 transition-transform"
+      >
+        3
+      </div>
+      <h3 class="text-xl font-bold text-white mb-3">Crea Proyectos</h3>
+      <p class="text-slate-400">Aplica lo aprendido en tus propios proyectos</p>
+    </div>
+  </div>
+</section>
+
+<!-- 
     <section class="py-20 px-6">
         <div class="max-w-7xl mx-auto">
             <div class="bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-slate-700/50 rounded-3xl p-12 backdrop-blur shadow-2xl">
@@ -417,336 +527,303 @@
         </div>
     </section> -->
 
-    <!-- FAQ -->
-    <section class="max-w-4xl mx-auto px-6 py-20">
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-white mb-4">
-                Preguntas Frecuentes
-            </h2>
-            <p class="text-slate-400 text-lg">Todo lo que necesitas saber sobre CodeVerse</p>
+<!-- FAQ -->
+<section class="max-w-4xl mx-auto px-6 py-20" id="faq">
+  <div class="text-center mb-12">
+    <h2 class="text-4xl font-bold text-white mb-4">Preguntas Frecuentes</h2>
+    <p class="text-slate-400 text-lg">
+      Todo lo que necesitas saber sobre CodeVerse
+    </p>
+  </div>
+
+  <div class="space-y-4">
+    <details
+      class="group bg-slate-900/50 border border-slate-700/50 rounded-2xl p-6 backdrop-blur hover:border-blue-500/30 transition-all"
+    >
+      <summary
+        class="flex items-center justify-between cursor-pointer text-white font-bold text-lg list-none"
+      >
+        <span class="flex items-center gap-3">
+          <i class="fas fa-question-circle text-blue-400"></i>
+          ¿CodeVerse es gratis?
+        </span>
+        <i
+          class="fas fa-chevron-down text-blue-400 group-open:rotate-180 transition-transform"
+        ></i>
+      </summary>
+      <p class="text-slate-400 mt-4 ml-9 leading-relaxed">
+        Sí, todos nuestros tutoriales y snippets son completamente gratuitos.
+        Queremos que el aprendizaje sea accesible para todos.
+      </p>
+    </details>
+
+    <details
+      class="group bg-slate-900/50 border border-slate-700/50 rounded-2xl p-6 backdrop-blur hover:border-blue-500/30 transition-all"
+    >
+      <summary
+        class="flex items-center justify-between cursor-pointer text-white font-bold text-lg list-none"
+      >
+        <span class="flex items-center gap-3">
+          <i class="fas fa-graduation-cap text-purple-400"></i>
+          ¿Necesito conocimientos previos?
+        </span>
+        <i
+          class="fas fa-chevron-down text-purple-400 group-open:rotate-180 transition-transform"
+        ></i>
+      </summary>
+      <p class="text-slate-400 mt-4 ml-9 leading-relaxed">
+        No, tenemos tutoriales para todos los niveles. Puedes empezar desde cero
+        y avanzar a tu propio ritmo.
+      </p>
+    </details>
+
+    <details
+      class="group bg-slate-900/50 border border-slate-700/50 rounded-2xl p-6 backdrop-blur hover:border-blue-500/30 transition-all"
+    >
+      <summary
+        class="flex items-center justify-between cursor-pointer text-white font-bold text-lg list-none"
+      >
+        <span class="flex items-center gap-3">
+          <i class="fas fa-briefcase text-emerald-400"></i>
+          ¿Puedo usar los snippets en proyectos comerciales?
+        </span>
+        <i
+          class="fas fa-chevron-down text-emerald-400 group-open:rotate-180 transition-transform"
+        ></i>
+      </summary>
+      <p class="text-slate-400 mt-4 ml-9 leading-relaxed">
+        Sí, todos los snippets pueden ser usados libremente en cualquier
+        proyecto, personal o comercial.
+      </p>
+    </details>
+  </div>
+</section>
+
+<!-- CTA Final -->
+<section class="py-20 px-6">
+  <div class="max-w-4xl mx-auto">
+    <div
+      class="relative overflow-hidden bg-gradient-to-r from-blue-600 to-cyan-600 rounded-3xl p-12 text-center shadow-2xl shadow-blue-600/30"
+    >
+      <!-- Animated Background -->
+      <div class="absolute inset-0 opacity-20">
+        <div
+          class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/20 to-transparent"
+        ></div>
+      </div>
+
+      <div class="relative z-10">
+        <h2 class="text-4xl md:text-5xl font-bold mb-4">
+          ¿Listo para Comenzar?
+        </h2>
+        <p class="text-lg text-blue-100 mb-8 leading-relaxed max-w-2xl mx-auto">
+          Únete a nuestra comunidad y comienza tu viaje en el mundo de la
+          programación. Desde HTML básico hasta proyectos complejos.
+        </p>
+        <div class="flex gap-4 flex-wrap justify-center">
+          <a
+            href="/tutoriales"
+            class="group bg-white text-blue-600 hover:bg-slate-100 px-8 py-4 rounded-xl font-bold transition-all transform hover:-translate-y-1 shadow-lg flex items-center gap-2"
+          >
+            <i class="fas fa-rocket"></i>
+            <span>Explorar Tutoriales</span>
+            <i
+              class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"
+            ></i>
+          </a>
+          <a
+            href="/snippets"
+            class="bg-blue-800 text-white hover:bg-blue-900 px-8 py-4 rounded-xl font-bold border-2 border-white transition-all transform hover:-translate-y-1 shadow-lg flex items-center gap-2"
+          >
+            <i class="fas fa-code"></i>
+            Ver Snippets
+          </a>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="space-y-4">
-            <details class="group bg-slate-900/50 border border-slate-700/50 rounded-2xl p-6 backdrop-blur hover:border-blue-500/30 transition-all">
-                <summary class="flex items-center justify-between cursor-pointer text-white font-bold text-lg list-none">
-                    <span class="flex items-center gap-3">
-                        <i class="fas fa-question-circle text-blue-400"></i>
-                        ¿CodeVerse es gratis?
-                    </span>
-                    <i class="fas fa-chevron-down text-blue-400 group-open:rotate-180 transition-transform"></i>
-                </summary>
-                <p class="text-slate-400 mt-4 ml-9 leading-relaxed">
-                    Sí, todos nuestros tutoriales y snippets son completamente gratuitos. Queremos que el aprendizaje sea accesible para todos.
-                </p>
-            </details>
+{% endblock %} {% block scripts %}
 
-            <details class="group bg-slate-900/50 border border-slate-700/50 rounded-2xl p-6 backdrop-blur hover:border-blue-500/30 transition-all">
-                <summary class="flex items-center justify-between cursor-pointer text-white font-bold text-lg list-none">
-                    <span class="flex items-center gap-3">
-                        <i class="fas fa-graduation-cap text-purple-400"></i>
-                        ¿Necesito conocimientos previos?
-                    </span>
-                    <i class="fas fa-chevron-down text-purple-400 group-open:rotate-180 transition-transform"></i>
-                </summary>
-                <p class="text-slate-400 mt-4 ml-9 leading-relaxed">
-                    No, tenemos tutoriales para todos los niveles. Puedes empezar desde cero y avanzar a tu propio ritmo.
-                </p>
-            </details>
+<!-- Scroll to Top Button -->
+<button
+  id="scrollToTop"
+  class="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white rounded-full shadow-2xl shadow-blue-500/50 flex items-center justify-center transition-all opacity-0 pointer-events-none hover:scale-110"
+>
+  <i class="fas fa-arrow-up text-xl"></i>
+</button>
 
-            <details class="group bg-slate-900/50 border border-slate-700/50 rounded-2xl p-6 backdrop-blur hover:border-blue-500/30 transition-all">
-                <summary class="flex items-center justify-between cursor-pointer text-white font-bold text-lg list-none">
-                    <span class="flex items-center gap-3">
-                        <i class="fas fa-briefcase text-emerald-400"></i>
-                        ¿Puedo usar los snippets en proyectos comerciales?
-                    </span>
-                    <i class="fas fa-chevron-down text-emerald-400 group-open:rotate-180 transition-transform"></i>
-                </summary>
-                <p class="text-slate-400 mt-4 ml-9 leading-relaxed">
-                    Sí, todos los snippets pueden ser usados libremente en cualquier proyecto, personal o comercial.
-                </p>
-            </details>
+<style>
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-     
-        </div>
-    </section>
+  @keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 
+  @keyframes loading {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
 
+  @keyframes gradient {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
 
-    <!-- CTA Final -->
-    <section class="py-20 px-6">
-        <div class="max-w-4xl mx-auto">
-            <div class="relative overflow-hidden bg-gradient-to-r from-blue-600 to-cyan-600 rounded-3xl p-12 text-center shadow-2xl shadow-blue-600/30">
-                <!-- Animated Background -->
-                <div class="absolute inset-0 opacity-20">
-                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/20 to-transparent"></div>
-                </div>
-                
-                <div class="relative z-10">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-4">¿Listo para Comenzar?</h2>
-                    <p class="text-lg text-blue-100 mb-8 leading-relaxed max-w-2xl mx-auto">
-                        Únete a nuestra comunidad y comienza tu viaje en el mundo de la programación. Desde HTML básico hasta proyectos complejos.
-                    </p>
-                    <div class="flex gap-4 flex-wrap justify-center">
-                        <a href="/tutoriales" class="group bg-white text-blue-600 hover:bg-slate-100 px-8 py-4 rounded-xl font-bold transition-all transform hover:-translate-y-1 shadow-lg flex items-center gap-2">
-                            <i class="fas fa-rocket"></i>
-                            <span>Explorar Tutoriales</span>
-                            <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-                        </a>
-                        <a href="/snippets" class="bg-blue-800 text-white hover:bg-blue-900 px-8 py-4 rounded-xl font-bold border-2 border-white transition-all transform hover:-translate-y-1 shadow-lg flex items-center gap-2">
-                            <i class="fas fa-code"></i>
-                            Ver Snippets
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  @keyframes bounceSlow {
+    0%,
+    100% {
+      transform: translateY(0) rotate(3deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(3deg);
+    }
+  }
 
-    <footer class="border-t border-slate-700 bg-gradient-to-b from-slate-950 to-slate-900 py-12 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <div>
-                    <div class="flex items-center gap-2 text-xl font-bold mb-3">
-                        <i class="fas fa-code text-blue-400"></i>
-                        <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">CodeVerse</span>
-                    </div>
-                    <p class="text-slate-400 mb-4">Un espacio para aprender, crear y explorar código.</p>
-                    <div class="flex gap-3">
-                        <a href="#" class="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all">
-                            <i class="fab fa-twitter text-slate-400"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all">
-                            <i class="fab fa-github text-slate-400"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-slate-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all">
-                            <i class="fab fa-discord text-slate-400"></i>
-                        </a>
-                    </div>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4 text-blue-400">Recursos</h4>
-                    <ul class="space-y-2 text-slate-300">
-                        <li><a href="/tutoriales" class="hover:text-blue-400 transition flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs"></i>Tutoriales
-                        </a></li>
-                        <li><a href="/snippets" class="hover:text-blue-400 transition flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs"></i>Snippets
-                        </a></li>
-                        <li><a href="/herramientas" class="hover:text-blue-400 transition flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs"></i>Herramientas
-                        </a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4 text-cyan-400">Lenguajes</h4>
-                    <ul class="space-y-2 text-slate-300">
-                        <li><a href="/tutoriales" class="hover:text-cyan-400 transition flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs"></i>HTML & CSS
-                        </a></li>
-                        <li><a href="/tutoriales" class="hover:text-cyan-400 transition flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs"></i>JavaScript
-                        </a></li>
-                        <li><a href="/tutoriales" class="hover:text-cyan-400 transition flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs"></i>Python & Java
-                        </a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4 text-green-400">Legal</h4>
-                    <ul class="space-y-2 text-slate-300">
-                        <li><a href="#" class="hover:text-green-400 transition flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs"></i>Privacidad
-                        </a></li>
-                        <li><a href="#" class="hover:text-green-400 transition flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs"></i>Términos
-                        </a></li>
-                        <li><a href="#" class="hover:text-green-400 transition flex items-center gap-2">
-                            <i class="fas fa-chevron-right text-xs"></i>Contacto
-                        </a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-slate-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400 text-sm">
-                <p>© 2025 CodeVerse. Todos los derechos reservados.</p>
-               
-            </div>
-        </div>
-    </footer>
+  .animate-fade-in {
+    animation: fadeInUp 0.8s ease-out;
+  }
 
-    <!-- Scroll to Top Button -->
-    <button id="scrollToTop" class="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white rounded-full shadow-2xl shadow-blue-500/50 flex items-center justify-center transition-all opacity-0 pointer-events-none hover:scale-110">
-        <i class="fas fa-arrow-up text-xl"></i>
-    </button>
+  .animate-fade-in-right {
+    animation: fadeInRight 0.8s ease-out;
+  }
 
-    <style>
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+  .animate-loading {
+    animation: loading 2s ease-in-out infinite;
+  }
 
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translateX(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+  }
 
-        @keyframes loading {
-            from {
-                width: 0%;
-            }
-            to {
-                width: 100%;
-            }
-        }
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
 
-        @keyframes gradient {
-            0%, 100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-        }
+  .animate-bounce-slow {
+    animation: bounceSlow 3s ease-in-out infinite;
+  }
 
-        @keyframes bounceSlow {
-            0%, 100% {
-                transform: translateY(0) rotate(3deg);
-            }
-            50% {
-                transform: translateY(-10px) rotate(3deg);
-            }
-        }
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
 
-        .animate-fade-in {
-            animation: fadeInUp 0.8s ease-out;
-        }
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
 
-        .animate-fade-in-right {
-            animation: fadeInRight 0.8s ease-out;
-        }
+  ::-webkit-scrollbar-track {
+    background: #0f172a;
+  }
 
-        .animate-loading {
-            animation: loading 2s ease-in-out infinite;
-        }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #3b82f6, #06b6d4);
+    border-radius: 5px;
+  }
 
-        .animate-gradient {
-            background-size: 200% 200%;
-            animation: gradient 3s ease infinite;
-        }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #2563eb, #0891b2);
+  }
+</style>
 
-        .animate-pulse-slow {
-            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
+<script>
+  // Mobile Menu Toggle
+  const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
 
-        .animate-bounce-slow {
-            animation: bounceSlow 3s ease-in-out infinite;
-        }
+  mobileMenuBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
 
-        /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
-        }
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute("href"));
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+        mobileMenu.classList.add("hidden");
+      }
+    });
+  });
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
+  // Scroll to Top Button
+  const scrollToTopBtn = document.getElementById("scrollToTop");
 
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
+  window.addEventListener("scroll", () => {
+    if (window.pageYOffset > 300) {
+      scrollToTopBtn.style.opacity = "1";
+      scrollToTopBtn.style.pointerEvents = "auto";
+    } else {
+      scrollToTopBtn.style.opacity = "0";
+      scrollToTopBtn.style.pointerEvents = "none";
+    }
+  });
 
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, #3b82f6, #06b6d4);
-            border-radius: 5px;
-        }
+  scrollToTopBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(to bottom, #2563eb, #0891b2);
-        }
-    </style>
+  // Intersection Observer for animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -100px 0px",
+  };
 
-    <script>
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = "1";
+        entry.target.style.transform = "translateY(0)";
+      }
+    });
+  }, observerOptions);
 
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+  document.querySelectorAll("section > div").forEach((el) => {
+    el.style.opacity = "0";
+    el.style.transform = "translateY(30px)";
+    el.style.transition = "opacity 0.6s ease-out, transform 0.6s ease-out";
+    observer.observe(el);
+  });
 
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = document.querySelector(link.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                    mobileMenu.classList.add('hidden');
-                }
-            });
-        });
-
-        // Scroll to Top Button
-        const scrollToTopBtn = document.getElementById('scrollToTop');
-
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                scrollToTopBtn.style.opacity = '1';
-                scrollToTopBtn.style.pointerEvents = 'auto';
-            } else {
-                scrollToTopBtn.style.opacity = '0';
-                scrollToTopBtn.style.pointerEvents = 'none';
-            }
-        });
-
-        scrollToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('section > div').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-            observer.observe(el);
-        });
-
-        // Newsletter Form
-        const newsletterForm = document.querySelector('form');
-        if (newsletterForm) {
-            newsletterForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const email = e.target.querySelector('input[type="email"]').value;
-                alert(`¡Gracias por suscribirte con ${email}! (Esto es una demo)`);
-                e.target.reset();
-            });
-        }
-    </script>
-</body>
-</html>
+  // Newsletter Form
+  const newsletterForm = document.querySelector("form");
+  if (newsletterForm) {
+    newsletterForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = e.target.querySelector('input[type="email"]').value;
+      alert(`¡Gracias por suscribirte con ${email}! (Esto es una demo)`);
+      e.target.reset();
+    });
+  }
+</script>
+{% endblock %}

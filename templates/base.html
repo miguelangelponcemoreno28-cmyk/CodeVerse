@@ -1,160 +1,435 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}CodeVerse - Herramientas{% endblock %}</title>
-    <!-- 🖤 Barra superior negra en Chrome -->
-<meta name="theme-color" content="#000000">
-<meta name="msapplication-navbutton-color" content="#000000">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta
+      name="description"
+      content="Aprende programación con tutoriales gratuitos en español. HTML, CSS, JavaScript, Python y más. Snippets listos para usar y herramientas para desarrolladores."
+    />
 
-<!-- 💙 Favicon dinámico con </> azul -->
-<link rel="icon" id="dynamic-favicon" type="image/svg+xml">
-<script>
-  // Crear un favicon con </> azul en SVG
-  const svgIcon = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
-      <rect width="100%" height="100%" fill="black"/>
-      <text x="50%" y="58%" font-size="34" text-anchor="middle" fill="#3b82f6" font-family="Arial, monospace">&lt;/&gt;</text>
-    </svg>
-  `;
 
-  const blob = new Blob([svgIcon], { type: 'image/svg+xml' });
-  const url = URL.createObjectURL(blob);
-  document.getElementById('dynamic-favicon').href = url;
-</script>
+    <!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://codeverse.com/" />
+<meta property="og:title" content="CodeVerse - Aprende a Programar desde Cero" />
+<meta property="og:description" content="Tutoriales gratuitos de programación en español. HTML, CSS, JavaScript, Python y más. Snippets listos para usar y herramientas para desarrolladores." />
+<meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'%3E%3Crect width='1200' height='630' fill='%230f172a'/%3E%3Ctext x='600' y='315' font-size='120' text-anchor='middle' fill='%233b82f6' font-family='Arial, monospace' font-weight='bold'%3E%26lt;/%26gt;%3C/text%3E%3Ctext x='600' y='420' font-size='48' text-anchor='middle' fill='%2306b6d4' font-family='Arial, sans-serif' font-weight='bold'%3ECodeVerse%3C/text%3E%3C/svg%3E" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="es_ES" />
+<meta property="og:site_name" content="CodeVerse" />
 
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://codeverse.com/" />
+<meta name="twitter:title" content="CodeVerse - Aprende a Programar desde Cero" />
+<meta name="twitter:description" content="Tutoriales gratuitos de programación en español. HTML, CSS, JavaScript, Python y más. Snippets listos para usar." />
+<meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'%3E%3Crect width='1200' height='630' fill='%230f172a'/%3E%3Ctext x='600' y='315' font-size='120' text-anchor='middle' fill='%233b82f6' font-family='Arial, monospace' font-weight='bold'%3E%26lt;/%26gt;%3C/text%3E%3Ctext x='600' y='420' font-size='48' text-anchor='middle' fill='%2306b6d4' font-family='Arial, sans-serif' font-weight='bold'%3ECodeVerse%3C/text%3E%3C/svg%3E" />
+<meta name="twitter:creator" content="@CodeVerse" />
+
+<!-- Canonical URL -->
+<link rel="canonical" href="https://codeverse-v37z.onrender.com/" />
+    <!-- 🎨 Colores de tema para navegadores móviles -->
+    <meta name="theme-color" content="#0369a1" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0c4a6e" media="(prefers-color-scheme: dark)">
+
+    <!-- Windows / Edge -->
+    <meta name="msapplication-TileColor" content="#0c4a6e">
+    <meta name="msapplication-navbutton-color" content="#0c4a6e">
+
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- 💙 Favicon dinámico con </> azul -->
+    <link rel="icon" id="dynamic-favicon" type="image/svg+xml" />
+    <script>
+      // Crear un favicon SVG con </> azul
+      (function () {
+        const svgIcon = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+                    <rect width="64" height="64" fill="#0f172a"/>
+                    <text x="32" y="44" font-size="28" text-anchor="middle" fill="#3b82f6" font-family="Arial, monospace" font-weight="bold">&lt;/&gt;</text>
+                </svg>
+            `;
+
+        const blob = new Blob([svgIcon], { type: "image/svg+xml" });
+        const url = URL.createObjectURL(blob);
+        document.getElementById("dynamic-favicon").href = url;
+      })();
+    </script>
+
+    <!-- Favicon alternativo para navegadores que no soportan SVG dinámico -->
+    <link
+      rel="alternate icon"
+      type="image/png"
+      href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+    />
+
+    <!-- Tailwind CSS y Font Awesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    {% block head %}{% endblock %}
+
     <style>
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(100px); }
-            to { opacity: 1; transform: translateY(0); }
+      /* Animaciones para notificaciones */
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(100px);
         }
-        @keyframes slideOutDown {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(100px); }
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        .notification-coffee {
-            animation: slideInUp 0.5s ease-out;
+      @keyframes slideOutDown {
+        from {
+          opacity: 1;
+          transform: translateY(0);
         }
-        .notification-coffee.closing {
-            animation: slideOutDown 0.5s ease-out;
+        to {
+          opacity: 0;
+          transform: translateY(100px);
         }
+      }
 
-        .coffee-button {
-            background: linear-gradient(135deg, #FFDD00 0%, #FFA500 100%);
-            box-shadow: 0 8px 24px rgba(255, 221, 0, 0.3);
-            transition: all 0.3s ease;
+      .notification-coffee {
+        animation: slideInUp 0.5s ease-out;
+      }
+
+      .notification-coffee.closing {
+        animation: slideOutDown 0.5s ease-out;
+      }
+
+      /* Botón de café con efecto dorado */
+      .coffee-button {
+        background: linear-gradient(135deg, #ffdd00 0%, #ffa500 100%);
+        box-shadow: 0 8px 24px rgba(255, 221, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .coffee-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(255, 221, 0, 0.4);
+      }
+
+      .coffee-button:active {
+        transform: translateY(0);
+      }
+
+      /* Scrollbar personalizada */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #0f172a;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(to bottom, #3b82f6, #06b6d4);
+        border-radius: 5px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(to bottom, #2563eb, #0891b2);
+      }
+
+      /* Animación suave para el menú móvil */
+      #mobileMenu {
+        animation: slideDown 0.3s ease-out;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
         }
-        .coffee-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(255, 221, 0, 0.4);
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
-        .coffee-button:active {
-            transform: translateY(0);
-        }
+      }
     </style>
-</head>
-<body class="bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-slate-100">
-    
+  </head>
+  <body
+    class="bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-slate-100"
+  >
     <!-- 🌐 NAVBAR -->
     <nav class="sticky top-0 z-50 border-b border-slate-700 bg-slate-950/95 backdrop-blur-md shadow-lg">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/" class="flex items-center gap-3 text-2xl font-bold hover:opacity-80 transition">
-                <i class="fas fa-code text-blue-400"></i>
-                <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">CodeVerse</span>
-            </a>
-            <div class="hidden md:flex items-center gap-8">
-                <a href="/" class="text-slate-300 hover:text-blue-400 transition font-medium">Inicio</a>
-                <a href="/tutoriales" class="text-slate-300 hover:text-blue-400 transition font-medium">Tutoriales</a>
-                <a href="/snippets" class="text-slate-300 hover:text-blue-400 transition font-medium">Snippets</a>
-                <a href="/herramientas" class="text-blue-400 font-bold transition">Herramientas</a>
-            </div>
-            <button id="mobileMenuBtn" class="md:hidden text-slate-300 hover:text-blue-400">
-                <i class="fas fa-bars text-2xl"></i>
-            </button>
+      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-3 text-2xl font-bold hover:opacity-80 transition group">
+          <i class="fas fa-code text-blue-400 group-hover:rotate-12 transition-transform"></i>
+          <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            CodeVerse
+          </span>
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="/" class="text-slate-300 hover:text-blue-400 transition font-medium relative group">
+            Inicio
+            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all"></span>
+          </a>
+          <a href="/tutoriales" class="text-slate-300 hover:text-blue-400 transition font-medium relative group">
+            Tutoriales
+            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all"></span>
+          </a>
+          <a href="/snippets" class="text-slate-300 hover:text-blue-400 transition font-medium relative group">
+            Snippets
+            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all"></span>
+          </a>
+          <a href="/herramientas" class="text-slate-300 hover:text-blue-400 transition font-medium relative group">
+            Herramientas
+            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all"></span>
+          </a>
+          <a href="/contacto" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white px-6 py-2 rounded-lg font-semibold transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30">
+            Contacto
+          </a>
         </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuBtn" class="md:hidden text-slate-300 hover:text-blue-400 transition">
+          <i id="menuIcon" class="fas fa-bars text-2xl"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="hidden md:hidden bg-slate-900/98 backdrop-blur-md border-t border-slate-700 shadow-2xl">
+        <div class="px-6 py-4 space-y-1">
+          <a href="/" class="block text-slate-300 hover:text-blue-400 hover:bg-slate-800/50 transition font-medium py-3 px-4 rounded-lg">
+            <i class="fas fa-home mr-3 text-blue-400"></i>Inicio
+          </a>
+          <a href="/tutoriales" class="block text-slate-300 hover:text-blue-400 hover:bg-slate-800/50 transition font-medium py-3 px-4 rounded-lg">
+            <i class="fas fa-book mr-3 text-cyan-400"></i>Tutoriales
+          </a>
+          <a href="/snippets" class="block text-slate-300 hover:text-blue-400 hover:bg-slate-800/50 transition font-medium py-3 px-4 rounded-lg">
+            <i class="fas fa-code mr-3 text-purple-400"></i>Snippets
+          </a>
+          <a href="/herramientas" class="block text-slate-300 hover:text-blue-400 hover:bg-slate-800/50 transition font-medium py-3 px-4 rounded-lg">
+            <i class="fas fa-tools mr-3 text-green-400"></i>Herramientas
+          </a>
+          <a href="/contacto" class="block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white text-center font-semibold py-3 px-4 rounded-lg transition-all mt-3">
+            <i class="fas fa-envelope mr-2"></i>Contacto
+          </a>
+        </div>
+      </div>
     </nav>
 
     <!-- 🔹 CONTENIDO PRINCIPAL -->
     <main class="max-w-7xl mx-auto px-6 py-12">
-        {% block content %}
-        {% endblock %}
+      {% block content %} {% endblock %}
     </main>
 
-    <!-- ⚙️ FOOTER -->
+    <!-- Footer -->
     <footer class="border-t border-slate-700 bg-gradient-to-b from-slate-950 to-slate-900 py-12 px-6 mt-20">
-        <div class="max-w-7xl mx-auto text-center">
-            <p class="text-slate-400">© 2025 CodeVerse. Todos los derechos reservados.</p>
+      <div class="max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <div class="flex items-center gap-2 text-lg font-bold mb-3">
+              <i class="fas fa-code text-blue-400"></i>
+              <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                CodeVerse
+              </span>
+            </div>
+            <p class="text-slate-400 text-sm mb-4">
+              Aprende a programar desde cero
+            </p>
+            <div class="flex gap-3">
+              <a href="#" target="_blank" class="w-10 h-10 bg-slate-800 hover:bg-pink-600 rounded-lg flex items-center justify-center transition-all">
+                <i class="fab fa-instagram text-slate-400 hover:text-white"></i>
+              </a>
+              <a href="#" target="_blank" class="w-10 h-10 bg-slate-800 hover:bg-red-600 rounded-lg flex items-center justify-center transition-all">
+                <i class="fab fa-youtube text-slate-400 hover:text-white"></i>
+              </a>
+              <a href="#" target="_blank" class="w-10 h-10 bg-slate-800 hover:bg-cyan-600 rounded-lg flex items-center justify-center transition-all">
+                <i class="fab fa-tiktok text-slate-400 hover:text-white"></i>
+              </a>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-bold mb-3 text-blue-400">Recursos</h4>
+            <ul class="space-y-2 text-slate-400 text-sm">
+              <li>
+                <a href="/tutoriales" class="hover:text-blue-400 transition flex items-center gap-2">
+                  <i class="fas fa-chevron-right text-xs"></i>Tutoriales
+                </a>
+              </li>
+              <li>
+                <a href="/snippets" class="hover:text-blue-400 transition flex items-center gap-2">
+                  <i class="fas fa-chevron-right text-xs"></i>Snippets
+                </a>
+              </li>
+              <li>
+                <a href="/herramientas" class="hover:text-blue-400 transition flex items-center gap-2">
+                  <i class="fas fa-chevron-right text-xs"></i>Herramientas
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold mb-3 text-cyan-400">Lenguajes</h4>
+            <ul class="space-y-2 text-slate-400 text-sm">
+              <li>
+                <a href="/tutoriales" class="hover:text-cyan-400 transition flex items-center gap-2">
+                  <i class="fas fa-chevron-right text-xs"></i>HTML & CSS
+                </a>
+              </li>
+              <li>
+                <a href="/tutoriales" class="hover:text-cyan-400 transition flex items-center gap-2">
+                  <i class="fas fa-chevron-right text-xs"></i>JavaScript
+                </a>
+              </li>
+              <li>
+                <a href="/tutoriales" class="hover:text-cyan-400 transition flex items-center gap-2">
+                  <i class="fas fa-chevron-right text-xs"></i>Python & Java
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold mb-3 text-green-400">Legal</h4>
+            <ul class="space-y-2 text-slate-400 text-sm">
+              <li>
+                <a href="/privacidad" class="hover:text-green-400 transition flex items-center gap-2">
+                  <i class="fas fa-chevron-right text-xs"></i>Privacidad
+                </a>
+              </li>
+              <li>
+                <a href="/terminos" class="hover:text-green-400 transition flex items-center gap-2">
+                  <i class="fas fa-chevron-right text-xs"></i>Términos
+                </a>
+              </li>
+              <li>
+                <a href="/contacto" class="hover:text-green-400 transition flex items-center gap-2">
+                  <i class="fas fa-chevron-right text-xs"></i>Contacto
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
+        <div class="border-t border-slate-700 pt-8 text-center text-slate-400">
+          <p>© 2025 CodeVerse. Aprende a programar con tutoriales prácticos.</p>
+        </div>
+      </div>
     </footer>
 
-    <!-- ☕ NOTIFICACIÓN BUY ME A COFFEE -->
-    <div id="coffeeNotification" class="fixed bottom-6 right-6 z-40 max-w-sm notification-coffee hidden">
-        <div class="bg-gradient-to-br from-slate-900 to-slate-800 border-2 border-yellow-500 rounded-xl shadow-2xl p-6 backdrop-blur-md">
-            <div class="flex items-start justify-between mb-4">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-mug-hot text-yellow-400 text-2xl"></i>
-                    <h3 class="text-lg font-bold text-white">¿Te gusta CodeVerse?</h3>
-                </div>
-                <button id="closeCoffeeNotif" class="text-slate-400 hover:text-white transition">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-
-            <p class="text-slate-300 text-sm mb-4 leading-relaxed">
-                Tu apoyo nos ayuda a mantener, actualizar y mejorar esta plataforma. 
-                <span class="text-yellow-300 font-semibold">¡Cada café cuenta!</span>
-            </p>
-
-            <a href="https://buymeacoffee.com/lunor" 
-               target="_blank"
-               class="coffee-button w-full py-3 px-4 rounded-lg font-semibold text-slate-900 flex items-center justify-center gap-2 mb-3"
-               onclick="closeCoffeeNotifOnClick()">
-                <i class="fas fa-heart text-red-500"></i>
-                <span>Apoyar en Buy Me a Coffee</span>
-            </a>
-
-            <p class="text-xs text-slate-400 text-center">
-                ✨ Esta notificación reaparecerá en 24 horas
-            </p>
-        </div>
+<!-- ☕ NOTIFICACIÓN BUY ME A COFFEE -->
+<div id="coffeeNotification" class="fixed bottom-6 right-6 z-40 max-w-sm notification-coffee hidden">
+  <div class="bg-gradient-to-br from-slate-900 to-slate-800 border-2 border-yellow-500 rounded-xl shadow-2xl p-6 backdrop-blur-md">
+    <div class="flex items-start justify-between mb-4">
+      <div class="flex items-center gap-3">
+        <i class="fas fa-mug-hot text-yellow-400 text-2xl"></i>
+        <h3 class="text-lg font-bold text-white">¿Te gusta CodeVerse?</h3>
+      </div>
+      <button id="closeCoffeeNotif" class="text-slate-400 hover:text-white transition">
+        <i class="fas fa-times text-xl"></i>
+      </button>
     </div>
+
+    <p class="text-slate-300 text-sm mb-4 leading-relaxed">
+      Tu apoyo nos ayuda a mantener, actualizar y mejorar esta plataforma.
+      <span class="text-yellow-300 font-semibold">¡Cada café cuenta!</span>
+    </p>
+
+    <a
+      href="https://buymeacoffee.com/lunor"
+      target="_blank"
+      class="coffee-button w-full py-3 px-4 rounded-lg font-semibold text-slate-900 flex items-center justify-center gap-2 mb-3"
+      onclick="closeCoffeeNotifOnClick()"
+    >
+      <i class="fas fa-heart text-red-500"></i>
+      <span>Apoyar en Buy Me a Coffee</span>
+    </a>
+
+    <p class="text-xs text-slate-400 text-center">
+      ✨ Esta notificación reaparecerá en 24 horas
+    </p>
+  </div>
+</div>
 
     <!-- 📜 SCRIPTS -->
     <script>
-        const STORAGE_KEY = 'codeverse_coffee_notification_time';
-        const NOTIFICATION_INTERVAL = 24 * 60 * 60 * 1000; // 24 horas
+      // Toggle Mobile Menu
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuIcon = document.getElementById('menuIcon');
 
-        function showCoffeeNotification() {
-            const lastShowTime = localStorage.getItem(STORAGE_KEY);
-            const now = Date.now();
-
-            if (!lastShowTime || (now - parseInt(lastShowTime)) >= NOTIFICATION_INTERVAL) {
-                const notifElement = document.getElementById('coffeeNotification');
-                notifElement.classList.remove('hidden');
-                localStorage.setItem(STORAGE_KEY, now.toString());
-            }
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        
+        // Cambiar icono
+        if (mobileMenu.classList.contains('hidden')) {
+          menuIcon.classList.remove('fa-times');
+          menuIcon.classList.add('fa-bars');
+        } else {
+          menuIcon.classList.remove('fa-bars');
+          menuIcon.classList.add('fa-times');
         }
+      });
 
-        function closeCoffeeNotif() {
-            const notifElement = document.getElementById('coffeeNotification');
-            notifElement.classList.add('closing');
-            setTimeout(() => {
-                notifElement.classList.add('hidden');
-                notifElement.classList.remove('closing');
-            }, 500);
+      // Cerrar menú al hacer clic en un enlace
+      document.querySelectorAll('#mobileMenu a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          menuIcon.classList.remove('fa-times');
+          menuIcon.classList.add('fa-bars');
+        });
+      });
+
+      // Cerrar menú al hacer scroll
+      let lastScroll = 0;
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        if (currentScroll > lastScroll && currentScroll > 100) {
+          mobileMenu.classList.add('hidden');
+          menuIcon.classList.remove('fa-times');
+          menuIcon.classList.add('fa-bars');
         }
+        lastScroll = currentScroll;
+      });
 
-        document.getElementById('closeCoffeeNotif').addEventListener('click', closeCoffeeNotif);
-        function closeCoffeeNotifOnClick() { closeCoffeeNotif(); }
+      // Coffee Notification
+      const NOTIFICATION_INTERVAL = 24 * 60 * 60 * 1000; // 24 horas
+      let coffeeNotificationTime = 0;
 
-        window.addEventListener('load', showCoffeeNotification);
+      function showCoffeeNotification() {
+        const now = Date.now();
+
+        if (
+          coffeeNotificationTime === 0 ||
+          now - coffeeNotificationTime >= NOTIFICATION_INTERVAL
+        ) {
+          const notifElement = document.getElementById("coffeeNotification");
+          notifElement.classList.remove("hidden");
+          coffeeNotificationTime = now;
+        }
+      }
+
+      function closeCoffeeNotif() {
+        const notifElement = document.getElementById("coffeeNotification");
+        notifElement.classList.add("closing");
+        setTimeout(() => {
+          notifElement.classList.add("hidden");
+          notifElement.classList.remove("closing");
+        }, 500);
+      }
+
+      document.getElementById("closeCoffeeNotif").addEventListener("click", closeCoffeeNotif);
+      
+      function closeCoffeeNotifOnClick() {
+        closeCoffeeNotif();
+      }
+
+      window.addEventListener("load", showCoffeeNotification);
     </script>
 
     {% block scripts %}{% endblock %}
-</body>
+  </body>
 </html>

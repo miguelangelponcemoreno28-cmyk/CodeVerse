@@ -1,567 +1,906 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sticky Notes - Notas Rápidas Avanzadas</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-  <style>
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(100px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes slideIn {
-      from { opacity: 0; transform: scale(0.8) rotate(-8deg); }
-      to { opacity: 1; transform: scale(1) rotate(var(--rotation, 0deg)); }
-    }
-    @keyframes slideOut {
-      from { opacity: 1; transform: scale(1) rotate(var(--rotation, 0deg)); }
-      to { opacity: 0; transform: scale(0.8) rotate(8deg); }
-    }
-    @keyframes pulse-reminder {
-      0%, 100% { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); }
-      50% { box-shadow: 0 8px 24px rgba(239, 68, 68, 0.6); }
-    }
-    body { position: relative; overflow: hidden; }
-    .notes-workspace {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
-    }
-    .workspace-header {
-      position: fixed; top: 0; left: 0; right: 0; height: 100px;
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.8) 100%);
-      border-bottom: 2px solid rgba(251, 191, 36, 0.3); z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 20px; backdrop-filter: blur(10px);
-    }
-    .workspace-title {
-      color: #fbbf24; font-size: 28px; font-weight: bold;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    }
-    .workspace-actions { display: flex; gap: 12px; align-items: center; }
-    .add-btn {
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-      box-shadow: 0 8px 16px rgba(251, 191, 36, 0.3);
-      transition: all 0.3s ease; color: black; padding: 10px 20px;
-      border-radius: 8px; font-weight: bold; border: none; cursor: pointer;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .add-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(251, 191, 36, 0.4); }
-    .stats-bar { color: #cbd5e1; font-size: 14px; display: flex; gap: 20px; }
-    .stat { display: flex; align-items: center; gap: 6px; }
-    .notes-container {
-      position: relative; width: 100%; height: calc(100vh - 100px);
-      margin-top: 100px; overflow: hidden;
-    }
-    .note {
-      position: absolute; width: 240px; min-height: 200px; padding: 16px;
-      border-radius: 12px; word-wrap: break-word;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-      animation: slideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      transition: all 0.2s ease; cursor: grab;
-      touch-action: none; user-select: none; z-index: 10;
-    }
-    .note.dragging {
-      opacity: 0.8; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-      cursor: grabbing; z-index: 1000; transform: scale(1.05);
-    }
-    .note:hover {
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-      transform: translateY(-4px) rotate(calc(var(--rotation) - 1deg));
-    }
-    .note.with-reminder { animation: pulse-reminder 2s ease-in-out infinite; }
-    .note-yellow { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 2px solid #fcd34d; --rotation: -2deg; }
-    .note-pink { background: linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%); border: 2px solid #f472b6; --rotation: 1deg; }
-    .note-blue { background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%); border: 2px solid #3b82f6; --rotation: -1.5deg; }
-    .note-green { background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%); border: 2px solid #22c55e; --rotation: 2deg; }
-    .note-purple { background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%); border: 2px solid #a855f7; --rotation: -1deg; }
-    .note-orange { background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%); border: 2px solid #f97316; --rotation: 1.5deg; }
-    .note-red { background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%); border: 2px solid #ef4444; --rotation: -0.5deg; }
-    .note-cyan { background: linear-gradient(135deg, #a5f3fc 0%, #67e8f9 100%); border: 2px solid #06b6d4; --rotation: 0.5deg; }
-    .note textarea {
-      width: 100%; height: 140px; background: transparent; border: none;
-      resize: none; outline: none; font-size: 14px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-weight: 500; color: rgba(0, 0, 0, 0.8);
-    }
-    .note textarea::placeholder { color: rgba(0, 0, 0, 0.3); }
-    .note-header {
-      display: flex; justify-content: space-between;
-      align-items: center; margin-bottom: 8px; gap: 8px;
-    }
-    .note-toolbar {
-      display: flex; gap: 6px; margin-top: 8px; padding-top: 8px;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-      justify-content: flex-start; align-items: center; flex-wrap: wrap;
-    }
-    .note-btn {
-      width: 28px; height: 28px; background: rgba(0, 0, 0, 0.1);
-      border: none; border-radius: 6px; cursor: pointer;
-      color: rgba(0, 0, 0, 0.6); transition: all 0.2s ease;
-      display: flex; align-items: center; justify-content: center; font-size: 12px;
-    }
-    .note-btn:hover { background: rgba(0, 0, 0, 0.2); transform: scale(1.1); }
-    .delete-btn {
-      width: 28px; height: 28px; background: rgba(0, 0, 0, 0.1);
-      border: none; border-radius: 6px; cursor: pointer;
-      color: rgba(0, 0, 0, 0.6); transition: all 0.2s ease;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; margin-left: auto;
-    }
-    .delete-btn:hover { background: rgba(220, 38, 38, 0.8); color: white; }
-    .note-color-btn {
-      width: 18px; height: 18px; border-radius: 4px;
-      border: 2px solid transparent; cursor: pointer; transition: all 0.2s ease;
-    }
-    .note-color-btn:hover { transform: scale(1.15); border-color: rgba(0, 0, 0, 0.3); }
-    .color-palette {
-      display: flex; gap: 4px; padding: 4px 6px;
-      background: rgba(0, 0, 0, 0.1); border-radius: 6px;
-    }
-    .reminder-badge {
-      background: rgba(239, 68, 68, 0.9); color: white;
-      padding: 2px 6px; border-radius: 4px; font-size: 10px;
-      font-weight: bold; display: flex; align-items: center; gap: 4px;
-    }
-    .empty-state {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      text-align: center; color: rgba(255, 255, 255, 0.4);
-    }
-    .empty-state i { font-size: 64px; margin-bottom: 16px; opacity: 0.3; }
-    .note.removing { animation: slideOut 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .reminder-modal {
-      display: none; position: fixed; z-index: 2000;
-      left: 0; top: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6); align-items: center;
-      justify-content: center; backdrop-filter: blur(4px);
-    }
-    .reminder-modal.active { display: flex; }
-    .reminder-content {
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      border: 2px solid #fbbf24; padding: 24px; border-radius: 16px;
-      color: white; max-width: 400px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-    }
-    .reminder-content h2 { margin-bottom: 16px; color: #fbbf24; }
-    .reminder-content input, .reminder-content select {
-      width: 100%; padding: 10px; margin: 12px 0; border-radius: 8px;
-      border: 1px solid #fbbf24; background: rgba(255, 255, 255, 0.1);
-      color: white; font-size: 14px;
-    }
-    .reminder-content input::placeholder { color: rgba(255, 255, 255, 0.5); }
-    .btn-reminder {
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-      color: black; padding: 10px 16px; border: none; border-radius: 8px;
-      cursor: pointer; font-weight: bold; margin-top: 12px; width: 100%;
-      transition: all 0.2s ease;
-    }
-    .btn-reminder:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(251, 191, 36, 0.3); }
-    .rotation-display {
-      font-size: 11px; background: rgba(0, 0, 0, 0.1);
-      padding: 2px 6px; border-radius: 4px; color: rgba(0, 0, 0, 0.6);
-    }
-    @media (max-width: 768px) {
-      .workspace-title { font-size: 20px; }
-      .stats-bar { font-size: 12px; gap: 10px; }
-      .note { width: 200px; }
-    }
-  </style>
-</head>
-<body>
-  <div class="notes-workspace">
-    <div class="workspace-header">
-      <div class="workspace-title">📝 Notas Rápidas</div>
-      <div class="workspace-actions">
-        <div class="stats-bar">
-          <div class="stat"><span id="noteCount">0</span> notas</div>
-          <div class="stat"><span id="reminderCount">0</span> recordatorios</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sticky Notes - Notas Rápidas Avanzadas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(100px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8) rotate(-8deg);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) rotate(var(--rotation, 0deg));
+        }
+      }
+      @keyframes slideOut {
+        from {
+          opacity: 1;
+          transform: scale(1) rotate(var(--rotation, 0deg));
+        }
+        to {
+          opacity: 0;
+          transform: scale(0.8) rotate(8deg);
+        }
+      }
+      @keyframes pulse-reminder {
+        0%,
+        100% {
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        50% {
+          box-shadow: 0 8px 24px rgba(239, 68, 68, 0.6);
+        }
+      }
+      body {
+        position: relative;
+        overflow: hidden;
+      }
+      .notes-workspace {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(
+          135deg,
+          #0f172a 0%,
+          #1e3a8a 50%,
+          #0f172a 100%
+        );
+      }
+      .workspace-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100px;
+        background: linear-gradient(
+          180deg,
+          rgba(15, 23, 42, 0.95) 0%,
+          rgba(15, 23, 42, 0.8) 100%
+        );
+        border-bottom: 2px solid rgba(251, 191, 36, 0.3);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        backdrop-filter: blur(10px);
+      }
+      .workspace-title {
+        color: #fbbf24;
+        font-size: 28px;
+        font-weight: bold;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      }
+      .workspace-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .add-btn {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        box-shadow: 0 8px 16px rgba(251, 191, 36, 0.3);
+        transition: all 0.3s ease;
+        color: black;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .add-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(251, 191, 36, 0.4);
+      }
+      .stats-bar {
+        color: #cbd5e1;
+        font-size: 14px;
+        display: flex;
+        gap: 20px;
+      }
+      .stat {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .notes-container {
+        position: relative;
+        width: 100%;
+        height: calc(100vh - 100px);
+        margin-top: 100px;
+        overflow: hidden;
+      }
+      .note {
+        position: absolute;
+        width: 240px;
+        min-height: 200px;
+        padding: 16px;
+        border-radius: 12px;
+        word-wrap: break-word;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        animation: slideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transition: all 0.2s ease;
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+        z-index: 10;
+      }
+      .note.dragging {
+        opacity: 0.8;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        cursor: grabbing;
+        z-index: 1000;
+        transform: scale(1.05);
+      }
+      .note:hover {
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+        transform: translateY(-4px) rotate(calc(var(--rotation) - 1deg));
+      }
+      .note.with-reminder {
+        animation: pulse-reminder 2s ease-in-out infinite;
+      }
+      .note-yellow {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 2px solid #fcd34d;
+        --rotation: -2deg;
+      }
+      .note-pink {
+        background: linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%);
+        border: 2px solid #f472b6;
+        --rotation: 1deg;
+      }
+      .note-blue {
+        background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+        border: 2px solid #3b82f6;
+        --rotation: -1.5deg;
+      }
+      .note-green {
+        background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%);
+        border: 2px solid #22c55e;
+        --rotation: 2deg;
+      }
+      .note-purple {
+        background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
+        border: 2px solid #a855f7;
+        --rotation: -1deg;
+      }
+      .note-orange {
+        background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+        border: 2px solid #f97316;
+        --rotation: 1.5deg;
+      }
+      .note-red {
+        background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+        border: 2px solid #ef4444;
+        --rotation: -0.5deg;
+      }
+      .note-cyan {
+        background: linear-gradient(135deg, #a5f3fc 0%, #67e8f9 100%);
+        border: 2px solid #06b6d4;
+        --rotation: 0.5deg;
+      }
+      .note textarea {
+        width: 100%;
+        height: 140px;
+        background: transparent;
+        border: none;
+        resize: none;
+        outline: none;
+        font-size: 14px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.8);
+      }
+      .note textarea::placeholder {
+        color: rgba(0, 0, 0, 0.3);
+      }
+      .note-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        gap: 8px;
+      }
+      .note-toolbar {
+        display: flex;
+        gap: 6px;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .note-btn {
+        width: 28px;
+        height: 28px;
+        background: rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        color: rgba(0, 0, 0, 0.6);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+      }
+      .note-btn:hover {
+        background: rgba(0, 0, 0, 0.2);
+        transform: scale(1.1);
+      }
+      .delete-btn {
+        width: 28px;
+        height: 28px;
+        background: rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        color: rgba(0, 0, 0, 0.6);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        margin-left: auto;
+      }
+      .delete-btn:hover {
+        background: rgba(220, 38, 38, 0.8);
+        color: white;
+      }
+      .note-color-btn {
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .note-color-btn:hover {
+        transform: scale(1.15);
+        border-color: rgba(0, 0, 0, 0.3);
+      }
+      .color-palette {
+        display: flex;
+        gap: 4px;
+        padding: 4px 6px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+      }
+      .reminder-badge {
+        background: rgba(239, 68, 68, 0.9);
+        color: white;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .empty-state {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .empty-state i {
+        font-size: 64px;
+        margin-bottom: 16px;
+        opacity: 0.3;
+      }
+      .note.removing {
+        animation: slideOut 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .reminder-modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+      }
+      .reminder-modal.active {
+        display: flex;
+      }
+      .reminder-content {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        border: 2px solid #fbbf24;
+        padding: 24px;
+        border-radius: 16px;
+        color: white;
+        max-width: 400px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      }
+      .reminder-content h2 {
+        margin-bottom: 16px;
+        color: #fbbf24;
+      }
+      .reminder-content input,
+      .reminder-content select {
+        width: 100%;
+        padding: 10px;
+        margin: 12px 0;
+        border-radius: 8px;
+        border: 1px solid #fbbf24;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 14px;
+      }
+      .reminder-content input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .btn-reminder {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        color: black;
+        padding: 10px 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 12px;
+        width: 100%;
+        transition: all 0.2s ease;
+      }
+      .btn-reminder:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(251, 191, 36, 0.3);
+      }
+      .rotation-display {
+        font-size: 11px;
+        background: rgba(0, 0, 0, 0.1);
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: rgba(0, 0, 0, 0.6);
+      }
+      @media (max-width: 768px) {
+        .workspace-title {
+          font-size: 20px;
+        }
+        .stats-bar {
+          font-size: 12px;
+          gap: 10px;
+        }
+        .note {
+          width: 200px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="notes-workspace">
+      <div class="workspace-header">
+        <div class="workspace-title">📝 Notas Rápidas</div>
+        <div class="workspace-actions">
+          <div class="stats-bar">
+            <div class="stat"><span id="noteCount">0</span> notas</div>
+            <div class="stat">
+              <span id="reminderCount">0</span> recordatorios
+            </div>
+          </div>
+          <button id="addNoteBtn" class="add-btn">
+            <i class="fas fa-plus"></i><span>Agregar</span>
+          </button>
         </div>
-        <button id="addNoteBtn" class="add-btn">
-          <i class="fas fa-plus"></i><span>Agregar</span>
+      </div>
+      <div id="notesContainer" class="notes-container"></div>
+      <div id="emptyState" class="empty-state">
+        <i class="fas fa-lightbulb"></i>
+        <p style="font-size: 18px; margin-top: 16px">No hay notas aún</p>
+        <p style="font-size: 14px; margin-top: 8px">
+          Crea tu primera nota haciendo clic en "Agregar"
+        </p>
+      </div>
+    </div>
+    <div id="reminderModal" class="reminder-modal">
+      <div class="reminder-content">
+        <h2>Establecer Recordatorio</h2>
+        <input
+          type="text"
+          id="reminderTitle"
+          placeholder="Título del recordatorio"
+        />
+        <div style="display: flex; gap: 8px; margin: 12px 0">
+          <input
+            type="number"
+            id="reminderValue"
+            min="1"
+            value="5"
+            style="width: 70px"
+            placeholder="5"
+          />
+          <select id="reminderUnit" style="flex: 1">
+            <option value="seconds">Segundos</option>
+            <option value="minutes" selected>Minutos</option>
+            <option value="hours">Horas</option>
+            <option value="days">Días</option>
+          </select>
+        </div>
+        <button class="btn-reminder" onclick="saveReminder()">
+          Establecer Recordatorio
+        </button>
+        <button
+          class="btn-reminder"
+          style="background: rgba(100, 116, 139, 0.8); margin-top: 8px"
+          onclick="closeReminderModal()"
+        >
+          Cancelar
         </button>
       </div>
     </div>
-    <div id="notesContainer" class="notes-container"></div>
-    <div id="emptyState" class="empty-state">
-      <i class="fas fa-lightbulb"></i>
-      <p style="font-size: 18px; margin-top: 16px;">No hay notas aún</p>
-      <p style="font-size: 14px; margin-top: 8px;">Crea tu primera nota haciendo clic en "Agregar"</p>
-    </div>
-  </div>
-  <div id="reminderModal" class="reminder-modal">
-    <div class="reminder-content">
-      <h2>Establecer Recordatorio</h2>
-      <input type="text" id="reminderTitle" placeholder="Título del recordatorio">
-      <div style="display: flex; gap: 8px; margin: 12px 0;">
-        <input type="number" id="reminderValue" min="1" value="5" style="width: 70px;" placeholder="5">
-        <select id="reminderUnit" style="flex: 1;">
-          <option value="seconds">Segundos</option>
-          <option value="minutes" selected>Minutos</option>
-          <option value="hours">Horas</option>
-          <option value="days">Días</option>
-        </select>
-      </div>
-      <button class="btn-reminder" onclick="saveReminder()">Establecer Recordatorio</button>
-      <button class="btn-reminder" style="background: rgba(100,116,139,0.8); margin-top: 8px;" onclick="closeReminderModal()">Cancelar</button>
-    </div>
-  </div>
-  <script>
-    const colors = ['note-yellow', 'note-pink', 'note-blue', 'note-green', 'note-purple', 'note-orange', 'note-red', 'note-cyan'];
-    const colorData = {'note-yellow': '#fef3c7','note-pink': '#fbcfe8','note-blue': '#bfdbfe','note-green': '#bbf7d0','note-purple': '#e9d5ff','note-orange': '#fed7aa','note-red': '#fecaca','note-cyan': '#a5f3fc'};
-    let notes = JSON.parse(localStorage.getItem('stickyNotes')) || [];
-    let reminders = JSON.parse(localStorage.getItem('stickyReminders')) || [];
-    let currentReminderNoteIndex = null;
-    const notesContainer = document.getElementById('notesContainer');
-    const emptyState = document.getElementById('emptyState');
-    const noteCount = document.getElementById('noteCount');
-    const reminderCount = document.getElementById('reminderCount');
-    let notificationPermission = false;
+    <script>
+      const colors = [
+        "note-yellow",
+        "note-pink",
+        "note-blue",
+        "note-green",
+        "note-purple",
+        "note-orange",
+        "note-red",
+        "note-cyan",
+      ];
+      const colorData = {
+        "note-yellow": "#fef3c7",
+        "note-pink": "#fbcfe8",
+        "note-blue": "#bfdbfe",
+        "note-green": "#bbf7d0",
+        "note-purple": "#e9d5ff",
+        "note-orange": "#fed7aa",
+        "note-red": "#fecaca",
+        "note-cyan": "#a5f3fc",
+      };
+      let notes = JSON.parse(localStorage.getItem("stickyNotes")) || [];
+      let reminders = JSON.parse(localStorage.getItem("stickyReminders")) || [];
+      let currentReminderNoteIndex = null;
+      const notesContainer = document.getElementById("notesContainer");
+      const emptyState = document.getElementById("emptyState");
+      const noteCount = document.getElementById("noteCount");
+      const reminderCount = document.getElementById("reminderCount");
+      let notificationPermission = false;
 
-    async function requestNotificationPermission() {
-      if ('Notification' in window && Notification.permission === 'default') {
-        const permission = await Notification.requestPermission();
-        notificationPermission = permission === 'granted';
-        if (notificationPermission) showCustomAlert('✅ Notificaciones activadas correctamente');
-      } else if ('Notification' in window && Notification.permission === 'granted') {
-        notificationPermission = true;
-      }
-    }
-
-    function showNotification(title, body) {
-      if (notificationPermission && 'Notification' in window) {
-        const notification = new Notification(title, {
-          body: body,
-          icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="80" font-size="80">📝</text></svg>',
-          badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="80" font-size="80">⏰</text></svg>',
-          vibrate: [200, 100, 200],
-          requireInteraction: true,
-          tag: 'sticky-note-reminder'
-        });
-        notification.onclick = () => { window.focus(); notification.close(); };
-      } else {
-        alert(`⏰ ${title}\n${body}`);
-      }
-    }
-
-    function showCustomAlert(message) {
-      const alertDiv = document.createElement('div');
-      alertDiv.style.cssText = `position: fixed;top: 120px;right: 20px;background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);color: black;padding: 16px 24px;border-radius: 12px;box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);z-index: 3000;font-weight: bold;animation: slideInRight 0.3s ease;`;
-      alertDiv.textContent = message;
-      document.body.appendChild(alertDiv);
-      setTimeout(() => {
-        alertDiv.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => alertDiv.remove(), 300);
-      }, 3000);
-    }
-
-    requestNotificationPermission();
-
-    function saveNotes() {
-      localStorage.setItem('stickyNotes', JSON.stringify(notes));
-      updateNoteCount();
-      updateEmptyState();
-    }
-
-    function saveReminders() {
-      localStorage.setItem('stickyReminders', JSON.stringify(reminders));
-      updateReminderCount();
-    }
-
-    function updateNoteCount() { noteCount.textContent = notes.length; }
-    function updateReminderCount() { reminderCount.textContent = reminders.length; }
-    function updateEmptyState() { emptyState.style.display = notes.length === 0 ? 'block' : 'none'; }
-
-    function createNoteElement(noteObj, index) {
-      const noteDiv = document.createElement('div');
-      const color = noteObj.color || colors[Math.floor(Math.random() * colors.length)];
-      const x = noteObj.x || Math.random() * (window.innerWidth - 300);
-      const y = noteObj.y || 120 + Math.random() * (window.innerHeight - 300);
-      const rotation = noteObj.rotation || (Math.random() * 6 - 3);
-
-      noteDiv.classList.add('note', color);
-      noteDiv.style.left = x + 'px';
-      noteDiv.style.top = y + 'px';
-      noteDiv.style.setProperty('--rotation', rotation + 'deg');
-
-      const hasReminder = reminders.some(r => r.noteIndex === index);
-      if (hasReminder) noteDiv.classList.add('with-reminder');
-
-      const header = document.createElement('div');
-      header.classList.add('note-header');
-
-      if (hasReminder) {
-        const badge = document.createElement('div');
-        badge.classList.add('reminder-badge');
-        badge.innerHTML = '<i class="fas fa-bell"></i> Recordatorio';
-        header.appendChild(badge);
+      async function requestNotificationPermission() {
+        if ("Notification" in window && Notification.permission === "default") {
+          const permission = await Notification.requestPermission();
+          notificationPermission = permission === "granted";
+          if (notificationPermission)
+            showCustomAlert("✅ Notificaciones activadas correctamente");
+        } else if (
+          "Notification" in window &&
+          Notification.permission === "granted"
+        ) {
+          notificationPermission = true;
+        }
       }
 
-      const deleteBtn = document.createElement('button');
-      deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-      deleteBtn.classList.add('delete-btn');
-      deleteBtn.onclick = (e) => {
-        e.stopPropagation();
-        noteDiv.classList.add('removing');
+      function showNotification(title, body) {
+        if (notificationPermission && "Notification" in window) {
+          const notification = new Notification(title, {
+            body: body,
+            icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="80" font-size="80">📝</text></svg>',
+            badge:
+              'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="80" font-size="80">⏰</text></svg>',
+            vibrate: [200, 100, 200],
+            requireInteraction: true,
+            tag: "sticky-note-reminder",
+          });
+          notification.onclick = () => {
+            window.focus();
+            notification.close();
+          };
+        } else {
+          alert(`⏰ ${title}\n${body}`);
+        }
+      }
+
+      function showCustomAlert(message) {
+        const alertDiv = document.createElement("div");
+        alertDiv.style.cssText = `position: fixed;top: 120px;right: 20px;background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);color: black;padding: 16px 24px;border-radius: 12px;box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);z-index: 3000;font-weight: bold;animation: slideInRight 0.3s ease;`;
+        alertDiv.textContent = message;
+        document.body.appendChild(alertDiv);
         setTimeout(() => {
-          notes.splice(index, 1);
-          reminders = reminders.filter(r => r.noteIndex !== index);
-          saveNotes();
-          saveReminders();
-          renderNotes();
-        }, 300);
+          alertDiv.style.animation = "slideOut 0.3s ease";
+          setTimeout(() => alertDiv.remove(), 300);
+        }, 3000);
       }
-      header.appendChild(deleteBtn);
-      noteDiv.appendChild(header);
 
-      const textarea = document.createElement('textarea');
-      textarea.value = noteObj.content;
-      textarea.placeholder = 'Escribe tu nota...';
-      textarea.oninput = () => {
-        notes[index].content = textarea.value;
-        saveNotes();
+      requestNotificationPermission();
+
+      function saveNotes() {
+        localStorage.setItem("stickyNotes", JSON.stringify(notes));
+        updateNoteCount();
+        updateEmptyState();
       }
-      noteDiv.appendChild(textarea);
 
-      const toolbar = document.createElement('div');
-      toolbar.classList.add('note-toolbar');
+      function saveReminders() {
+        localStorage.setItem("stickyReminders", JSON.stringify(reminders));
+        updateReminderCount();
+      }
 
-      const rotationDisplay = document.createElement('div');
-      rotationDisplay.classList.add('rotation-display');
-      rotationDisplay.textContent = '↻ ' + rotation.toFixed(1) + '°';
-      toolbar.appendChild(rotationDisplay);
+      function updateNoteCount() {
+        noteCount.textContent = notes.length;
+      }
+      function updateReminderCount() {
+        reminderCount.textContent = reminders.length;
+      }
+      function updateEmptyState() {
+        emptyState.style.display = notes.length === 0 ? "block" : "none";
+      }
 
-      const colorPalette = document.createElement('div');
-      colorPalette.classList.add('color-palette');
-      colors.forEach(colorClass => {
-        const colorBtn = document.createElement('button');
-        colorBtn.classList.add('note-color-btn');
-        colorBtn.style.background = colorData[colorClass];
-        colorBtn.style.borderColor = colorClass === color ? 'rgba(0, 0, 0, 0.3)' : 'transparent';
-        colorBtn.onclick = (e) => {
+      function createNoteElement(noteObj, index) {
+        const noteDiv = document.createElement("div");
+        const color =
+          noteObj.color || colors[Math.floor(Math.random() * colors.length)];
+        const x = noteObj.x || Math.random() * (window.innerWidth - 300);
+        const y = noteObj.y || 120 + Math.random() * (window.innerHeight - 300);
+        const rotation = noteObj.rotation || Math.random() * 6 - 3;
+
+        noteDiv.classList.add("note", color);
+        noteDiv.style.left = x + "px";
+        noteDiv.style.top = y + "px";
+        noteDiv.style.setProperty("--rotation", rotation + "deg");
+
+        const hasReminder = reminders.some((r) => r.noteIndex === index);
+        if (hasReminder) noteDiv.classList.add("with-reminder");
+
+        const header = document.createElement("div");
+        header.classList.add("note-header");
+
+        if (hasReminder) {
+          const badge = document.createElement("div");
+          badge.classList.add("reminder-badge");
+          badge.innerHTML = '<i class="fas fa-bell"></i> Recordatorio';
+          header.appendChild(badge);
+        }
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteBtn.classList.add("delete-btn");
+        deleteBtn.onclick = (e) => {
           e.stopPropagation();
-          notes[index].color = colorClass;
+          noteDiv.classList.add("removing");
+          setTimeout(() => {
+            notes.splice(index, 1);
+            reminders = reminders.filter((r) => r.noteIndex !== index);
+            saveNotes();
+            saveReminders();
+            renderNotes();
+          }, 300);
+        };
+        header.appendChild(deleteBtn);
+        noteDiv.appendChild(header);
+
+        const textarea = document.createElement("textarea");
+        textarea.value = noteObj.content;
+        textarea.placeholder = "Escribe tu nota...";
+        textarea.oninput = () => {
+          notes[index].content = textarea.value;
           saveNotes();
-          renderNotes();
-        }
-        colorPalette.appendChild(colorBtn);
-      });
-      toolbar.appendChild(colorPalette);
+        };
+        noteDiv.appendChild(textarea);
 
-      const reminderBtn = document.createElement('button');
-      reminderBtn.classList.add('note-btn');
-      reminderBtn.innerHTML = '<i class="fas fa-bell"></i>';
-      reminderBtn.title = 'Establecer recordatorio';
-      reminderBtn.onclick = (e) => {
-        e.stopPropagation();
-        currentReminderNoteIndex = index;
-        document.getElementById('reminderModal').classList.add('active');
-      }
-      toolbar.appendChild(reminderBtn);
-      noteDiv.appendChild(toolbar);
+        const toolbar = document.createElement("div");
+        toolbar.classList.add("note-toolbar");
 
-      let isDragging = false, offsetX = 0, offsetY = 0, initialRotation = rotation, touchStartAngle = 0, isMultiTouch = false;
+        const rotationDisplay = document.createElement("div");
+        rotationDisplay.classList.add("rotation-display");
+        rotationDisplay.textContent = "↻ " + rotation.toFixed(1) + "°";
+        toolbar.appendChild(rotationDisplay);
 
-      noteDiv.addEventListener('mousedown', (e) => {
-        if (e.target.closest('.note-btn') || e.target.closest('.delete-btn') || e.target.closest('.note-color-btn')) return;
-        isDragging = true;
-        noteDiv.classList.add('dragging');
-        offsetX = e.clientX - noteDiv.offsetLeft;
-        offsetY = e.clientY - noteDiv.offsetTop;
-      });
+        const colorPalette = document.createElement("div");
+        colorPalette.classList.add("color-palette");
+        colors.forEach((colorClass) => {
+          const colorBtn = document.createElement("button");
+          colorBtn.classList.add("note-color-btn");
+          colorBtn.style.background = colorData[colorClass];
+          colorBtn.style.borderColor =
+            colorClass === color ? "rgba(0, 0, 0, 0.3)" : "transparent";
+          colorBtn.onclick = (e) => {
+            e.stopPropagation();
+            notes[index].color = colorClass;
+            saveNotes();
+            renderNotes();
+          };
+          colorPalette.appendChild(colorBtn);
+        });
+        toolbar.appendChild(colorPalette);
 
-      document.addEventListener('mousemove', (e) => {
-        if (isDragging) {
-          noteDiv.style.left = (e.clientX - offsetX) + 'px';
-          noteDiv.style.top = (e.clientY - offsetY) + 'px';
-          notes[index].x = e.clientX - offsetX;
-          notes[index].y = e.clientY - offsetY;
-          saveNotes();
-        }
-      });
+        const reminderBtn = document.createElement("button");
+        reminderBtn.classList.add("note-btn");
+        reminderBtn.innerHTML = '<i class="fas fa-bell"></i>';
+        reminderBtn.title = "Establecer recordatorio";
+        reminderBtn.onclick = (e) => {
+          e.stopPropagation();
+          currentReminderNoteIndex = index;
+          document.getElementById("reminderModal").classList.add("active");
+        };
+        toolbar.appendChild(reminderBtn);
+        noteDiv.appendChild(toolbar);
 
-      document.addEventListener('mouseup', () => {
-        if (isDragging) { isDragging = false; noteDiv.classList.remove('dragging'); }
-      });
+        let isDragging = false,
+          offsetX = 0,
+          offsetY = 0,
+          initialRotation = rotation,
+          touchStartAngle = 0,
+          isMultiTouch = false;
 
-      noteDiv.addEventListener('touchstart', (e) => {
-        if (e.target.closest('.note-btn') || e.target.closest('.delete-btn') || e.target.closest('.note-color-btn')) return;
-        if (e.touches.length === 1) {
+        noteDiv.addEventListener("mousedown", (e) => {
+          if (
+            e.target.closest(".note-btn") ||
+            e.target.closest(".delete-btn") ||
+            e.target.closest(".note-color-btn")
+          )
+            return;
           isDragging = true;
-          noteDiv.classList.add('dragging');
-          const touch = e.touches[0];
-          offsetX = touch.clientX - noteDiv.offsetLeft;
-          offsetY = touch.clientY - noteDiv.offsetTop;
-          isMultiTouch = false;
-        } else if (e.touches.length === 2) {
-          e.preventDefault();
+          noteDiv.classList.add("dragging");
+          offsetX = e.clientX - noteDiv.offsetLeft;
+          offsetY = e.clientY - noteDiv.offsetTop;
+        });
+
+        document.addEventListener("mousemove", (e) => {
+          if (isDragging) {
+            noteDiv.style.left = e.clientX - offsetX + "px";
+            noteDiv.style.top = e.clientY - offsetY + "px";
+            notes[index].x = e.clientX - offsetX;
+            notes[index].y = e.clientY - offsetY;
+            saveNotes();
+          }
+        });
+
+        document.addEventListener("mouseup", () => {
+          if (isDragging) {
+            isDragging = false;
+            noteDiv.classList.remove("dragging");
+          }
+        });
+
+        noteDiv.addEventListener("touchstart", (e) => {
+          if (
+            e.target.closest(".note-btn") ||
+            e.target.closest(".delete-btn") ||
+            e.target.closest(".note-color-btn")
+          )
+            return;
+          if (e.touches.length === 1) {
+            isDragging = true;
+            noteDiv.classList.add("dragging");
+            const touch = e.touches[0];
+            offsetX = touch.clientX - noteDiv.offsetLeft;
+            offsetY = touch.clientY - noteDiv.offsetTop;
+            isMultiTouch = false;
+          } else if (e.touches.length === 2) {
+            e.preventDefault();
+            isDragging = false;
+            isMultiTouch = true;
+            const touch1 = e.touches[0],
+              touch2 = e.touches[1];
+            const dx = touch2.clientX - touch1.clientX,
+              dy = touch2.clientY - touch1.clientY;
+            touchStartAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+            initialRotation =
+              parseFloat(noteDiv.style.getPropertyValue("--rotation")) ||
+              rotation;
+            noteDiv.classList.add("dragging");
+          }
+        });
+
+        noteDiv.addEventListener("touchmove", (e) => {
+          if (e.touches.length === 1 && isDragging && !isMultiTouch) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const newLeft = touch.clientX - offsetX,
+              newTop = touch.clientY - offsetY;
+            noteDiv.style.left = newLeft + "px";
+            noteDiv.style.top = newTop + "px";
+            notes[index].x = newLeft;
+            notes[index].y = newTop;
+          } else if (e.touches.length === 2 && isMultiTouch) {
+            e.preventDefault();
+            const touch1 = e.touches[0],
+              touch2 = e.touches[1];
+            const dx = touch2.clientX - touch1.clientX,
+              dy = touch2.clientY - touch1.clientY;
+            const currentAngle = Math.atan2(dy, dx) * (180 / Math.PI);
+            let angleDiff = currentAngle - touchStartAngle;
+            let newRotation = initialRotation + angleDiff;
+            newRotation = ((newRotation % 360) + 360) % 360;
+            noteDiv.style.setProperty("--rotation", newRotation + "deg");
+            rotationDisplay.textContent = "↻ " + newRotation.toFixed(1) + "°";
+            notes[index].rotation = newRotation;
+            saveNotes();
+          }
+        });
+
+        noteDiv.addEventListener("touchend", (e) => {
+          if (isDragging || isMultiTouch) {
+            isDragging = false;
+            isMultiTouch = false;
+            noteDiv.classList.remove("dragging");
+            saveNotes();
+          }
+        });
+
+        noteDiv.addEventListener("touchcancel", () => {
           isDragging = false;
-          isMultiTouch = true;
-          const touch1 = e.touches[0], touch2 = e.touches[1];
-          const dx = touch2.clientX - touch1.clientX, dy = touch2.clientY - touch1.clientY;
-          touchStartAngle = Math.atan2(dy, dx) * (180 / Math.PI);
-          initialRotation = parseFloat(noteDiv.style.getPropertyValue('--rotation')) || rotation;
-          noteDiv.classList.add('dragging');
-        }
-      });
-
-      noteDiv.addEventListener('touchmove', (e) => {
-        if (e.touches.length === 1 && isDragging && !isMultiTouch) {
-          e.preventDefault();
-          const touch = e.touches[0];
-          const newLeft = touch.clientX - offsetX, newTop = touch.clientY - offsetY;
-          noteDiv.style.left = newLeft + 'px';
-          noteDiv.style.top = newTop + 'px';
-          notes[index].x = newLeft;
-          notes[index].y = newTop;
-        } else if (e.touches.length === 2 && isMultiTouch) {
-          e.preventDefault();
-          const touch1 = e.touches[0], touch2 = e.touches[1];
-          const dx = touch2.clientX - touch1.clientX, dy = touch2.clientY - touch1.clientY;
-          const currentAngle = Math.atan2(dy, dx) * (180 / Math.PI);
-          let angleDiff = currentAngle - touchStartAngle;
-          let newRotation = initialRotation + angleDiff;
-          newRotation = ((newRotation % 360) + 360) % 360;
-          noteDiv.style.setProperty('--rotation', newRotation + 'deg');
-          rotationDisplay.textContent = '↻ ' + newRotation.toFixed(1) + '°';
-          notes[index].rotation = newRotation;
-          saveNotes();
-        }
-      });
-
-      noteDiv.addEventListener('touchend', (e) => {
-        if (isDragging || isMultiTouch) {
-          isDragging = false;
           isMultiTouch = false;
-          noteDiv.classList.remove('dragging');
-          saveNotes();
-        }
-      });
+          noteDiv.classList.remove("dragging");
+        });
 
-      noteDiv.addEventListener('touchcancel', () => {
-        isDragging = false;
-        isMultiTouch = false;
-        noteDiv.classList.remove('dragging');
-      });
+        noteDiv.addEventListener("wheel", (e) => {
+          if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            let currentRotation =
+              parseFloat(noteDiv.style.getPropertyValue("--rotation")) ||
+              rotation;
+            let newRotation = currentRotation + (e.deltaY > 0 ? -2 : 2);
+            newRotation = ((newRotation % 360) + 360) % 360;
+            noteDiv.style.setProperty("--rotation", newRotation + "deg");
+            rotationDisplay.textContent = "↻ " + newRotation.toFixed(1) + "°";
+            notes[index].rotation = newRotation;
+            saveNotes();
+          }
+        });
 
-      noteDiv.addEventListener('wheel', (e) => {
-        if (e.ctrlKey || e.metaKey) {
-          e.preventDefault();
-          let currentRotation = parseFloat(noteDiv.style.getPropertyValue('--rotation')) || rotation;
-          let newRotation = currentRotation + (e.deltaY > 0 ? -2 : 2);
-          newRotation = ((newRotation % 360) + 360) % 360;
-          noteDiv.style.setProperty('--rotation', newRotation + 'deg');
-          rotationDisplay.textContent = '↻ ' + newRotation.toFixed(1) + '°';
-          notes[index].rotation = newRotation;
-          saveNotes();
-        }
-      });
+        noteDiv.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowLeft" && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            let currentRotation =
+              parseFloat(noteDiv.style.getPropertyValue("--rotation")) ||
+              rotation;
+            let newRotation = currentRotation - 5;
+            noteDiv.style.setProperty("--rotation", newRotation + "deg");
+            rotationDisplay.textContent = "↻ " + newRotation.toFixed(1) + "°";
+            notes[index].rotation = newRotation;
+            saveNotes();
+          } else if (e.key === "ArrowRight" && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            let currentRotation =
+              parseFloat(noteDiv.style.getPropertyValue("--rotation")) ||
+              rotation;
+            let newRotation = currentRotation + 5;
+            noteDiv.style.setProperty("--rotation", newRotation + "deg");
+            rotationDisplay.textContent = "↻ " + newRotation.toFixed(1) + "°";
+            notes[index].rotation = newRotation;
+            saveNotes();
+          }
+        });
 
-      noteDiv.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft' && (e.ctrlKey || e.metaKey)) {
-          e.preventDefault();
-          let currentRotation = parseFloat(noteDiv.style.getPropertyValue('--rotation')) || rotation;
-          let newRotation = currentRotation - 5;
-          noteDiv.style.setProperty('--rotation', newRotation + 'deg');
-          rotationDisplay.textContent = '↻ ' + newRotation.toFixed(1) + '°';
-          notes[index].rotation = newRotation;
-          saveNotes();
-        } else if (e.key === 'ArrowRight' && (e.ctrlKey || e.metaKey)) {
-          e.preventDefault();
-          let currentRotation = parseFloat(noteDiv.style.getPropertyValue('--rotation')) || rotation;
-          let newRotation = currentRotation + 5;
-          noteDiv.style.setProperty('--rotation', newRotation + 'deg');
-          rotationDisplay.textContent = '↻ ' + newRotation.toFixed(1) + '°';
-          notes[index].rotation = newRotation;
-          saveNotes();
-        }
-      });
-
-      return noteDiv;
-    }
-
-    function renderNotes() {
-      notesContainer.innerHTML = '';
-      notes.forEach((note, idx) => {
-        const noteEl = createNoteElement(note, idx);
-        notesContainer.appendChild(noteEl);
-      });
-      updateNoteCount();
-      updateEmptyState();
-      updateReminderCount();
-    }
-
-    function saveReminder() {
-      const titleInput = document.getElementById('reminderTitle');
-      const valueInput = document.getElementById('reminderValue');
-      const unitSelect = document.getElementById('reminderUnit');
-      
-      if (!titleInput || !valueInput || !unitSelect) {
-        console.error('Elementos del modal no encontrados');
-        return;
+        return noteDiv;
       }
-      
-      const title = titleInput.value || 'Recordatorio';
-      const value = parseInt(valueInput.value) || 5;
-      const unit = unitSelect.value;
-      
-      let milliseconds = 0;
-      switch(unit) {
-        case 'seconds': milliseconds = value * 1000; break;
-        case 'minutes': milliseconds = value * 60 * 1000; break;
-        case 'hours': milliseconds = value * 60 * 60 * 1000; break;
-        case 'days': milliseconds = value * 24 * 60 * 60 * 1000; break;
+
+      function renderNotes() {
+        notesContainer.innerHTML = "";
+        notes.forEach((note, idx) => {
+          const noteEl = createNoteElement(note, idx);
+          notesContainer.appendChild(noteEl);
+        });
+        updateNoteCount();
+        updateEmptyState();
+        updateReminderCount();
       }
-      
-      const time = Date.now() + milliseconds;
-      reminders.push({ noteIndex: currentReminderNoteIndex, title: title, time: time });
-      saveReminders();
-      closeReminderModal();
-      renderNotes();
-    }
 
-    function closeReminderModal() {
-      document.getElementById('reminderModal').classList.remove('active');
-      const titleInput = document.getElementById('reminderTitle');
-      const valueInput = document.getElementById('reminderValue');
-      const unitSelect = document.getElementById('reminderUnit');
-      
-      if (titleInput) titleInput.value = '';
-      if (valueInput) valueInput.value = '5';
-      if (unitSelect) unitSelect.value = 'minutes';
-      
-      currentReminderNoteIndex = null;
-    }
+      function saveReminder() {
+        const titleInput = document.getElementById("reminderTitle");
+        const valueInput = document.getElementById("reminderValue");
+        const unitSelect = document.getElementById("reminderUnit");
 
-    function checkReminders() {
-      const now = Date.now();
-      reminders = reminders.filter(reminder => {
-        if (now >= reminder.time) {
-          const noteContent = notes[reminder.noteIndex]?.content || 'Sin contenido';
-          showNotification(`⏰ ${reminder.title}`, noteContent.substring(0, 100) + (noteContent.length > 100 ? '...' : ''));
-          return false;
+        if (!titleInput || !valueInput || !unitSelect) {
+          console.error("Elementos del modal no encontrados");
+          return;
         }
-        return true;
+
+        const title = titleInput.value || "Recordatorio";
+        const value = parseInt(valueInput.value) || 5;
+        const unit = unitSelect.value;
+
+        let milliseconds = 0;
+        switch (unit) {
+          case "seconds":
+            milliseconds = value * 1000;
+            break;
+          case "minutes":
+            milliseconds = value * 60 * 1000;
+            break;
+          case "hours":
+            milliseconds = value * 60 * 60 * 1000;
+            break;
+          case "days":
+            milliseconds = value * 24 * 60 * 60 * 1000;
+            break;
+        }
+
+        const time = Date.now() + milliseconds;
+        reminders.push({
+          noteIndex: currentReminderNoteIndex,
+          title: title,
+          time: time,
+        });
+        saveReminders();
+        closeReminderModal();
+        renderNotes();
+      }
+
+      function closeReminderModal() {
+        document.getElementById("reminderModal").classList.remove("active");
+        const titleInput = document.getElementById("reminderTitle");
+        const valueInput = document.getElementById("reminderValue");
+        const unitSelect = document.getElementById("reminderUnit");
+
+        if (titleInput) titleInput.value = "";
+        if (valueInput) valueInput.value = "5";
+        if (unitSelect) unitSelect.value = "minutes";
+
+        currentReminderNoteIndex = null;
+      }
+
+      function checkReminders() {
+        const now = Date.now();
+        reminders = reminders.filter((reminder) => {
+          if (now >= reminder.time) {
+            const noteContent =
+              notes[reminder.noteIndex]?.content || "Sin contenido";
+            showNotification(
+              `⏰ ${reminder.title}`,
+              noteContent.substring(0, 100) +
+                (noteContent.length > 100 ? "..." : "")
+            );
+            return false;
+          }
+          return true;
+        });
+        saveReminders();
+        renderNotes();
+      }
+
+      document.getElementById("addNoteBtn").addEventListener("click", () => {
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        const randomX = Math.random() * (window.innerWidth - 300);
+        const randomY = 120 + Math.random() * (window.innerHeight - 300);
+        const randomRotation = Math.random() * 6 - 3;
+        notes.push({
+          content: "",
+          color: randomColor,
+          x: randomX,
+          y: randomY,
+          rotation: randomRotation,
+        });
+        saveNotes();
+        renderNotes();
       });
-      saveReminders();
+
+      document
+        .getElementById("reminderModal")
+        .addEventListener("click", (e) => {
+          if (e.target.id === "reminderModal") closeReminderModal();
+        });
+
+      setInterval(checkReminders, 10000);
       renderNotes();
-    }
-
-    document.getElementById('addNoteBtn').addEventListener('click', () => {
-      const randomColor = colors[Math.floor(Math.random() * colors.length)];
-      const randomX = Math.random() * (window.innerWidth - 300);
-      const randomY = 120 + Math.random() * (window.innerHeight - 300);
-      const randomRotation = Math.random() * 6 - 3;
-      notes.push({ content: '', color: randomColor, x: randomX, y: randomY, rotation: randomRotation });
-      saveNotes();
-      renderNotes();
-    });
-
-    document.getElementById('reminderModal').addEventListener('click', (e) => {
-      if (e.target.id === 'reminderModal') closeReminderModal();
-    });
-
-    setInterval(checkReminders, 10000);
-    renderNotes();
-  </script>
-</body>
+    </script>
+  </body>
 </html>

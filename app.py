@@ -537,6 +537,18 @@ def listar_herramientas():
 def qrgen():
     return render_template("qr.html")
 
+@app.route('/terminos')
+def term():
+    return render_template("terminos.html")
+
+@app.route('/contacto')
+def contac():
+    return render_template("contacto.html")
+
+@app.route('/privacidad')
+def priv():
+    return render_template("privacidad.html")
+
 @app.route('/convertidor')
 def convert():
     return render_template("convertidor.html")

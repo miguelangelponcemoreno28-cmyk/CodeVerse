@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+{% block title %}Contacto | CodeVerse{% endblock %}
+
+{% block head %}
+<!-- Toastify CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+{% endblock %}
+
+{% block content %}
+<section class="py-20 px-6">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <a href="/" class="inline-flex items-center gap-2 text-blue-400 hover:text-cyan-400 transition mb-8 font-medium group">
+                <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i>
+                Volver al Inicio
+            </a>
+            
+            <div class="mb-6 inline-block">
+                <span class="bg-green-500/20 text-green-300 px-4 py-2 rounded-full text-sm font-semibold border border-green-400/30">
+                    <i class="fas fa-comments mr-2"></i>Estamos aquí para ayudarte
+                </span>
+            </div>
+            
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-400 via-emerald-400 to-green-400 bg-clip-text text-transparent">
+                Contáctanos
+            </h1>
+            <p class="text-xl text-slate-300">
+                ¿Tienes preguntas, sugerencias o necesitas ayuda? Escríbenos
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Formulario de Contacto -->
+            <div class="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 md:p-10 backdrop-blur">
+                <h2 class="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+                    <i class="fas fa-envelope text-green-400"></i>
+                    Envíanos un Mensaje
+                </h2>
+                
+                <form id="contactForm" class="space-y-6">
+                    <!-- Nombre -->
+                    <div>
+                        <label for="nombre" class="block text-slate-300 font-semibold mb-2">
+                            <i class="fas fa-user text-blue-400 mr-2"></i>
+                            Tu Nombre
+                        </label>
+                        <input 
+                            type="text" 
+                            id="nombre" 
+                            name="nombre" 
+                            required
+                            class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition"
+                            placeholder="¿Cómo te llamas?"
+                        >
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label for="email" class="block text-slate-300 font-semibold mb-2">
+                            <i class="fas fa-envelope text-cyan-400 mr-2"></i>
+                            Tu Email
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            required
+                            class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition"
+                            placeholder="tu@email.com"
+                        >
+                    </div>
+
+                    <!-- Asunto -->
+                    <div>
+                        <label for="asunto" class="block text-slate-300 font-semibold mb-2">
+                            <i class="fas fa-tag text-purple-400 mr-2"></i>
+                            Asunto
+                        </label>
+                        <select 
+                            id="asunto" 
+                            name="asunto" 
+                            required
+                            class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition"
+                        >
+                            <option value="">Selecciona un tema</option>
+                            <option value="Consulta General">Consulta General</option>
+                            <option value="Ayuda con Tutorial">Ayuda con Tutorial</option>
+                            <option value="Sugerencia">Sugerencia</option>
+                            <option value="Reportar Error">Reportar Error</option>
+                            <option value="Colaboración">Colaboración</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <!-- Mensaje -->
+                    <div>
+                        <label for="mensaje" class="block text-slate-300 font-semibold mb-2">
+                            <i class="fas fa-comment-dots text-yellow-400 mr-2"></i>
+                            Tu Mensaje
+                        </label>
+                        <textarea 
+                            id="mensaje" 
+                            name="mensaje" 
+                            rows="5" 
+                            required
+                            class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition resize-none"
+                            placeholder="Cuéntanos en qué podemos ayudarte..."
+                        ></textarea>
+                    </div>
+
+                    <!-- Botón Enviar -->
+                    <button 
+                        type="submit"
+                        class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg hover:-translate-y-1 hover:shadow-green-500/50 flex items-center justify-center gap-3 group"
+                    >
+                        <i class="fab fa-whatsapp text-2xl"></i>
+                        <span>Enviar por WhatsApp</span>
+                        <i class="fas fa-paper-plane group-hover:translate-x-1 transition"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Información de Contacto -->
+            <div class="space-y-6">
+                <!-- WhatsApp Directo -->
+                <div class="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl p-8 backdrop-blur">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-green-500/20 border border-green-400/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fab fa-whatsapp text-green-400 text-2xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">WhatsApp Directo</h3>
+                            <p class="text-slate-300 mb-4">
+                                ¿Prefieres escribirnos directamente? Haz clic aquí
+                            </p>
+                            <a 
+                                href="https://wa.me/524661002589?text=Hola%20CodeVerse,%20me%20gustaría%20contactarlos" 
+                                target="_blank"
+                                class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white font-bold px-6 py-3 rounded-xl transition-all hover:-translate-y-1 shadow-lg"
+                            >
+                                <i class="fab fa-whatsapp text-xl"></i>
+                                <span>Abrir WhatsApp</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Horario de Atención -->
+                <div class="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 backdrop-blur">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-blue-500/20 border border-blue-400/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-clock text-blue-400 text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-3">Horario de Atención</h3>
+                            <div class="space-y-2 text-slate-300">
+                                <p class="flex items-center gap-2">
+                                    <i class="fas fa-check text-green-400"></i>
+                                    Lunes a Viernes: 9:00 AM - 6:00 PM
+                                </p>
+                                <p class="flex items-center gap-2">
+                                    <i class="fas fa-check text-green-400"></i>
+                                    Sábados: 10:00 AM - 2:00 PM
+                                </p>
+                                <p class="flex items-center gap-2">
+                                    <i class="fas fa-times text-red-400"></i>
+                                    Domingos: Cerrado
+                                </p>
+                            </div>
+                            <p class="text-sm text-slate-400 mt-3 italic">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Horario de México (UTC-6)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+              <!-- Redes Sociales -->
+<div class="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700/50 rounded-2xl p-8 backdrop-blur">
+    <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+        <i class="fas fa-share-alt text-purple-400"></i>
+        Síguenos en Redes
+    </h3>
+    <div class="grid grid-cols-3 gap-3">
+        <a href="#" target="_blank" class="flex flex-col items-center gap-2 bg-slate-900/50 border border-slate-700 hover:border-pink-500/50 rounded-xl p-4 transition-all hover:-translate-y-1 group">
+            <i class="fab fa-instagram text-pink-400 text-3xl"></i>
+            <span class="text-slate-300 group-hover:text-white text-sm font-semibold">Instagram</span>
+        </a>
+        <a href="#" target="_blank" class="flex flex-col items-center gap-2 bg-slate-900/50 border border-slate-700 hover:border-red-500/50 rounded-xl p-4 transition-all hover:-translate-y-1 group">
+            <i class="fab fa-youtube text-red-400 text-3xl"></i>
+            <span class="text-slate-300 group-hover:text-white text-sm font-semibold">YouTube</span>
+        </a>
+        <a href="#" target="_blank" class="flex flex-col items-center gap-2 bg-slate-900/50 border border-slate-700 hover:border-cyan-500/50 rounded-xl p-4 transition-all hover:-translate-y-1 group">
+            <i class="fab fa-tiktok text-cyan-400 text-3xl"></i>
+            <span class="text-slate-300 group-hover:text-white text-sm font-semibold">TikTok</span>
+        </a>
+    </div>
+</div>
+
+                <!-- FAQ Quick Links -->
+                <div class="bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-2xl p-8 backdrop-blur">
+                    <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-3">
+                        <i class="fas fa-question-circle text-yellow-400"></i>
+                        ¿Necesitas Ayuda Rápida?
+                    </h3>
+                    <p class="text-slate-300 mb-4">
+                        Revisa nuestras preguntas frecuentes, tal vez tu respuesta ya está ahí
+                    </p>
+                    <a 
+                        href="/#faq" 
+                        class="inline-flex items-center gap-2 text-yellow-400 hover:text-yellow-300 font-semibold transition"
+                    >
+                        <span>Ver Preguntas Frecuentes</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Toastify JS -->
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<style>
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+    
+    .shake-on-error {
+        animation: shake 0.3s ease-in-out;
+    }
+
+    /* Personalizar Toastify */
+    .toastify {
+        padding: 16px 24px;
+        border-radius: 12px;
+        font-family: inherit;
+        font-weight: 600;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    .toastify.success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+    
+    .toastify.error {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    }
+</style>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Obtener valores del formulario
+    const nombre = document.getElementById('nombre').value;
+    const email = document.getElementById('email').value;
+    const asunto = document.getElementById('asunto').value;
+    const mensaje = document.getElementById('mensaje').value;
+    
+    // Validar que todos los campos estén llenos
+    if (!nombre || !email || !asunto || !mensaje) {
+        Toastify({
+            text: "⚠️ Por favor completa todos los campos",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            className: "error",
+            stopOnFocus: true
+        }).showToast();
+        return;
+    }
+    
+    // Validar email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        Toastify({
+            text: "⚠️ Por favor ingresa un email válido",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            className: "error",
+            stopOnFocus: true
+        }).showToast();
+        return;
+    }
+    
+    // Mostrar notificación de éxito
+    Toastify({
+        text: "✅ ¡Redirigiendo a WhatsApp!",
+        duration: 2000,
+        gravity: "top",
+        position: "right",
+        className: "success",
+        stopOnFocus: true
+    }).showToast();
+    
+    // Crear mensaje para WhatsApp
+    const mensajeWhatsApp = `*Nuevo mensaje de CodeVerse*%0A%0A` +
+                           `*Nombre:* ${encodeURIComponent(nombre)}%0A` +
+                           `*Email:* ${encodeURIComponent(email)}%0A` +
+                           `*Asunto:* ${encodeURIComponent(asunto)}%0A%0A` +
+                           `*Mensaje:*%0A${encodeURIComponent(mensaje)}`;
+    
+    // Número de WhatsApp
+    const numeroWhatsApp = '524661002589';
+    
+    // Crear URL de WhatsApp
+    const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeWhatsApp}`;
+    
+    // Esperar un momento antes de abrir WhatsApp
+    setTimeout(() => {
+        // Abrir WhatsApp en una nueva pestaña
+        window.open(urlWhatsApp, '_blank');
+        
+        // Limpiar formulario
+        this.reset();
+    }, 500);
+});
+
+// Animación para campos vacíos
+document.querySelectorAll('input, textarea, select').forEach(field => {
+    field.addEventListener('invalid', function(e) {
+        e.preventDefault();
+        this.classList.add('shake-on-error');
+        setTimeout(() => {
+            this.classList.remove('shake-on-error');
+        }, 300);
+        
+        Toastify({
+            text: `⚠️ El campo "${this.previousElementSibling.textContent.trim()}" es requerido`,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            className: "error",
+            stopOnFocus: true
+        }).showToast();
+    });
+});
+</script>
+{% endblock %}

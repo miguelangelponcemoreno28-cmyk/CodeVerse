@@ -1,29 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ tutorial.title }} - CodeVerse</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-</head>
-<body class="bg-gradient-to-b from-slate-950 via-blue-950 to-slate-950 text-slate-100">
-    <!-- Navbar -->
-    <nav class="sticky top-0 z-50 border-b border-slate-700 bg-slate-950/95 backdrop-blur-md shadow-lg">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/" class="flex items-center gap-3 text-2xl font-bold hover:opacity-80 transition">
-                <i class="fas fa-code text-blue-400"></i>
-                <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">CodeVerse</span>
-            </a>
-            <div class="hidden md:flex gap-8">
-                <a href="/" class="text-slate-300 hover:text-blue-400 transition font-medium">Inicio</a>
-                <a href="/snippets" class="text-slate-300 hover:text-blue-400 transition font-medium">Snippets</a>
-                <a href="/tutoriales" class="text-blue-400 font-medium border-b-2 border-blue-400 pb-1">Tutoriales</a>
-                <a href="/herramientas" class="text-slate-300 hover:text-blue-400 transition font-medium">Herramientas</a>
-            </div>
-        </div>
-    </nav>
+{% extends "base.html" %}
 
+{% block title %}{{ tutorial.title }} - CodeVerse{% endblock %}
+
+{% block content %}
     <!-- Container -->
     <div class="max-w-5xl mx-auto px-6">
         <!-- Breadcrumb -->
@@ -189,219 +168,178 @@
             </div>
         </div>
     </div>
+{% endblock %}
 
-    <!-- Footer -->
-    <footer class="border-t border-slate-700 bg-gradient-to-b from-slate-950 to-slate-900 py-12 px-6 mt-20">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <div>
-                    <div class="flex items-center gap-2 text-lg font-bold mb-3">
-                        <i class="fas fa-code text-blue-400"></i>
-                        <span>CodeVerse</span>
-                    </div>
-                    <p class="text-slate-400 text-sm">Aprende a programar desde cero</p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-3 text-blue-400">Recursos</h4>
-                    <ul class="space-y-2 text-slate-400 text-sm">
-                        <li><a href="/tutoriales" class="hover:text-blue-400 transition">Tutoriales</a></li>
-                        <li><a href="/snippets" class="hover:text-blue-400 transition">Snippets</a></li>
-                        <li><a href="/herramientas" class="hover:text-blue-400 transition">Herramientas</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-3 text-cyan-400">Lenguajes</h4>
-                    <ul class="space-y-2 text-slate-400 text-sm">
-                        <li><a href="#" class="hover:text-cyan-400 transition">HTML & CSS</a></li>
-                        <li><a href="#" class="hover:text-cyan-400 transition">JavaScript</a></li>
-                        <li><a href="#" class="hover:text-cyan-400 transition">Python & Java</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-3 text-green-400">Legal</h4>
-                    <ul class="space-y-2 text-slate-400 text-sm">
-                        <li><a href="#" class="hover:text-green-400 transition">Privacidad</a></li>
-                        <li><a href="#" class="hover:text-green-400 transition">Términos</a></li>
-                        <li><a href="#" class="hover:text-green-400 transition">Contacto</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-slate-700 pt-8 text-center text-slate-400">
-                <p>© 2025 CodeVerse. Aprende a programar con tutoriales prácticos.</p>
-            </div>
-        </div>
-    </footer>
+{% block scripts %}
+<script>
+    // Configurar badge de nivel con colores
+    function setupLevelBadge() {
+        const levelBadge = document.getElementById('levelBadge');
+        const levelStars = document.getElementById('levelStars');
+        const levelText = document.getElementById('levelText');
 
-    <script>
-
-
-        // Configurar badge de nivel con colores
-        function setupLevelBadge() {
-            const levelBadge = document.getElementById('levelBadge');
-            const levelStars = document.getElementById('levelStars');
-            const levelText = document.getElementById('levelText');
-
-            const levelConfig = {
-                'principiante': {
-                    stars: '⭐',
-                    classes: 'from-emerald-500/20 to-emerald-600/20 border-emerald-400/30 text-emerald-300'
-                },
-                'intermedio': {
-                    stars: '⭐⭐',
-                    classes: 'from-blue-500/20 to-blue-600/20 border-blue-400/30 text-blue-300'
-                },
-                'avanzado': {
-                    stars: '⭐⭐⭐',
-                    classes: 'from-orange-500/20 to-orange-600/20 border-orange-400/30 text-orange-300'
-                }
-            };
-
-            const config = levelConfig[tutorial.level] || levelConfig['principiante'];
-            levelStars.textContent = config.stars;
-            levelBadge.className = `inline-flex items-center gap-2 bg-gradient-to-r ${config.classes} rounded-lg px-4 py-2 text-sm font-bold`;
-        }
-
-        // Configurar prerequisitos según nivel
-        function setupPrerequisites() {
-            const prerequisitesList = document.getElementById('prerequisites');
-            let prerequisites = [];
-
-            if (tutorial.level === 'principiante') {
-                prerequisites = [
-                    'Conocimientos básicos de programación',
-                    'Un editor de código instalado (VS Code, Sublime Text, etc.)'
-                ];
-            } else if (tutorial.level === 'intermedio') {
-                prerequisites = [
-                    `Experiencia previa con ${tutorial.language}`,
-                    'Entendimiento de conceptos básicos de programación',
-                    'Disposición para aprender conceptos más avanzados'
-                ];
-            } else {
-                prerequisites = [
-                    `Dominio sólido de ${tutorial.language}`,
-                    'Experiencia con proyectos complejos',
-                    'Capacidad para resolver problemas de forma independiente'
-                ];
+        const levelConfig = {
+            'principiante': {
+                stars: '⭐',
+                classes: 'from-emerald-500/20 to-emerald-600/20 border-emerald-400/30 text-emerald-300'
+            },
+            'intermedio': {
+                stars: '⭐⭐',
+                classes: 'from-blue-500/20 to-blue-600/20 border-blue-400/30 text-blue-300'
+            },
+            'avanzado': {
+                stars: '⭐⭐⭐',
+                classes: 'from-orange-500/20 to-orange-600/20 border-orange-400/30 text-orange-300'
             }
+        };
 
-            prerequisitesList.innerHTML = prerequisites.map(prereq => `
-                <li class="flex items-start gap-3 text-slate-300">
-                    <i class="fas fa-arrow-right text-cyan-400 mt-1"></i>
-                    <span>${prereq}</span>
-                </li>
-            `).join('');
+        const config = levelConfig['{{ tutorial.level }}'] || levelConfig['principiante'];
+        levelStars.textContent = config.stars;
+        levelBadge.className = `inline-flex items-center gap-2 bg-gradient-to-r ${config.classes} rounded-lg px-4 py-2 text-sm font-bold`;
+    }
+
+    // Configurar prerequisitos según nivel
+    function setupPrerequisites() {
+        const prerequisitesList = document.getElementById('prerequisites');
+        const level = '{{ tutorial.level }}';
+        const language = '{{ tutorial.language }}';
+        let prerequisites = [];
+
+        if (level === 'principiante') {
+            prerequisites = [
+                'Conocimientos básicos de programación',
+                'Un editor de código instalado (VS Code, Sublime Text, etc.)'
+            ];
+        } else if (level === 'intermedio') {
+            prerequisites = [
+                `Experiencia previa con ${language}`,
+                'Entendimiento de conceptos básicos de programación',
+                'Disposición para aprender conceptos más avanzados'
+            ];
+        } else {
+            prerequisites = [
+                `Dominio sólido de ${language}`,
+                'Experiencia con proyectos complejos',
+                'Capacidad para resolver problemas de forma independiente'
+            ];
         }
 
-        // Inicializar
-        setupLevelBadge();
-        setupPrerequisites();
+        prerequisitesList.innerHTML = prerequisites.map(prereq => `
+            <li class="flex items-start gap-3 text-slate-300">
+                <i class="fas fa-arrow-right text-cyan-400 mt-1"></i>
+                <span>${prereq}</span>
+            </li>
+        `).join('');
+    }
 
-        // Animación de scroll suave para los enlaces
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
+    // Inicializar
+    setupLevelBadge();
+    setupPrerequisites();
+
+    // Animación de scroll suave para los enlaces
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         });
-    </script>
+    });
+</script>
 
-    <style>
-/* Estilos adicionales para código */
-        .tutorial-content-area pre {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            border: 1px solid rgba(71, 85, 105, 0.5);
-            border-radius: 12px;
-            padding: 1.5rem;
-            overflow-x: auto;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-        }
+<style>
+    /* Estilos adicionales para código */
+    .tutorial-content-area pre {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border: 1px solid rgba(71, 85, 105, 0.5);
+        border-radius: 12px;
+        padding: 1.5rem;
+        overflow-x: auto;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
 
-        .tutorial-content-area pre code {
-            display: block;
-            color: #67e8f9;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            white-space: pre;
-        }
+    .tutorial-content-area pre code {
+        display: block;
+        color: #67e8f9;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        white-space: pre;
+    }
 
-        .tutorial-content-area code {
-            color: #22d3ee;
-            background: rgba(34, 211, 238, 0.1);
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.375rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.875rem;
-        }
+    .tutorial-content-area code {
+        color: #22d3ee;
+        background: rgba(34, 211, 238, 0.1);
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.375rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.875rem;
+    }
 
-        .tutorial-content-area h2 {
-            font-size: 1.875rem;
-            font-weight: 700;
-            margin-top: 3rem;
-            margin-bottom: 1.5rem;
-            color: #60a5fa;
-            border-bottom: 2px solid rgba(71, 85, 105, 0.5);
-            padding-bottom: 0.75rem;
-        }
+    .tutorial-content-area h2 {
+        font-size: 1.875rem;
+        font-weight: 700;
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+        color: #60a5fa;
+        border-bottom: 2px solid rgba(71, 85, 105, 0.5);
+        padding-bottom: 0.75rem;
+    }
 
-        .tutorial-content-area h2:first-child {
-            margin-top: 0;
-        }
+    .tutorial-content-area h2:first-child {
+        margin-top: 0;
+    }
 
-        .tutorial-content-area h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            color: #22d3ee;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+    .tutorial-content-area h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: #22d3ee;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 
-        .tutorial-content-area h3::before {
-            content: "▶";
-            color: #60a5fa;
-            font-size: 0.875rem;
-        }
+    .tutorial-content-area h3::before {
+        content: "▶";
+        color: #60a5fa;
+        font-size: 0.875rem;
+    }
 
-        .tutorial-content-area p {
-            color: #cbd5e1;
-            margin-bottom: 1.25rem;
-            line-height: 1.8;
-            font-size: 1.05rem;
-        }
+    .tutorial-content-area p {
+        color: #cbd5e1;
+        margin-bottom: 1.25rem;
+        line-height: 1.8;
+        font-size: 1.05rem;
+    }
 
-        .tutorial-content-area ul,
-        .tutorial-content-area ol {
-            margin-left: 1.5rem;
-            margin-bottom: 1.5rem;
-            space-y: 0.5rem;
-        }
+    .tutorial-content-area ul,
+    .tutorial-content-area ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
 
-        .tutorial-content-area li {
-            color: #cbd5e1;
-            line-height: 1.7;
-            padding-left: 0.5rem;
-        }
+    .tutorial-content-area li {
+        color: #cbd5e1;
+        line-height: 1.7;
+        padding-left: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
 
-        .tutorial-content-area strong {
-            color: #60a5fa;
-            font-weight: 600;
-        }
+    .tutorial-content-area strong {
+        color: #60a5fa;
+        font-weight: 600;
+    }
 
-        .tutorial-content-area em {
-            color: #a78bfa;
-            font-style: italic;
-        }
-    </style>
-</body>
-</html>
+    .tutorial-content-area em {
+        color: #a78bfa;
+        font-style: italic;
+    }
+</style>
+{% endblock %}
