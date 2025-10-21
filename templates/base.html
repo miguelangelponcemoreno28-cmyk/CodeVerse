@@ -4,6 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CodeVerse - Herramientas{% endblock %}</title>
+    <!-- 🖤 Barra superior negra en Chrome -->
+<meta name="theme-color" content="#000000">
+<meta name="msapplication-navbutton-color" content="#000000">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- 💙 Favicon dinámico con </> azul -->
+<link rel="icon" id="dynamic-favicon" type="image/svg+xml">
+<script>
+  // Crear un favicon con </> azul en SVG
+  const svgIcon = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+      <rect width="100%" height="100%" fill="black"/>
+      <text x="50%" y="58%" font-size="34" text-anchor="middle" fill="#3b82f6" font-family="Arial, monospace">&lt;/&gt;</text>
+    </svg>
+  `;
+
+  const blob = new Blob([svgIcon], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  document.getElementById('dynamic-favicon').href = url;
+</script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <style>

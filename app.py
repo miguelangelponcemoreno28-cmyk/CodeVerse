@@ -14,19 +14,45 @@ from dotenv import load_dotenv
 from bson.objectid import ObjectId
 
 
+
+# Cargar variables de entorno (.env)
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'advpjsh')
 
-# Configuración
-MONGO_URI = os.getenv('MONGO_URI', "mongodb+srv://miguelangelponcemoreno28_db_user:54Gu0KasBAf58CXY@cluster0.rhzhszo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+# ==============================
+# ⚙️ Configuración general
+# ==============================
+MONGO_USERNAME = os.getenv('MONGO_USERNAME')
+MONGO_PASSWORD = os.getenv('MONGO_PASSWORD')
+MONGO_URI = (
+    f"mongodb+srv://{MONGO_USERNAME}:{MONGO_PASSWORD}"
+    "@cluster0.rhzhszo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+)
+
 DB_NAME = "codeverse"
 COLLECTION_NAME = "tutorials"
 CONTENIDO_FILE = "contenido_tutoriales.json"
 DOWNLOAD_FOLDER = "downloads"
 
+# ==============================
+# 🧠 Conexión a MongoDB Atlas
+# ==============================
+try:
+    client = MongoClient(
+        MONGO_URI,
+        tls=True,                         # Conexión segura
+        tlsAllowInvalidCertificates=True, # Evita error SSL en Render
+        serverSelectionTimeoutMS=5000     # Timeout corto para evitar cuelgues
+    )
+    client.server_info()  # Verifica conexión
+    db = client[DB_NAME]
+    print("✅ Conectado a MongoDB Atlas correctamente.")
+except Exception as e:
+    db = None
+    print(f"⚠️ No se pudo conectar a MongoDB Atlas: {e}")
 # Crear carpeta de descargas
 os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
