@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-# app.py corregido
-
-
-
-
-
+# app.py mejorado con soporte para JSON de contenidos
 
 from flask import Flask, request, render_template, redirect, url_for, session, flash, jsonify, send_file, abort
 from pymongo import MongoClient
@@ -18,7 +13,9 @@ import uuid
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
 
-# Cargar variables de entorno
+
+
+# Cargar variables de entorno (.env)
 load_dotenv()
 
 app = Flask(__name__)
@@ -26,7 +23,7 @@ CORS(app)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'advpjsh')
 
 # ==============================
-# ⚙️ Configuración
+# ⚙️ Configuración general
 # ==============================
 MONGO_USERNAME = os.getenv('MONGO_USERNAME')
 MONGO_PASSWORD = os.getenv('MONGO_PASSWORD')
@@ -40,30 +37,35 @@ COLLECTION_NAME = "tutorials"
 CONTENIDO_FILE = "contenido_tutoriales.json"
 DOWNLOAD_FOLDER = "downloads"
 
+# ==============================
+# 🧠 Conexión a MongoDB Atlas
+# ==============================
+try:
+    client = MongoClient(
+        MONGO_URI,
+        tls=True,                         # Conexión segura
+        tlsAllowInvalidCertificates=True, # Evita error SSL en Render
+        serverSelectionTimeoutMS=5000     # Timeout corto para evitar cuelgues
+    )
+    client.server_info()  # Verifica conexión
+    db = client[DB_NAME]
+    print("✅ Conectado a MongoDB Atlas correctamente.")
+except Exception as e:
+    db = None
+    print(f"⚠️ No se pudo conectar a MongoDB Atlas: {e}")
+# Crear carpeta de descargas
 os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
 # Variable global para la colección
 tutorials_collection = None
-mongo_client = None
 
-# ==============================
-# 🔌 Conexión a MongoDB
-# ==============================
 def conectar_mongodb():
     """Intenta conectar a MongoDB y devuelve la colección"""
-    global tutorials_collection, mongo_client
+    global tutorials_collection
     try:
-        if mongo_client is None:
-            mongo_client = MongoClient(
-                MONGO_URI,
-                serverSelectionTimeoutMS=5000,
-                connectTimeoutMS=5000,
-                tls=True,
-                tlsAllowInvalidCertificates=True
-            )
-        
-        mongo_client.admin.command('ping')
-        db = mongo_client[DB_NAME]
+        client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000, connectTimeoutMS=5000)
+        client.admin.command('ping')
+        db = client[DB_NAME]
         tutorials_collection = db[COLLECTION_NAME]
         print("✅ Conectado a MongoDB Atlas")
         return tutorials_collection
@@ -72,12 +74,10 @@ def conectar_mongodb():
         tutorials_collection = None
         return None
 
-# Intentar conectar al iniciar
+# Conectar al iniciar la aplicación
 conectar_mongodb()
 
-# ==============================
-# 📝 Funciones JSON
-# ==============================
+# Funciones auxiliares para JSON
 def cargar_contenidos():
     """Carga el archivo JSON de contenidos"""
     if os.path.exists(CONTENIDO_FILE):
@@ -85,7 +85,7 @@ def cargar_contenidos():
             with open(CONTENIDO_FILE, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            print(f"❌ Error cargando JSON: {e}")
+            print(f"Error cargando JSON: {e}")
             return {}
     return {}
 
@@ -94,35 +94,74 @@ def guardar_contenidos(contenidos):
     try:
         with open(CONTENIDO_FILE, 'w', encoding='utf-8') as f:
             json.dump(contenidos, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"Error guardando JSON: {e}")
+
+def sincronizar_json():
+    """Sincroniza MongoDB con el JSON automáticamente"""
+    try:
+        if not tutorials_collection:
+            print("❌ Colección no disponible para sincronizar")
+            return False
+        
+        contenidos = {}
+        tutoriales = list(tutorials_collection.find({}))
+        
+        for tutorial in tutoriales:
+            tutorial_id = str(tutorial['_id'])
+            contenidos[tutorial_id] = {
+                'title': tutorial.get('title'),
+                'language': tutorial.get('language'),
+                'level': tutorial.get('level'),
+                'duration': tutorial.get('duration'),
+                'description': tutorial.get('description'),
+                'content': tutorial.get('content', '<p>Contenido no disponible</p>'),
+                'lastUpdated': datetime.now().isoformat()
+            }
+        
+        guardar_contenidos(contenidos)
+        print("✅ JSON sincronizado con MongoDB")
         return True
     except Exception as e:
-        print(f"❌ Error guardando JSON: {e}")
+        print(f"❌ Error sincronizando JSON: {e}")
         return False
 
-def obtener_tutoriales_safe():
-    """Obtiene tutoriales de MongoDB o JSON como fallback"""
-    tutoriales_list = []
-    
-    # Intentar desde MongoDB
+# ==================== RUTAS ====================
+
+@app.route('/')
+def inicio():
+    """Ruta para la página de inicio"""
+    return render_template('index.html')
+
+@app.route('/tutoriales')
+def tutoriales():
+    """Ruta para la página de tutoriales"""
     try:
+        global tutorials_collection
         if tutorials_collection is None:
             conectar_mongodb()
         
-        if tutorials_collection is not None:
-            tutoriales_list = list(tutorials_collection.find(
-                {},
-                {"_id": 1, "title": 1, "description": 1, "level": 1, "duration": 1, "language": 1, "content": 1}
-            ))
+        if tutorials_collection is None:
+            contenidos = cargar_contenidos()
+            tutoriales_list = [
+                {
+                    '_id': tid,
+                    'title': content.get('title', 'Sin título'),
+                    'description': content.get('description', ''),
+                    'level': content.get('level', 'principiante'),
+                    'duration': content.get('duration', '0'),
+                    'language': content.get('language', 'python')
+                }
+                for tid, content in contenidos.items()
+            ]
+        else:
+            tutoriales_list = list(tutorials_collection.find({}, {"_id": 1, "title": 1, "description": 1, "level": 1, "duration": 1, "language": 1}))
             for tutorial in tutoriales_list:
                 tutorial['_id'] = str(tutorial['_id'])
-            print(f"✅ {len(tutoriales_list)} tutoriales cargados desde MongoDB")
+        
+        return render_template('tutoriales.html', tutoriales=tutoriales_list)
     except Exception as e:
-        print(f"⚠️ Error consultando MongoDB: {e}")
-        tutoriales_list = []
-    
-    # Fallback a JSON si MongoDB falla
-    if not tutoriales_list:
-        print("📄 Usando JSON como fallback...")
+        print(f"Error en tutoriales: {e}")
         contenidos = cargar_contenidos()
         tutoriales_list = [
             {
@@ -130,62 +169,32 @@ def obtener_tutoriales_safe():
                 'title': content.get('title', 'Sin título'),
                 'description': content.get('description', ''),
                 'level': content.get('level', 'principiante'),
-                'duration': content.get('duration', '30 min'),
-                'language': content.get('language', 'python'),
-                'content': content.get('content', '<p>Contenido no disponible</p>')
+                'duration': content.get('duration', '0'),
+                'language': content.get('language', 'python')
             }
             for tid, content in contenidos.items()
         ]
-        print(f"✅ {len(tutoriales_list)} tutoriales cargados desde JSON")
-    
-    return tutoriales_list
-
-# ==================== RUTAS ====================
-
-@app.route('/')
-def inicio():
-    """Página de inicio"""
-    return render_template('index.html')
-
-@app.route('/tutoriales')
-def tutoriales():
-    """Página de tutoriales"""
-    try:
-        tutoriales_list = obtener_tutoriales_safe()
-        print(f"📚 Renderizando {len(tutoriales_list)} tutoriales")
-        
-        # DEBUG: Imprime los tutoriales
-        for t in tutoriales_list:
-            print(f"   - {t.get('title')} | ID: {t.get('_id')} | Lang: {t.get('language')}")
-        
         return render_template('tutoriales.html', tutoriales=tutoriales_list)
-    except Exception as e:
-        print(f"❌ Error crítico en /tutoriales: {e}")
-        import traceback
-        traceback.print_exc()
-        return render_template('tutoriales.html', tutoriales=[])
-    
 
 @app.route('/tutorial/<tutorial_id>')
 def ver_tutorial(tutorial_id):
-    """Ver un tutorial específico"""
+    """Ruta para ver un tutorial específico con contenido del JSON"""
     try:
-        tutorial = None
-        
-        # Intentar desde MongoDB
+        global tutorials_collection
         if tutorials_collection is None:
             conectar_mongodb()
+        
+        tutorial = None
         
         if tutorials_collection is not None:
             try:
                 tutorial = tutorials_collection.find_one({"_id": ObjectId(tutorial_id)})
                 if tutorial:
                     tutorial['_id'] = str(tutorial['_id'])
-                    print(f"✅ Tutorial {tutorial_id} cargado desde MongoDB")
             except Exception as e:
-                print(f"⚠️ Error consultando MongoDB para tutorial {tutorial_id}: {e}")
+                print(f"Error consultando MongoDB: {e}")
+                tutorial = None
         
-        # Fallback a JSON
         if not tutorial:
             contenidos = cargar_contenidos()
             if tutorial_id in contenidos:
@@ -193,112 +202,125 @@ def ver_tutorial(tutorial_id):
                     '_id': tutorial_id,
                     **contenidos[tutorial_id]
                 }
-                print(f"✅ Tutorial {tutorial_id} cargado desde JSON")
+            else:
+                return "Tutorial no encontrado", 404
         
-        if not tutorial:
-            print(f"❌ Tutorial {tutorial_id} no encontrado")
-            return "❌ Tutorial no encontrado", 404
-        
-        # Asegurar que content existe
         if 'content' not in tutorial or not tutorial['content']:
-            tutorial['content'] = '<p>Contenido no disponible</p>'
+            contenidos = cargar_contenidos()
+            if tutorial_id in contenidos:
+                tutorial['content'] = contenidos[tutorial_id].get('content', '<p>Contenido no disponible</p>')
+            else:
+                tutorial['content'] = '<p>Contenido no disponible</p>'
         
         return render_template('tutorial-detalle.html', tutorial=tutorial)
     except Exception as e:
-        print(f"❌ Error en ver_tutorial: {e}")
+        print(f"Error en ver_tutorial: {e}")
         return f"Error al cargar el tutorial: {str(e)}", 500
 
 @app.route('/admin/editor')
 def editor_admin():
-    """Editor de tutoriales"""
+    """Página para editar tutoriales y guardarlos en JSON"""
     try:
-        tutoriales_list = obtener_tutoriales_safe()
+        global tutorials_collection
+        if tutorials_collection is None:
+            conectar_mongodb()
+        
+        tutoriales_list = []
+        
+        if tutorials_collection is not None:
+            try:
+                tutoriales_list = list(tutorials_collection.find({}, {"_id": 1, "title": 1, "language": 1, "level": 1}))
+                for tutorial in tutoriales_list:
+                    tutorial['_id'] = str(tutorial['_id'])
+                print(f"✅ Cargados {len(tutoriales_list)} tutoriales de MongoDB")
+            except Exception as e:
+                print(f"Error consultando MongoDB: {e}")
+                tutoriales_list = []
+        
+        if not tutoriales_list:
+            print("📄 Cargando tutoriales desde JSON...")
+            contenidos = cargar_contenidos()
+            tutoriales_list = [
+                {
+                    '_id': tid,
+                    'title': content.get('title', 'Sin título'),
+                    'language': content.get('language', 'python'),
+                    'level': content.get('level', 'principiante')
+                }
+                for tid, content in contenidos.items()
+            ]
+            print(f"✅ Cargados {len(tutoriales_list)} tutoriales de JSON")
+        
         return render_template('admin-editor.html', tutoriales=tutoriales_list)
     except Exception as e:
-        print(f"❌ Error en editor_admin: {e}")
-        return render_template('admin-editor.html', tutoriales=[])
+        print(f"Error en editor_admin: {e}")
+        return f"Error al cargar el editor: {str(e)}", 500
 
 # ==================== API ENDPOINTS ====================
 
 @app.route('/api/tutorial/<tutorial_id>/contenido', methods=['GET'])
 def get_contenido(tutorial_id):
-    """Obtener contenido de un tutorial"""
+    """Obtener contenido de un tutorial desde JSON"""
     try:
-        # Primero intentar MongoDB
-        if tutorials_collection is not None:
-            try:
-                tutorial = tutorials_collection.find_one({"_id": ObjectId(tutorial_id)})
-                if tutorial:
-                    return jsonify({
-                        "success": True,
-                        "data": {
-                            "title": tutorial.get('title'),
-                            "language": tutorial.get('language'),
-                            "level": tutorial.get('level'),
-                            "duration": tutorial.get('duration'),
-                            "description": tutorial.get('description'),
-                            "content": tutorial.get('content', '<p>Contenido no disponible</p>')
-                        }
-                    }), 200
-            except Exception as e:
-                print(f"⚠️ Error consultando MongoDB: {e}")
-        
-        # Fallback a JSON
         contenidos = cargar_contenidos()
+        
         if tutorial_id in contenidos:
             return jsonify({
                 "success": True,
                 "data": contenidos[tutorial_id]
             }), 200
-        
-        return jsonify({
-            "success": False,
-            "message": "Contenido no encontrado"
-        }), 404
+        else:
+            return jsonify({
+                "success": False,
+                "message": "Contenido no encontrado"
+            }), 404
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/tutorial/<tutorial_id>/contenido', methods=['POST'])
 def guardar_contenido(tutorial_id):
-    """Guardar contenido de un tutorial"""
+    """Guardar contenido de un tutorial en JSON"""
     try:
+        global tutorials_collection
+        if tutorials_collection is None:
+            conectar_mongodb()
+        
         data = request.get_json()
-        
-        if not data:
-            return jsonify({"error": "No se recibieron datos"}), 400
-        
-        # Cargar contenidos actuales
         contenidos = cargar_contenidos()
         
-        # Crear/actualizar contenido
+        tutorial_data = {}
+        if tutorials_collection is not None:
+            try:
+                tutorial = tutorials_collection.find_one({"_id": ObjectId(tutorial_id)})
+                if tutorial:
+                    tutorial_data = tutorial
+            except Exception:
+                pass
+        
+        if not tutorial_data and tutorial_id in contenidos:
+            tutorial_data = contenidos[tutorial_id]
+        
+        if not tutorial_data:
+            return jsonify({"error": "Tutorial no encontrado"}), 404
+        
         contenidos[tutorial_id] = {
-            'title': data.get('title', ''),
-            'language': data.get('language', 'python'),
-            'level': data.get('level', 'principiante'),
-            'duration': data.get('duration', '30 min'),
-            'description': data.get('description', ''),
+            'title': data.get('title', tutorial_data.get('title')),
+            'language': data.get('language', tutorial_data.get('language')),
+            'level': data.get('level', tutorial_data.get('level')),
+            'duration': data.get('duration', tutorial_data.get('duration')),
+            'description': data.get('description', tutorial_data.get('description')),
             'content': data.get('content', ''),
             'lastUpdated': datetime.now().isoformat()
         }
         
-        # Guardar en JSON
-        if not guardar_contenidos(contenidos):
-            return jsonify({"error": "Error al guardar en JSON"}), 500
+        guardar_contenidos(contenidos)
         
-        # Intentar actualizar en MongoDB
         if tutorials_collection is not None:
             try:
                 tutorials_collection.update_one(
                     {"_id": ObjectId(tutorial_id)},
-                    {"$set": {
-                        "content": data.get('content', ''),
-                        "title": data.get('title', ''),
-                        "description": data.get('description', ''),
-                        "lastUpdated": datetime.now()
-                    }},
-                    upsert=False
+                    {"$set": {"content": data.get('content', '')}}
                 )
-                print(f"✅ Tutorial {tutorial_id} actualizado en MongoDB")
             except Exception as e:
                 print(f"⚠️ No se pudo actualizar en MongoDB: {e}")
         
@@ -310,11 +332,56 @@ def guardar_contenido(tutorial_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/sincronizar-json', methods=['POST'])
+def sincronizar():
+    """Sincronizar MongoDB con JSON"""
+    try:
+        if sincronizar_json():
+            return jsonify({
+                "success": True,
+                "message": "JSON sincronizado exitosamente"
+            }), 200
+        else:
+            return jsonify({
+                "success": False,
+                "message": "Error sincronizando JSON"
+            }), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/api/tutoriales', methods=['GET'])
 def get_all_tutoriales():
-    """Obtener todos los tutoriales (API)"""
+    """Obtener todos los tutoriales"""
     try:
-        tutoriales_list = obtener_tutoriales_safe()
+        global tutorials_collection
+        if tutorials_collection is None:
+            conectar_mongodb()
+        
+        tutoriales_list = []
+        
+        if tutorials_collection is not None:
+            try:
+                tutoriales_list = list(tutorials_collection.find({}, {"_id": 1, "title": 1, "description": 1, "level": 1, "duration": 1, "language": 1}))
+                for tutorial in tutoriales_list:
+                    tutorial['_id'] = str(tutorial['_id'])
+            except Exception as e:
+                print(f"Error consultando MongoDB: {e}")
+                tutoriales_list = []
+        
+        if not tutoriales_list:
+            contenidos = cargar_contenidos()
+            tutoriales_list = [
+                {
+                    '_id': tid,
+                    'title': content.get('title', 'Sin título'),
+                    'description': content.get('description', ''),
+                    'level': content.get('level', 'principiante'),
+                    'duration': content.get('duration', '0'),
+                    'language': content.get('language', 'python')
+                }
+                for tid, content in contenidos.items()
+            ]
+        
         return jsonify({
             "success": True,
             "count": len(tutoriales_list),
@@ -323,33 +390,120 @@ def get_all_tutoriales():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/api/health', methods=['GET'])
-def health_check():
-    """Estado de la API"""
+@app.route('/api/tutorial/nuevo', methods=['POST'])
+def crear_tutorial():
+    """Crear un nuevo tutorial"""
     try:
-        mongo_status = "disconnected"
+        global tutorials_collection
+        if tutorials_collection is None:
+            conectar_mongodb()
+        
+        data = request.get_json()
+        
+        if not data.get('title') or not data.get('description') or not data.get('duration'):
+            return jsonify({"error": "Faltan campos requeridos"}), 400
+        
+        nuevo_tutorial = {
+            'title': data.get('title'),
+            'description': data.get('description'),
+            'language': data.get('language', 'python'),
+            'level': data.get('level', 'principiante'),
+            'duration': data.get('duration'),
+            'content': data.get('content', ''),
+            'createdAt': datetime.now()
+        }
+        
+        tutorial_id = None
+        
         if tutorials_collection is not None:
             try:
-                mongo_client.admin.command('ping')
-                mongo_status = "connected"
-            except:
-                mongo_status = "disconnected"
+                resultado = tutorials_collection.insert_one(nuevo_tutorial)
+                tutorial_id = str(resultado.inserted_id)
+            except Exception as e:
+                print(f"⚠️ No se pudo insertar en MongoDB: {e}")
         
-        json_exists = os.path.exists(CONTENIDO_FILE)
+        if not tutorial_id:
+            tutorial_id = str(uuid.uuid4())
+        
+        contenidos = cargar_contenidos()
+        contenidos[tutorial_id] = {
+            'title': nuevo_tutorial['title'],
+            'language': nuevo_tutorial['language'],
+            'level': nuevo_tutorial['level'],
+            'duration': nuevo_tutorial['duration'],
+            'description': nuevo_tutorial['description'],
+            'content': nuevo_tutorial['content'],
+            'lastUpdated': datetime.now().isoformat()
+        }
+        guardar_contenidos(contenidos)
         
         return jsonify({
-            "status": "healthy" if mongo_status == "connected" or json_exists else "degraded",
-            "database": mongo_status,
-            "json_fallback": "available" if json_exists else "not found",
-            "timestamp": datetime.now().isoformat()
+            "success": True,
+            "message": "Tutorial creado exitosamente",
+            "tutorial_id": tutorial_id
+        }), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/tutorial/<tutorial_id>', methods=['DELETE'])
+def eliminar_tutorial(tutorial_id):
+    """Eliminar un tutorial"""
+    try:
+        global tutorials_collection
+        if tutorials_collection is None:
+            conectar_mongodb()
+        
+        eliminado = False
+        
+        if tutorials_collection is not None:
+            try:
+                resultado = tutorials_collection.delete_one({"_id": ObjectId(tutorial_id)})
+                eliminado = resultado.deleted_count > 0
+            except Exception as e:
+                print(f"⚠️ No se pudo eliminar de MongoDB: {e}")
+        
+        contenidos = cargar_contenidos()
+        if tutorial_id in contenidos:
+            del contenidos[tutorial_id]
+            guardar_contenidos(contenidos)
+            eliminado = True
+        
+        if not eliminado:
+            return jsonify({"error": "Tutorial no encontrado"}), 404
+        
+        return jsonify({
+            "success": True,
+            "message": "Tutorial eliminado exitosamente"
         }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Verificar el estado de la API"""
+    try:
+        global tutorials_collection
+        if tutorials_collection is None:
+            conectar_mongodb()
+        
+        if tutorials_collection is not None:
+            return jsonify({
+                "status": "healthy",
+                "database": "connected",
+                "timestamp": datetime.now().isoformat()
+            }), 200
+        else:
+            return jsonify({
+                "status": "degraded",
+                "database": "disconnected",
+                "fallback": "using JSON",
+                "timestamp": datetime.now().isoformat()
+            }), 200
     except Exception as e:
         return jsonify({
             "status": "error",
             "message": str(e)
         }), 500
-
-# ==================== OTRAS RUTAS ====================
 
 @app.route('/snippets')
 def snippets():
@@ -359,8 +513,24 @@ def snippets():
 def snippets_tutorial():
     return render_template('snippets-tutorial.html')
 
+HERRAMIENTAS = {
+    'imc': {
+        'template': 'imc.html',
+        'title': 'Calculadora IMC'
+    },
+    'convertidor': {
+        'template': 'convertidor.html',
+        'title': 'Convertidor de Unidades'
+    },
+    'calculadora': {
+        'template': 'calculadora.html',
+        'title': 'Calculadora'
+    }
+}
+
 @app.route('/herramientas')
 def listar_herramientas():
+    """Ruta para la página principal que lista las herramientas."""
     return render_template('herramientas.html', current_tool='list')
 
 @app.route('/qrgen')
@@ -425,15 +595,11 @@ def tiktok_download():
         flash(f"Ocurrió un error inesperado: {str(e)}", "error")
         return redirect(url_for('tiktok_page'))
 
-HERRAMIENTAS = {
-    'imc': {'template': 'imc.html', 'title': 'Calculadora IMC'},
-    'convertidor': {'template': 'convertidor.html', 'title': 'Convertidor de Unidades'},
-    'calculadora': {'template': 'calculadora.html', 'title': 'Calculadora'}
-}
-
 @app.route('/herramienta/<nombre_herramienta>')
 def mostrar_herramienta(nombre_herramienta):
+    """Ruta dinámica que renderiza la herramienta seleccionada."""
     herramienta_info = HERRAMIENTAS.get(nombre_herramienta)
+    
     if herramienta_info:
         return render_template(
             herramienta_info['template'], 
@@ -457,6 +623,4 @@ def internal_error(error):
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
-    print(f"🚀 Iniciando servidor en puerto {port}")
-    print(f"📊 MongoDB: {'Conectado' if tutorials_collection is not None else 'Desconectado (usando JSON)'}")
-    app.run(debug=True, host='0.0.0.0', port=port)
+    app.run(debug=False, host='0.0.0.0', port=port)
