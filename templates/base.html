@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}CodeVerse - Herramientas{% endblock %}</title>
+    
+    <meta name="author" content="CodeVerse">
+<meta name="copyright" content="© 2025 CodeVerse">
+<meta name="robots" content="index, follow">
+<meta name="googlebot" content="index, follow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * data:; script-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com;">
+<meta name="referrer" content="no-referrer-when-downgrade">
+
     <meta
       name="description"
       content="Aprende programación con tutoriales gratuitos en español. HTML, CSS, JavaScript, Python y más. Snippets listos para usar y herramientas para desarrolladores."
@@ -31,44 +39,26 @@
 
 <!-- Canonical URL -->
 <link rel="canonical" href="https://codeverse-v37z.onrender.com/" />
-    <!-- 🎨 Colores de tema para navegadores móviles -->
-    <meta name="theme-color" content="#0369a1" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0c4a6e" media="(prefers-color-scheme: dark)">
+<!-- 🎨 Color de tema unificado para todos los navegadores -->
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: dark)">
 
-    <!-- Windows / Edge -->
-    <meta name="msapplication-TileColor" content="#0c4a6e">
-    <meta name="msapplication-navbutton-color" content="#0c4a6e">
+<!-- 🪟 Windows / Edge -->
+<meta name="msapplication-TileColor" content="#3b82f6">
+<meta name="msapplication-navbutton-color" content="#3b82f6">
 
-    <!-- iOS Safari -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- 🍎 iOS / Safari -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CodeVerse">
 
-    <!-- 💙 Favicon dinámico con </> azul -->
-    <link rel="icon" id="dynamic-favicon" type="image/svg+xml" />
-    <script>
-      // Crear un favicon SVG con </> azul
-      (function () {
-        const svgIcon = `
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-                    <rect width="64" height="64" fill="#0f172a"/>
-                    <text x="32" y="44" font-size="28" text-anchor="middle" fill="#3b82f6" font-family="Arial, monospace" font-weight="bold">&lt;/&gt;</text>
-                </svg>
-            `;
-
-        const blob = new Blob([svgIcon], { type: "image/svg+xml" });
-        const url = URL.createObjectURL(blob);
-        document.getElementById("dynamic-favicon").href = url;
-      })();
-    </script>
-
-    <!-- Favicon alternativo para navegadores que no soportan SVG dinámico -->
-    <link
-      rel="alternate icon"
-      type="image/png"
-      href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
-    />
+<link rel="icon" href="../static/img/fav.png">
 
     <!-- Tailwind CSS y Font Awesome -->
+     <link rel="preconnect" href="https://cdn.tailwindcss.com">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 
