@@ -5,26 +5,11 @@
 {% block head %}
 <meta name="description" content="Tutoriales gratuitos de programación en español. HTML, CSS, JavaScript, Python, Java y más. Aprende desde cero con ejemplos prácticos.">
 <style>
-    .filter-btn {
-        @apply px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 border-2 border-slate-600 text-slate-300 hover:border-blue-400 hover:text-blue-400 hover:shadow-lg hover:shadow-blue-500/20 hover:-translate-y-0.5 flex items-center gap-2;
-    }
-    
-    .filter-btn.active {
-        @apply border-blue-500 bg-gradient-to-r from-blue-600/40 to-cyan-600/40 text-white shadow-lg shadow-blue-500/40 backdrop-blur;
-    }
-
-    .tutorial-card-link {
-        @apply block;
-    }
-
-    .tutorial-card {
-        @apply h-full bg-slate-900/50 backdrop-blur border border-slate-700/50 rounded-2xl overflow-hidden transition-all duration-300 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-2 cursor-pointer;
-    }
-
-    @keyframes slideUp {
+    /* ==================== ANIMACIONES ==================== */
+    @keyframes fadeInUp {
         from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px);
         }
         to {
             opacity: 1;
@@ -32,318 +17,682 @@
         }
     }
 
-    @keyframes gradient {
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+    }
+
+    @keyframes pulse-glow {
         0%, 100% {
-            background-position: 0% 50%;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
         }
         50% {
-            background-position: 100% 50%;
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
         }
     }
 
-    .animate-slide-up {
-        animation: slideUp 0.4s ease-out forwards;
+    @keyframes gradient-shift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
     }
 
-    .animate-gradient {
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    /* ==================== UTILIDADES ==================== */
+    .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .gradient-text {
+        background: linear-gradient(to right, #3b82f6, #06b6d4, #8b5cf6);
         background-size: 200% 200%;
-        animation: gradient 3s ease infinite;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradient-shift 3s ease infinite;
     }
 
-    .animate-pulse-slow {
-        animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    /* ==================== SEARCH BAR ==================== */
+    .search-wrapper {
+        position: relative;
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+        border: 2px solid rgba(71, 85, 105, 0.4);
+        border-radius: 1.5rem;
+        padding: 0.75rem;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
     }
 
-    .line-clamp-2 {
+    .search-wrapper:focus-within {
+        border-color: rgba(59, 130, 246, 0.8);
+        box-shadow: 0 10px 40px rgba(59, 130, 246, 0.3);
+    }
+
+    .search-input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        padding: 0.875rem 1rem 0.875rem 3.5rem;
+        color: #fff;
+        font-size: 1rem;
+        outline: none;
+    }
+
+    .search-input::placeholder {
+        color: #64748b;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 1.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748b;
+        font-size: 1.25rem;
+        transition: color 0.3s;
+    }
+
+    .search-wrapper:focus-within .search-icon {
+        color: #60a5fa;
+    }
+
+    /* ==================== FILTER CHIPS ==================== */
+    .filter-chip {
+        position: relative;
+        padding: 0.875rem 1.75rem;
+        background: rgba(15, 23, 42, 0.7);
+        border: 2px solid rgba(71, 85, 105, 0.5);
+        border-radius: 9999px;
+        color: #cbd5e1;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.625rem;
+        overflow: hidden;
+    }
+
+    .filter-chip::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+        transition: left 0.6s;
+    }
+
+    .filter-chip:hover::before {
+        left: 100%;
+    }
+
+    .filter-chip:hover {
+        border-color: rgba(59, 130, 246, 0.8);
+        color: #60a5fa;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.25);
+    }
+
+    .filter-chip.active {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(6, 182, 212, 0.3));
+        border-color: #3b82f6;
+        color: #fff;
+        box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+    }
+
+    .filter-chip i {
+        font-size: 1.25rem;
+    }
+
+    /* ==================== TUTORIAL CARDS ==================== */
+    .tutorial-card-wrapper {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
+    }
+
+    .tutorial-card {
+        position: relative;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9));
+        border: 1px solid rgba(71, 85, 105, 0.3);
+        border-radius: 1.75rem;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        backdrop-filter: blur(10px);
+    }
+
+    .tutorial-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #3b82f6, #06b6d4, #8b5cf6);
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .tutorial-card:hover::before {
+        opacity: 1;
+    }
+
+    .tutorial-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        border-color: rgba(59, 130, 246, 0.6);
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.5),
+            0 0 80px rgba(59, 130, 246, 0.3);
+    }
+
+    .tutorial-card::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: radial-gradient(circle, rgba(59, 130, 246, 0.1), transparent);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .tutorial-card:hover::after {
+        width: 500px;
+        height: 500px;
+    }
+
+    .card-header {
+        position: relative;
+        padding: 2rem;
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+        border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+        z-index: 1;
+    }
+
+    .language-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 0.625rem 1.25rem;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid;
+        border-radius: 0.875rem;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        backdrop-filter: blur(10px);
+    }
+
+    .level-badge {
+        padding: 0.5rem 1.125rem;
+        border-radius: 9999px;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        backdrop-filter: blur(10px);
+        border: 1px solid;
+    }
+
+    .card-title {
+        position: relative;
+        z-index: 1;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fff;
+        margin: 1.25rem 0 0.875rem;
+        line-height: 1.4;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
+        transition: color 0.3s;
     }
 
-    .line-clamp-3 {
+    .tutorial-card:hover .card-title {
+        color: #60a5fa;
+    }
+
+    .card-description {
+        position: relative;
+        z-index: 1;
+        color: #94a3b8;
+        font-size: 0.9375rem;
+        line-height: 1.7;
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
+
+    .card-body {
+        position: relative;
+        z-index: 1;
+        padding: 2rem;
+    }
+
+    .card-footer {
+        position: relative;
+        z-index: 1;
+        padding: 1.5rem 2rem;
+        border-top: 1px solid rgba(71, 85, 105, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(15, 23, 42, 0.5);
+    }
+
+    .card-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        color: #94a3b8;
+        font-size: 0.9375rem;
+        font-weight: 500;
+    }
+
+    .card-cta {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        color: #60a5fa;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        transition: all 0.3s;
+    }
+
+    .tutorial-card:hover .card-cta {
+        color: #22d3ee;
+        transform: translateX(6px);
+    }
+
+    /* ==================== STATS CARDS ==================== */
+    .stat-card {
+        padding: 1.75rem;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(6, 182, 212, 0.15));
+        border: 2px solid rgba(59, 130, 246, 0.3);
+        border-radius: 1.25rem;
+        text-align: center;
+        transition: all 0.3s;
+        backdrop-filter: blur(10px);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(59, 130, 246, 0.6);
+        box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+    }
+
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #60a5fa, #22d3ee);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .stat-label {
+        color: #cbd5e1;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        margin-top: 0.625rem;
+    }
+
+    /* ==================== LEVEL SELECT ==================== */
+    .level-select {
+        padding: 0.875rem 1.5rem;
+        background: rgba(15, 23, 42, 0.8);
+        border: 2px solid rgba(71, 85, 105, 0.5);
+        border-radius: 0.875rem;
+        color: #cbd5e1;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        outline: none;
+    }
+
+    .level-select:hover,
+    .level-select:focus {
+        border-color: rgba(59, 130, 246, 0.8);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    /* ==================== EMPTY STATE ==================== */
+    .empty-state {
+        padding: 5rem 2rem;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(30, 41, 59, 0.7));
+        border: 2px dashed rgba(71, 85, 105, 0.5);
+        border-radius: 2rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .empty-icon {
+        font-size: 5rem;
+        color: rgba(100, 116, 139, 0.4);
+        margin-bottom: 2rem;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .empty-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #cbd5e1;
+        margin-bottom: 1rem;
+    }
+
+    .empty-description {
+        color: #64748b;
+        font-size: 1.125rem;
+        margin-bottom: 2.5rem;
+    }
+
+    /* ==================== SCROLL TO TOP ==================== */
+    .scroll-top-btn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 3.75rem;
+        height: 3.75rem;
+        background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        border: none;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 1.375rem;
+        cursor: pointer;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s;
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.5);
+        z-index: 50;
+    }
+
+    .scroll-top-btn.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .scroll-top-btn:hover {
+        transform: translateY(-5px) scale(1.1);
+        box-shadow: 0 15px 40px rgba(59, 130, 246, 0.7);
+    }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 768px) {
+        .card-header,
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-footer {
+            padding: 1.25rem 1.5rem;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+        }
+
+        .filter-chip {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .search-input {
+            padding: 0.875rem 0.875rem 0.875rem 3rem;
+        }
+
+        .search-icon {
+            left: 1.25rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Header -->
-<section class="py-20 px-6 bg-gradient-to-b from-blue-600/20 via-cyan-600/10 to-transparent relative overflow-hidden -mx-6 -mt-12">
-    <!-- Decorative Elements -->
-    <div class="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
+<!-- Hero Section -->
+<section class="relative py-16 px-6 overflow-hidden -mx-6 -mt-12 mb-12">
+    <!-- Animated Background -->
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-600/15 via-slate-900 to-cyan-600/15"></div>
+    <div class="absolute top-20 left-10 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1.5s;"></div>
     
-    <div class="max-w-7xl mx-auto text-center relative z-10">
-        <a href="/" class="inline-flex items-center gap-2 text-blue-400 hover:text-cyan-400 transition mb-8 font-medium group">
-            <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i> Volver al Inicio
+    <div class="max-w-7xl mx-auto relative z-10">
+        <!-- Back Button -->
+        <a href="/" class="inline-flex items-center gap-2 text-blue-400 hover:text-cyan-400 transition-all mb-8 font-semibold group">
+            <i class="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> 
+            <span>Volver al Inicio</span>
         </a>
         
-        <div class="mb-6 inline-block">
-            <span class="bg-blue-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-semibold border border-blue-400/30 animate-pulse-slow">
-                <i class="fas fa-graduation-cap mr-2"></i>Biblioteca de Tutoriales
+        <!-- Badge -->
+        <div class="mb-6 animate-fade-in-up">
+            <span class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-400/30 rounded-full text-sm font-bold text-blue-300 backdrop-blur">
+                <i class="fas fa-graduation-cap"></i>
+                Centro de Aprendizaje
             </span>
         </div>
         
-        <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Aprende a <span class="bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent animate-gradient">Programar</span>
+        <!-- Title -->
+        <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight animate-fade-in-up" style="animation-delay: 0.1s;">
+            <span class="gradient-text">Tutoriales</span>
+            <br>
+            <span class="text-white">de Programación</span>
         </h1>
-        <p class="text-xl text-slate-300 max-w-2xl mx-auto mb-8">
-            Tutoriales paso a paso para dominar diferentes lenguajes de programación. Desde principiante hasta experto.
+        
+        <p class="text-xl md:text-2xl text-slate-300 max-w-3xl mb-12 leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
+            Aprende a programar con guías paso a paso, ejemplos prácticos y proyectos reales. 
+            <span class="text-cyan-400 font-semibold">Todo 100% gratis</span> y en español.
         </p>
         
-        <!-- Stats Mini -->
-        <div class="flex flex-wrap justify-center gap-6 text-slate-400 text-sm">
-            <div class="flex items-center gap-2">
-                <i class="fas fa-book text-blue-400"></i>
-                <span><span class="font-bold text-white" id="totalTutorials">0</span> Tutoriales</span>
+        <!-- Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl animate-fade-in-up" style="animation-delay: 0.3s;">
+            <div class="stat-card">
+                <div class="stat-number" id="totalTutorials">0</div>
+                <div class="stat-label">Tutoriales</div>
             </div>
-            <div class="flex items-center gap-2">
-                <i class="fas fa-users text-cyan-400"></i>
-                <span>+10,000 Estudiantes</span>
+            <div class="stat-card">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Lenguajes</div>
             </div>
-            <div class="flex items-center gap-2">
-                <i class="fas fa-check-circle text-green-400"></i>
-                <span>100% Gratis</span>
+            <div class="stat-card">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Gratis</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Acceso</div>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Search Bar -->
-<section class="px-6 -mt-8 relative z-20 mb-8">
-    <div class="max-w-3xl mx-auto">
-        <div class="bg-slate-900/80 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-2 shadow-2xl">
-            <div class="flex gap-2">
-                <div class="relative flex-1">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input 
-                        type="text" 
-                        id="searchInput"
-                        placeholder="Buscar tutoriales por título, descripción o lenguaje..."
-                        class="w-full bg-transparent border-0 pl-12 pr-4 py-4 text-white placeholder-slate-400 focus:outline-none"
-                    >
-                </div>
-                <button id="searchBtn" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold px-6 py-4 rounded-xl transition-all shadow-lg shadow-blue-500/30">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
+<section class="px-6 mb-12">
+    <div class="max-w-4xl mx-auto">
+        <div class="search-wrapper">
+            <i class="fas fa-search search-icon"></i>
+            <input 
+                type="text" 
+                id="searchInput"
+                placeholder="Buscar tutoriales por título, lenguaje o nivel..."
+                class="search-input"
+            >
         </div>
     </div>
 </section>
 
-<!-- Filters -->
-<section class="px-6 mb-8">
-    <div class="max-w-7xl mx-auto">
-        <div class="bg-slate-800/30 backdrop-blur border border-slate-700/50 rounded-2xl p-6 shadow-xl">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fas fa-filter text-blue-400"></i>
-                    Filtrar por Lenguaje
-                </h3>
-                <div class="flex items-center gap-3">
-                    <span class="text-slate-400 text-sm">Nivel:</span>
-                    <select id="levelFilter" class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="all">Todos los niveles</option>
-                        <option value="principiante">Principiante</option>
-                        <option value="intermedio">Intermedio</option>
-                        <option value="avanzado">Avanzado</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="flex flex-wrap gap-3">
-                <button class="filter-btn active" data-filter="all">
-                    <i class="fas fa-th"></i> Todos
-                </button>
-                <button class="filter-btn" data-filter="html">
-                    <i class="fab fa-html5"></i> HTML
-                </button>
-                <button class="filter-btn" data-filter="css">
-                    <i class="fab fa-css3-alt"></i> CSS
-                </button>
-                <button class="filter-btn" data-filter="javascript">
-                    <i class="fab fa-js-square"></i> JavaScript
-                </button>
-                <button class="filter-btn" data-filter="python">
-                    <i class="fab fa-python"></i> Python
-                </button>
-                <button class="filter-btn" data-filter="java">
-                    <i class="fab fa-java"></i> Java
-                </button>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Tutoriales Grid -->
+<!-- Filters Section -->
 <section class="px-6 mb-12">
     <div class="max-w-7xl mx-auto">
-        <!-- Results Count -->
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-white">
-                <span id="resultsCount">0</span> Tutoriales Disponibles
-            </h2>
-            <div class="flex items-center gap-2 text-slate-400">
-                <i class="fas fa-sort-amount-down"></i>
-                <span class="text-sm">Más recientes</span>
+        <!-- Filter Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+            <div>
+                <h2 class="text-3xl font-bold text-white mb-2">Explora por Categoría</h2>
+                <p class="text-slate-400">
+                    <span id="resultsCount" class="text-blue-400 font-semibold">0</span> tutoriales disponibles
+                </p>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <label class="text-slate-400 text-sm font-semibold flex items-center gap-2">
+                    <i class="fas fa-layer-group text-blue-400"></i>
+                    Nivel:
+                </label>
+                <select id="levelFilter" class="level-select">
+                    <option value="all">Todos los niveles</option>
+                    <option value="principiante">⭐ Principiante</option>
+                    <option value="intermedio">⭐⭐ Intermedio</option>
+                    <option value="avanzado">⭐⭐⭐ Avanzado</option>
+                </select>
             </div>
         </div>
         
+        <!-- Language Filters -->
+        <div class="flex flex-wrap gap-3">
+            <button class="filter-chip active" data-filter="all">
+                <i class="fas fa-th"></i>
+                <span>Todos</span>
+            </button>
+            <button class="filter-chip" data-filter="html">
+                <i class="fab fa-html5"></i>
+                <span>HTML</span>
+            </button>
+            <button class="filter-chip" data-filter="css">
+                <i class="fab fa-css3-alt"></i>
+                <span>CSS</span>
+            </button>
+            <button class="filter-chip" data-filter="javascript">
+                <i class="fab fa-js-square"></i>
+                <span>JavaScript</span>
+            </button>
+            <button class="filter-chip" data-filter="python">
+                <i class="fab fa-python"></i>
+                <span>Python</span>
+            </button>
+            <button class="filter-chip" data-filter="java">
+                <i class="fab fa-java"></i>
+                <span>Java</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Tutorials Grid -->
+<section class="px-6 mb-20">
+    <div class="max-w-7xl mx-auto">
         <div id="tutorialsGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Loading State -->
-            <div class="col-span-full text-center py-20">
-                <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
-                <p class="text-slate-400 mt-4">Cargando tutoriales...</p>
+            <div class="col-span-full flex flex-col items-center justify-center py-20">
+                <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                <p class="text-slate-400 mt-6 font-semibold">Cargando tutoriales...</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Info Section -->
-<section class="px-6 mb-8">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-6">
-        <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-l-4 border-blue-400 rounded-xl p-8 backdrop-blur shadow-xl hover:shadow-2xl transition-all">
-            <div class="flex items-start gap-4">
-                <i class="fas fa-graduation-cap text-blue-400 text-3xl mt-1"></i>
-                <div>
-                    <strong class="text-blue-300 text-xl block mb-2">🎓 Empieza tu viaje de aprendizaje</strong>
-                    <p class="text-slate-300 text-base leading-relaxed">
-                        Cada tutorial está diseñado para que aprendas de forma progresiva. Comienza con los tutoriales para principiantes y avanza a tu propio ritmo.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-l-4 border-purple-400 rounded-xl p-8 backdrop-blur shadow-xl hover:shadow-2xl transition-all">
-            <div class="flex items-start gap-4">
-                <i class="fas fa-lightbulb text-purple-400 text-3xl mt-1"></i>
-                <div>
-                    <strong class="text-purple-300 text-xl block mb-2">💡 Aprende Practicando</strong>
-                    <p class="text-slate-300 text-base leading-relaxed">
-                        Cada lección incluye ejemplos de código que puedes copiar y modificar. La mejor forma de aprender es haciendo.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Scroll to Top -->
-<button id="scrollToTop" class="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white rounded-full shadow-2xl shadow-blue-500/50 flex items-center justify-center transition-all opacity-0 pointer-events-none hover:scale-110 z-30">
-    <i class="fas fa-arrow-up text-xl"></i>
+<!-- Scroll to Top Button -->
+<button id="scrollToTop" class="scroll-top-btn">
+    <i class="fas fa-arrow-up"></i>
 </button>
 {% endblock %}
 
 {% block scripts %}
 <script>
-    // Datos de tutoriales
     const tutorialesData = {{ tutoriales | tojson }};
-
     let currentFilter = 'all';
     let currentLevel = 'all';
     let searchQuery = '';
 
-    // Scroll to Top
-    const scrollToTopBtn = document.getElementById('scrollToTop');
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-            scrollToTopBtn.style.opacity = '1';
-            scrollToTopBtn.style.pointerEvents = 'auto';
-        } else {
-            scrollToTopBtn.style.opacity = '0';
-            scrollToTopBtn.style.pointerEvents = 'none';
+    // Language configurations
+    const languageConfig = {
+        html: { color: 'text-orange-400', borderColor: 'border-orange-400/60', icon: 'fa-html5' },
+        css: { color: 'text-blue-400', borderColor: 'border-blue-400/60', icon: 'fa-css3-alt' },
+        javascript: { color: 'text-yellow-400', borderColor: 'border-yellow-400/60', icon: 'fa-js-square' },
+        python: { color: 'text-green-400', borderColor: 'border-green-400/60', icon: 'fa-python' },
+        java: { color: 'text-red-400', borderColor: 'border-red-400/60', icon: 'fa-java' }
+    };
+
+    // Level configurations
+    const levelConfig = {
+        principiante: {
+            stars: '⭐',
+            bg: 'bg-gradient-to-r from-emerald-500/25 to-emerald-600/25',
+            border: 'border-emerald-500/60',
+            text: 'text-emerald-300'
+        },
+        intermedio: {
+            stars: '⭐⭐',
+            bg: 'bg-gradient-to-r from-blue-500/25 to-blue-600/25',
+            border: 'border-blue-500/60',
+            text: 'text-blue-300'
+        },
+        avanzado: {
+            stars: '⭐⭐⭐',
+            bg: 'bg-gradient-to-r from-orange-500/25 to-orange-600/25',
+            border: 'border-orange-500/60',
+            text: 'text-orange-300'
         }
-    });
-    scrollToTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    };
 
-    function getStars(level) {
-        const stars = { 
-            'principiante': '⭐', 
-            'intermedio': '⭐⭐', 
-            'avanzado': '⭐⭐⭐' 
-        };
-        return stars[level] || '⭐';
-    }
-
-    function getLevelColor(level) {
-        const colors = {
-            'principiante': { bg: 'from-emerald-500/20 to-emerald-600/20', border: 'border-emerald-500/40', text: 'text-emerald-300' },
-            'intermedio': { bg: 'from-blue-500/20 to-blue-600/20', border: 'border-blue-500/40', text: 'text-blue-300' },
-            'avanzado': { bg: 'from-orange-500/20 to-orange-600/20', border: 'border-orange-500/40', text: 'text-orange-300' }
-        };
-        return colors[level] || colors['principiante'];
-    }
-
-    function getLanguageIcon(language) {
-        const icons = {
-            'html': 'fa-html5',
-            'css': 'fa-css3-alt',
-            'javascript': 'fa-js-square',
-            'python': 'fa-python',
-            'java': 'fa-java'
-        };
-        return icons[language] || 'fa-code';
-    }
-
-    function getLanguageColor(language) {
-        const colors = {
-            'html': 'text-orange-400',
-            'css': 'text-blue-400',
-            'javascript': 'text-yellow-400',
-            'python': 'text-green-400',
-            'java': 'text-red-400'
-        };
-        return colors[language] || 'text-blue-400';
-    }
-
-    function createTutorialCard(tutorial) {
-        const levelColor = getLevelColor(tutorial.level);
+    function createTutorialCard(tutorial, index) {
+        const lang = languageConfig[tutorial.language] || languageConfig.html;
+        const level = levelConfig[tutorial.level] || levelConfig.principiante;
         const capitalizedLevel = tutorial.level.charAt(0).toUpperCase() + tutorial.level.slice(1);
-        const languageIcon = getLanguageIcon(tutorial.language);
-        const languageColor = getLanguageColor(tutorial.language);
         
         return `
-            <a href="/tutorial/${tutorial._id}" class="tutorial-card-link">
-                <div class="tutorial-card animate-slide-up group">
-                    <!-- Header -->
-                    <div class="bg-gradient-to-r from-slate-800/80 to-slate-800/50 border-b border-slate-700/50 p-6">
+            <a href="/tutorial/${tutorial._id}" class="tutorial-card-wrapper" style="animation-delay: ${index * 0.08}s">
+                <div class="tutorial-card">
+                    <div class="card-header">
                         <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-2">
-                                <i class="fab ${languageIcon} text-2xl ${languageColor}"></i>
-                                <span class="text-xs uppercase font-bold text-slate-400 tracking-wider">${tutorial.language}</span>
+                            <div class="language-badge ${lang.borderColor}">
+                                <i class="fab ${lang.icon} ${lang.color} text-lg"></i>
+                                <span class="${lang.color}">${tutorial.language.toUpperCase()}</span>
                             </div>
-                            <span class="inline-flex items-center gap-1 bg-gradient-to-r ${levelColor.bg} border ${levelColor.border} px-3 py-1 rounded-full text-xs font-bold ${levelColor.text}">
-                                ${getStars(tutorial.level)} ${capitalizedLevel}
-                            </span>
+                            <div class="level-badge ${level.bg} ${level.border} ${level.text}">
+                                <span>${level.stars}</span>
+                                <span>${capitalizedLevel}</span>
+                            </div>
                         </div>
-                        
-                        <h3 class="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-blue-300 transition">
-                            ${tutorial.title}
-                        </h3>
+                        <h3 class="card-title">${tutorial.title}</h3>
                     </div>
                     
-                    <!-- Body -->
-                    <div class="p-6">
-                        <p class="text-slate-400 mb-6 line-clamp-3 leading-relaxed">
-                            ${tutorial.description}
-                        </p>
-                        
-                        <!-- Footer -->
-                        <div class="flex items-center justify-between pt-4 border-t border-slate-700/50">
-                            <div class="flex items-center gap-2 text-slate-400 text-sm">
-                                <i class="fas fa-clock text-blue-400"></i>
-                                <span>${tutorial.duration}</span>
-                            </div>
-                            <div class="flex items-center gap-2 text-blue-400 font-semibold text-sm">
-                                <span class="group-hover:translate-x-1 transition">Ver Tutorial</span>
-                                <i class="fas fa-arrow-right group-hover:translate-x-1 transition"></i>
-                            </div>
+                    <div class="card-body">
+                        <p class="card-description">${tutorial.description}</p>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="card-meta">
+                            <i class="fas fa-clock text-blue-400"></i>
+                            <span>${tutorial.duration}</span>
+                        </div>
+                        <div class="card-cta">
+                            <span>Ver tutorial</span>
+                            <i class="fas fa-arrow-right"></i>
                         </div>
                     </div>
                 </div>
@@ -363,10 +712,12 @@
         }
 
         if (searchQuery) {
+            const query = searchQuery.toLowerCase();
             filtered = filtered.filter(t => 
-                t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                t.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                t.language.toLowerCase().includes(searchQuery.toLowerCase())
+                t.title.toLowerCase().includes(query) ||
+                t.description.toLowerCase().includes(query) ||
+                t.language.toLowerCase().includes(query) ||
+                t.level.toLowerCase().includes(query)
             );
         }
 
@@ -382,19 +733,22 @@
 
         if (filtered.length === 0) {
             grid.innerHTML = `
-                <div class="col-span-full text-center py-20 bg-slate-900/50 rounded-2xl border border-slate-700/50">
-                    <i class="fas fa-search text-6xl text-slate-600 mb-4 block"></i>
-                    <p class="text-slate-400 text-lg font-medium mb-2">No se encontraron tutoriales</p>
-                    <p class="text-slate-500 text-sm">Intenta con otros filtros o términos de búsqueda</p>
-                    <button onclick="resetFilters()" class="mt-6 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition-all">
-                        <i class="fas fa-redo mr-2"></i>Resetear Filtros
+                <div class="col-span-full empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="empty-title">No se encontraron tutoriales</h3>
+                    <p class="empty-description">Intenta ajustar los filtros o términos de búsqueda</p>
+                    <button onclick="resetFilters()" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-4 rounded-xl font-bold transition-all transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/50">
+                        <i class="fas fa-redo mr-2"></i>
+                        Resetear filtros
                     </button>
                 </div>
             `;
             return;
         }
 
-        grid.innerHTML = filtered.map(createTutorialCard).join('');
+        grid.innerHTML = filtered.map((tutorial, index) => createTutorialCard(tutorial, index)).join('');
     }
 
     function resetFilters() {
@@ -403,15 +757,15 @@
         searchQuery = '';
         document.getElementById('searchInput').value = '';
         document.getElementById('levelFilter').value = 'all';
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
         document.querySelector('[data-filter="all"]').classList.add('active');
         renderTutorials();
     }
 
-    // Event listeners
-    document.querySelectorAll('.filter-btn').forEach(btn => {
+    // Event Listeners
+    document.querySelectorAll('.filter-chip').forEach(btn => {
         btn.addEventListener('click', function() {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             currentFilter = this.dataset.filter;
             renderTutorials();
@@ -424,12 +778,6 @@
     });
 
     const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
-
-    searchBtn.addEventListener('click', function() {
-        searchQuery = searchInput.value.trim();
-        renderTutorials();
-    });
 
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
@@ -439,14 +787,113 @@
     });
 
     searchInput.addEventListener('input', function() {
-        searchQuery = this.value.trim();
         clearTimeout(window.searchTimeout);
         window.searchTimeout = setTimeout(() => {
+            searchQuery = this.value.trim();
             renderTutorials();
-        }, 500);
+        }, 400);
     });
 
-    // Inicializar
-    renderTutorials();
+    // Scroll to Top
+    const scrollBtn = document.getElementById('scrollToTop');
+    
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 500) {
+            scrollBtn.classList.add('visible');
+        } else {
+            scrollBtn.classList.remove('visible');
+        }
+    });
+
+    scrollBtn.addEventListener('click', () => {
+        window.scrollTo({ 
+            top: 0, 
+            behavior: 'smooth' 
+        });
+    });
+
+    // Smooth scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+        renderTutorials();
+        
+        // Add entrance animation to stats
+        const stats = document.querySelectorAll('.stat-card');
+        stats.forEach((stat, index) => {
+            stat.style.animationDelay = `${0.4 + (index * 0.1)}s`;
+        });
+    });
+
+    // Easter egg: Konami code
+    let konamiCode = [];
+    const correctCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    
+    document.addEventListener('keydown', (e) => {
+        konamiCode.push(e.key);
+        konamiCode = konamiCode.slice(-10);
+        
+        if (konamiCode.join(',') === correctCode.join(',')) {
+            // Show all tutorials regardless of filters
+            currentFilter = 'all';
+            currentLevel = 'all';
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('levelFilter').value = 'all';
+            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-filter="all"]').classList.add('active');
+            renderTutorials();
+            
+            // Show celebration
+            const celebration = document.createElement('div');
+            celebration.innerHTML = `
+                <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                            background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(6, 182, 212, 0.95)); 
+                            padding: 2rem 3rem; border-radius: 1.5rem; z-index: 9999; 
+                            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); text-align: center;
+                            animation: fadeInUp 0.5s ease-out;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: white; margin-bottom: 0.5rem;">
+                        ¡Código Konami Activado!
+                    </div>
+                    <div style="color: rgba(255, 255, 255, 0.9);">
+                        Eres un verdadero desarrollador 🚀
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(celebration);
+            setTimeout(() => {
+                celebration.remove();
+            }, 3000);
+        }
+    });
+
+    // Add keyboard shortcuts info
+    document.addEventListener('keydown', (e) => {
+        // Press 'S' to focus search
+        if (e.key === 's' && !e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
+            e.preventDefault();
+            document.getElementById('searchInput').focus();
+        }
+        
+        // Press 'Escape' to clear search
+        if (e.key === 'Escape') {
+            if (document.getElementById('searchInput').value) {
+                resetFilters();
+            }
+        }
+    });
 </script>
 {% endblock %}
